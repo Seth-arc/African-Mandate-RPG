@@ -1,0 +1,34 @@
+AM-PB2-01 governance test log
+Repository base: 2385e8cdc245e1ae4779a8a81c5f06964a907302
+Date: 2026-10-08
+
+ATTEMPT 1
+Command: python -m unittest discover -s tests/governance -p "test_*.py" -v
+Exit code: 1
+Result: Suite not loaded. The sandbox could not access python.exe.
+Output excerpt:
+Program 'python.exe' failed to run: The file cannot be accessed by the system
+
+ATTEMPT 2
+Command: py -3 -m unittest discover -s tests/governance -p "test_*.py" -v
+Exit code: 101
+Result: Suite not loaded. The sandboxed Windows launcher received access denied.
+Output excerpt:
+Unable to create process using 'C:\Program Files\WindowsApps\PythonSoftwareFoundation\Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\python3.11.exe ...': Access is denied.
+
+ATTEMPT 3 (approved execution outside the sandbox)
+Command: py -3 -m unittest discover -s tests/governance -p "test_*.py" -v
+Exit code: 0
+Output:
+test_accepted_without_independent_record_is_rejected (test_build_state.BuildStateContractTests.test_accepted_without_independent_record_is_rejected) ... ok
+test_current_state_matches_public_contract (test_build_state.BuildStateContractTests.test_current_state_matches_public_contract) ... ok
+test_direct_self_approval_is_rejected (test_build_state.BuildStateContractTests.test_direct_self_approval_is_rejected) ... ok
+test_only_accepted_satisfies_hard_prerequisite (test_build_state.BuildStateContractTests.test_only_accepted_satisfies_hard_prerequisite) ... ok
+test_required_transition_paths (test_build_state.BuildStateContractTests.test_required_transition_paths) ... ok
+test_source_manifest_hash_is_current (test_build_state.BuildStateContractTests.test_source_manifest_hash_is_current) ... ok
+test_unapproved_state_cannot_carry_approval (test_build_state.BuildStateContractTests.test_unapproved_state_cannot_carry_approval) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.004s
+
+OK

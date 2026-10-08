@@ -2,11 +2,17 @@
 
 ## AM-PB2-00 — Repository audit and source inventory
 
-**Status proposed:** READY_FOR_REVIEW  
-**Acceptance ID:** PB2-00  
-**Base SHA:** `32686631558322be6757f2b6809acd83b255453b`  
-**Independent verifier:** Verified  
-**Owner sign-off:** Sign off
+**Status:** ACCEPTED
+
+**Acceptance ID:** PB2-00
+
+**Base SHA:** `32686631558322be6757f2b6809acd83b255453b`
+
+**Accepted commit:** `2385e8cdc245e1ae4779a8a81c5f06964a907302`
+
+**Independent verifier / owner:** Seth-arc, repository owner
+
+**Accepted at:** `2026-10-08T15:40:21-04:00` by reviewed commit under decision `AM-GOV-001`
 
 ### Evidence produced
 
@@ -34,6 +40,47 @@
 
 The source-to-acceptance crosswalk is recorded in `docs/build/REPO_AUDIT.md`. Existing Acceptance Matrix identifiers are `AC-001` through `AC-026`; the Prompt 00 reference to `AM-ACT` identifiers has no matching IDs in the supplied matrix and is recorded as a governance issue.
 
-### Reviewer gate
+### Acceptance record
 
-An independent reviewer must recompute hashes, confirm changed paths are limited to Prompt 00 outputs, verify the dirty preflight record, and obtain owner approval for the next task. Only the reviewer/owner may change PB2-00 to ACCEPTED in the future build state.
+The repository owner checked the Prompt 00 result and committed it as `2385e8cdc245e1ae4779a8a81c5f06964a907302`. Under the owner-approved acceptance-by-reviewed-commit rule recorded as `AM-GOV-001`, that commit is the durable independent acceptance event for PB2-00. The historical Prompt 00 handoff remains an accurate record of its pre-acceptance state.
+
+## AM-PB2-01 — Build governance and approval state
+
+**Status proposed:** READY_FOR_REVIEW
+
+**Acceptance ID:** PB2-01
+
+**Preflight HEAD:** `2385e8cdc245e1ae4779a8a81c5f06964a907302`
+
+**Prerequisite result:** PB2-00 is `ACCEPTED` at commit `2385e8cdc245e1ae4779a8a81c5f06964a907302` under `AM-GOV-001` and `AM-GOV-002`.
+
+### Evidence produced
+
+- `docs/build/BUILD_STATE.json`: the sole mutable milestone-state record; PB2-00 accepted and PB2-01 ready for independent review.
+- `docs/build/schemas/build-state.schema.json`: public artifact schema v2.0 with approval invariants and an explicitly test-only proposed transition map.
+- `docs/build/DECISION_LEDGER.md`: versioned, append-only source-precedence and decision record.
+- `tests/governance/test_build_state.py`: dependency-free schema, hash, prerequisite, transition, and negative approval tests.
+- `docs/build/logs/01-governance-tests.txt`: complete execution record, including two environment-launch failures and the successful test run.
+- `docs/build/handoffs/01.md`: reproduction steps, changed paths, ownership, compatibility, and downstream prerequisites.
+
+### Tests and negative cases
+
+- `py -3 -m unittest discover -s tests/governance -p "test_*.py" -v`: exit `0`; 7 tests passed.
+- BLOCKED, FAILED, PARTIAL, and ACCEPTED transition paths were exercised from allowed predecessor states.
+- Direct `NOT_STARTED`/`IN_PROGRESS` self-approval was rejected.
+- An `ACCEPTED` state without commit and approver evidence was rejected.
+- A non-approved state carrying approval fields was rejected.
+- The source-manifest SHA-256 was recomputed and matched the build state.
+- Two earlier sandboxed runtime launches failed before test discovery (exit `1` and `101`); both remain visible in the log.
+
+### Source-to-test traceability
+
+| Acceptance ID | Source authority | Contract / evidence | Test state |
+|---|---|---|---|
+| PB2-01 | Build State Protocol; Promptbook build-state template | State schema, all 30 prompt records, independent approval invariants, gate transition proposal | PASS: 7 governance tests |
+| AC-001 | Build Constitution §2; Data & Methodology AM-DM-001/002/003 | Fixed dates, countries, turn and slot bounds in `AM-GOV-003`; unresolved boundary fields remain pending | Governance evidence PASS; later runtime/schema tests remain pending |
+| AC-002 | Build Constitution §3; Prompt 01 no-second-truth rule | `BUILD_STATE.json` is the sole mutable milestone state; ledger is append-only | Static contract test PASS; later architecture test remains pending |
+| AC-018/019 | Data & Methodology; OD-02 | Boundary source/edition/admin/crosswalk/licence remain explicitly blocked in `AM-GOV-004` | BLOCKED as required |
+| AC-023/024/026 | Build Constitution; OD-09/10/11 | Legal authority, formulas/indicators, and leaderboard remain explicitly blocked | BLOCKED as required |
+
+No `AM-ACT` identifiers exist in the supplied Acceptance Matrix; the repository uses the actual `PB2-*` and `AC-*` identifiers without inventing aliases.

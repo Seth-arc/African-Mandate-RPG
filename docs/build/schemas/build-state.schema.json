@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:african-mandate:build-state:2.0",
+  "title": "African Mandate build state v2.0",
+  "description": "Public governance artifact schema derived from the Promptbook v2 template. BUILD_STATE.json is the only mutable milestone-state record.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "sourceManifestHash",
+    "prompts"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "2.0"
+    },
+    "sourceManifestHash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "prompts": {
+      "type": "object",
+      "required": [
+        "00", "01", "02", "03", "04", "05", "06", "07", "08", "09",
+        "10", "11", "12", "13", "14", "15", "16", "17", "18", "19",
+        "20", "21", "22", "23", "24", "25", "26", "27", "28", "29"
+      ],
+      "propertyNames": {
+        "pattern": "^(0[0-9]|1[0-9]|2[0-9])$"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/promptState"
+      }
+    }
+  },
+  "$defs": {
+    "promptState": {
+      "type": "object",
+      "required": [
+        "status",
+        "approvedCommit",
+        "evidencePath",
+        "approver"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "NOT_STARTED",
+            "IN_PROGRESS",
+            "PARTIAL",
+            "BLOCKED",
+            "FAILED",
+            "READY_FOR_REVIEW",
+            "ACCEPTED",
+            "DEFERRED_APPROVED"
+          ]
+        },
+        "approvedCommit": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "evidencePath": {
+          "type": ["string", "null"],
+          "pattern": "^docs/build/"
+        },
+        "approver": {
+          "type": ["string", "null"],
+          "minLength": 1
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "enum": ["ACCEPTED", "DEFERRED_APPROVED"]
+              }
+            },
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "approvedCommit": {"type": "string"},
+              "evidencePath": {"type": "string"},
+              "approver": {"type": "string"}
+            }
+          },
+          "else": {
+            "properties": {
+              "approvedCommit": {"const": null},
+              "approver": {"const": null}
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    }
+  },
+  "x-transitionClassification": "TEST_ONLY_DESIGN_PROPOSAL_PENDING_AM-PB2-01_REVIEW",
+  "x-allowedTransitions": {
+    "NOT_STARTED": ["IN_PROGRESS", "BLOCKED"],
+    "IN_PROGRESS": ["PARTIAL", "BLOCKED", "FAILED", "READY_FOR_REVIEW"],
+    "PARTIAL": ["IN_PROGRESS", "BLOCKED", "FAILED", "READY_FOR_REVIEW"],
+    "BLOCKED": ["IN_PROGRESS"],
+    "FAILED": ["IN_PROGRESS", "BLOCKED"],
+    "READY_FOR_REVIEW": ["IN_PROGRESS", "BLOCKED", "FAILED", "ACCEPTED"],
+    "ACCEPTED": [],
+    "DEFERRED_APPROVED": ["IN_PROGRESS"]
+  },
+  "additionalProperties": false
+}
