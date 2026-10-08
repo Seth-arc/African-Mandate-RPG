@@ -1,0 +1,31 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  workspace:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - name: Enable pinned pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@11.23.0 --activate
+      - name: Verify toolchain
+        run: |
+          test "$(node --version)" = "v22.16.0"
+          test "$(pnpm --version)" = "11.23.0"
+      - name: Frozen install
+        run: pnpm install --frozen-lockfile
+      - name: Workspace checks
+        run: pnpm run ci

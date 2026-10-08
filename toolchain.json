@@ -1,0 +1,16 @@
+{
+  "$schema": "./packages/tooling/schemas/toolchain.schema.json",
+  "schemaVersion": "1.0",
+  "contractStatus": "TEST_ONLY_DESIGN_PROPOSAL_PENDING_AM-PB2-02_REVIEW",
+  "node": "22.16.0",
+  "pnpm": "11.23.0",
+  "corepack": "0.32.0",
+  "typescript": "6.0.3",
+  "typescriptRunner": {
+    "name": "tsx",
+    "version": "4.23.15"
+  },
+  "browserMatrix": null,
+  "basemapProvider": null,
+  "gisTools": []
+}

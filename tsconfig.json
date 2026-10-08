@@ -1,0 +1,21 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "paths": {
+      "@african-mandate/application": ["./packages/application/src/index.ts"],
+      "@african-mandate/content": ["./packages/content/src/index.ts"],
+      "@african-mandate/data-pipeline": [
+        "./packages/data-pipeline/src/index.ts"
+      ],
+      "@african-mandate/domain": ["./packages/domain/src/index.ts"],
+      "@african-mandate/simulation": ["./packages/simulation/src/index.ts"],
+      "@african-mandate/tooling": ["./packages/tooling/src/index.ts"],
+      "@african-mandate/ui": ["./packages/ui/src/index.ts"],
+      "@african-mandate/web": ["./apps/web/src/index.ts"]
+    },
+    "types": ["vitest/globals"]
+  },
+  "include": ["apps/**/*.ts", "packages/**/*.ts", "tests/unit/**/*.ts"],
+  "exclude": ["tests/fixtures/**", "node_modules/**"]
+}

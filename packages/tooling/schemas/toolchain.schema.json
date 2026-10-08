@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:african-mandate:toolchain:1.0",
+  "title": "African Mandate toolchain manifest v1.0",
+  "type": "object",
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "contractStatus",
+    "node",
+    "pnpm",
+    "corepack",
+    "typescript",
+    "typescriptRunner",
+    "browserMatrix",
+    "basemapProvider",
+    "gisTools"
+  ],
+  "properties": {
+    "$schema": { "const": "./packages/tooling/schemas/toolchain.schema.json" },
+    "schemaVersion": { "const": "1.0" },
+    "contractStatus": {
+      "const": "TEST_ONLY_DESIGN_PROPOSAL_PENDING_AM-PB2-02_REVIEW"
+    },
+    "node": { "const": "22.16.0" },
+    "pnpm": { "const": "11.23.0" },
+    "corepack": { "const": "0.32.0" },
+    "typescript": { "const": "6.0.3" },
+    "typescriptRunner": {
+      "type": "object",
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "const": "tsx" },
+        "version": { "const": "4.23.15" }
+      },
+      "additionalProperties": false
+    },
+    "browserMatrix": { "type": "null" },
+    "basemapProvider": { "type": "null" },
+    "gisTools": { "type": "array", "maxItems": 0 }
+  },
+  "additionalProperties": false
+}

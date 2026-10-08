@@ -84,3 +84,41 @@ The repository owner checked the Prompt 00 result and committed it as `2385e8cdc
 | AC-023/024/026 | Build Constitution; OD-09/10/11 | Legal authority, formulas/indicators, and leaderboard remain explicitly blocked | BLOCKED as required |
 
 No `AM-ACT` identifiers exist in the supplied Acceptance Matrix; the repository uses the actual `PB2-*` and `AC-*` identifiers without inventing aliases.
+
+## AM-PB2-02 — Pinned workspace and CI
+
+**Status proposed:** READY_FOR_REVIEW
+
+**Acceptance ID:** PB2-02
+
+**Preflight HEAD:** `3a3302099f6e78e786dbc0fc5d78f13723a366d4`
+
+**Prerequisite result:** PB2-01 is `ACCEPTED` by the reviewed Prompt 01 commit under `AM-GOV-001` and `AM-GOV-013`.
+
+### Evidence produced
+
+- Exact Node/Corepack/pnpm and development dependency pins in `.node-version`, `package.json`, `toolchain.json`, and `pnpm-lock.yaml`.
+- Nine-project pnpm workspace: the root plus `domain`, `simulation`, `application`, `data-pipeline`, `content`, `ui`, `tooling`, and `web` workspaces.
+- ESM/strict-TypeScript public root exports and ESLint import-direction enforcement.
+- GitHub Actions frozen install and format/lint/type/unit/negative-boundary/schema pipeline.
+- `docs/build/PACKAGE_GRAPH.md` and `packages/tooling/schemas/toolchain.schema.json` document the graph and artifact contract.
+- `docs/build/logs/02-workspace-ci.txt` preserves failed and successful command evidence.
+
+### Tests and negative cases
+
+- Clean `corepack pnpm install --frozen-lockfile`: exit `0`, starting with `node_modules=False`; lockfile supply-chain policy passed.
+- `corepack pnpm run ci`: exit `0`; format, peer dependencies, lint, typecheck, two unit smoke tests, forbidden-import negative test, and schema checks passed.
+- `py -3 -m unittest discover -s tests/governance -p "test_*.py" -v`: exit `0`; 7 governance regression tests passed after moving the negative fixture from newly accepted PB2-01 to unapproved PB2-02.
+- Forbidden import fixture: web importing simulation was rejected by `no-restricted-imports`; the boundary test passes only on that expected lint failure.
+- Browser matrix, basemap provider, and GIS tool list remain explicitly unselected.
+- Earlier install/configuration, formatting, lint, typecheck, and unit-resolution failures remain visible in the Prompt 02 execution log.
+
+### Source-to-test traceability
+
+| Acceptance ID | Source authority | Contract / evidence | Test state |
+|---|---|---|---|
+| PB2-02 | Technical Architecture v2 §§5, 5.1, 7–9, 90, 97, 100; Repository Bootstrap | Exact toolchain pins, frozen lock, workspace roots, CI, public exports, package graph | PASS |
+| AC-021 | Technical Architecture v2 §§7.1–7.2 and 45.1 | UI/web cannot import simulation or deep/raw/debug modules; checked-in negative fixture must fail lint | Import-firewall portion PASS; accessibility remains for later UI prompts |
+| PB2-01 | Build State Protocol and accepted governance schema | Previous acceptance reconciled; current prompt remains `READY_FOR_REVIEW` without self-approval | PASS: governance regression suite |
+
+The Promptbook references an `AM-ACT` family that does not exist in the supplied Acceptance Matrix. This evidence uses the actual `PB2-02` and `AC-021` identifiers and does not invent aliases.

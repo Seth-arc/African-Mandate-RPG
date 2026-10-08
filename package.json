@@ -1,0 +1,39 @@
+{
+  "name": "african-mandate",
+  "version": "0.0.0-test-only",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "22.16.0",
+    "pnpm": "11.23.0"
+  },
+  "packageManager": "pnpm@11.23.0",
+  "scripts": {
+    "format:check": "prettier --check package.json pnpm-workspace.yaml tsconfig.base.json tsconfig.json eslint.config.js toolchain.json .github/workflows/ci.yml apps packages scripts tests/unit tests/fixtures",
+    "deps:check": "corepack pnpm peers check",
+    "lint": "eslint apps packages scripts tests/unit",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "corepack pnpm run test:unit && corepack pnpm run test:boundaries",
+    "test:unit": "vitest run tests/unit",
+    "test:boundaries": "node scripts/verify-forbidden-import.mjs",
+    "schema:check": "node scripts/verify-governance-artifacts.mjs",
+    "ci": "corepack pnpm run format:check && corepack pnpm run deps:check && corepack pnpm run lint && corepack pnpm run typecheck && corepack pnpm run test && corepack pnpm run schema:check"
+  },
+  "devDependencies": {
+    "@african-mandate/application": "workspace:*",
+    "@african-mandate/content": "workspace:*",
+    "@african-mandate/data-pipeline": "workspace:*",
+    "@african-mandate/domain": "workspace:*",
+    "@african-mandate/simulation": "workspace:*",
+    "@african-mandate/tooling": "workspace:*",
+    "@african-mandate/ui": "workspace:*",
+    "@african-mandate/web": "workspace:*",
+    "@eslint/js": "10.0.1",
+    "eslint": "10.12.0",
+    "prettier": "3.9.9",
+    "tsx": "4.23.15",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.71.1",
+    "vitest": "5.0.3"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "@african-mandate/application",
+  "version": "0.0.0-test-only",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@african-mandate/domain": "workspace:*",
+    "@african-mandate/simulation": "workspace:*"
+  }
+}
