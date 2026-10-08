@@ -1,0 +1,12 @@
+# Prompt NN — handoff
+- Status proposed: READY_FOR_REVIEW | BLOCKED | PARTIAL | FAILED
+- Repository base SHA / delivered SHA:
+- Canonical inputs and version/hash:
+- Implementation files changed and why:
+- Contracts added/changed and downstream compatibility:
+- Test command + exit code + real output/log path:
+- Negative tests and independent fixture ID:
+- Not tested / reasons:
+- Open decisions and scope exclusions:
+- Evidence artifacts / verifier and owner sign-off:
+- Next prerequisite and revalidation requirements:

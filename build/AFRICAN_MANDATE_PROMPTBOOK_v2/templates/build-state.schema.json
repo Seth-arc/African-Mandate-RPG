@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "African Mandate build state v2",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "sourceManifestHash",
+    "prompts"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "2.0"
+    },
+    "sourceManifestHash": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "prompts": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "status",
+          "approvedCommit",
+          "evidencePath"
+        ],
+        "properties": {
+          "status": {
+            "enum": [
+              "NOT_STARTED",
+              "IN_PROGRESS",
+              "PARTIAL",
+              "BLOCKED",
+              "FAILED",
+              "READY_FOR_REVIEW",
+              "ACCEPTED",
+              "DEFERRED_APPROVED"
+            ]
+          },
+          "approvedCommit": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "evidencePath": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "approver": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,418 @@
+/*
+  tokens.css — African Mandate
+  Version 0.1, 2026-10-08. Governed by DESIGN_STANDARDS.md v2.1 (section 1.2).
+
+  Rules
+  - Components reference semantic tokens (--color-*, --text-*, --space-*, ...) only.
+  - Reference tokens (--ref-*) hold raw values. Components never use them directly.
+  - A new colour needs a new semantic role here before it appears anywhere else (R12).
+  - Verified values and their contrast and colour-vision results are logged in DESIGN_DECISIONS.md.
+
+  Tiers
+  1. Reference  --ref-*       raw palette, changes only for a brand-level decision
+  2. Semantic   --color-*     role-mapped, changes when a meaning changes
+  3. Component  --control-*   sizes and structure shared by component families
+*/
+
+:root {
+  color-scheme: light;
+
+  /* ===================================================================
+     1. COLOUR: REFERENCE TIER
+     Why: a cool-grey chart-stock neutral scale and blue-black ink (instrument charts and
+     briefing paper), plus one restrained hue per semantic family. No pure white, no gradients.
+     =================================================================== */
+
+  /* Stock: surfaces and rules */
+  --ref-stock-050: #FBFBF9;
+  --ref-stock-100: #F3F4F1;
+  --ref-stock-150: #E9EBE7;
+  --ref-stock-200: #E3E5E0;
+  --ref-stock-300: #C8CCC6;
+  --ref-stock-500: #7A827D;
+
+  /* Ink: text and heavy rules */
+  --ref-ink-400: #707A83;
+  --ref-ink-500: #5E6872;
+  --ref-ink-600: #4E5A65;
+  --ref-ink-700: #26323D;
+  --ref-ink-900: #111C26;
+
+  /* Interaction blue */
+  --ref-blue-100: #DAE6F4;
+  --ref-blue-700: #1D5BA6;
+  --ref-blue-800: #164A87;
+
+  /* Outcome families */
+  --ref-green-100: #DCEBDF;
+  --ref-green-700: #2B6A3C;
+  --ref-amber-100: #F6E7C8;
+  --ref-amber-600: #B87400;
+  --ref-amber-800: #7A4F00;
+  --ref-red-100: #F3DAD5;
+  --ref-red-700: #A32B18;
+  --ref-red-800: #8A2314;
+  --ref-slate-100: #DDE6EC;
+  --ref-slate-700: #37546A;
+
+  /* Fog */
+  --ref-fog-100: #DCDFDA;
+
+  /* Map */
+  --ref-map-water: #D2DEE2;
+  --ref-map-land: #ECEBE3;
+  --ref-map-graticule: #C3CBCB;
+  --ref-map-boundary-international: #3D4852;
+  --ref-map-boundary-admin: #6B756F;
+  --ref-map-label: #1E2A34;
+  --ref-map-label-water: #3F6478;
+  --ref-map-ramp-1: #F0E0C7;
+  --ref-map-ramp-2: #D1BC9B;
+  --ref-map-ramp-3: #BAA37B;
+  --ref-map-ramp-4: #A68E64;
+
+  /* Faction identities: eight muted hues, searched for colour-vision separation (see DESIGN_DECISIONS.md) */
+  --ref-faction-1: #1D856A;
+  --ref-faction-2: #215438;
+  --ref-faction-3: #514287;
+  --ref-faction-4: #514B14;
+  --ref-faction-5: #6D74B9;
+  --ref-faction-6: #6F804B;
+  --ref-faction-7: #73305C;
+  --ref-faction-8: #7D6A19;
+
+  /* Indicator types: five muted hues distinct from each other and from factions */
+  --ref-indicator-1: #426F48;
+  --ref-indicator-2: #CF697C;
+  --ref-indicator-3: #AD8236;
+  --ref-indicator-4: #4C85DA;
+  --ref-indicator-5: #8C759D;
+
+  /* Scrim */
+  --ref-scrim: rgba(17, 28, 38, 0.55);
+
+  /* ===================================================================
+     2. COLOUR: SEMANTIC ROLES
+     Why: one value per meaning, one meaning per value (R12). Primary action is ink,
+     not a brand colour, so colour is reserved for state and meaning.
+     =================================================================== */
+
+  /* Surfaces: three steps plus one inset, so panels separate by tone and rule, not by shadow */
+  --color-surface-ground: var(--ref-stock-200);
+  --color-surface-panel: var(--ref-stock-100);
+  --color-surface-document: var(--ref-stock-050);
+  --color-surface-sunken: var(--ref-stock-150);
+  --color-scrim: var(--ref-scrim);
+
+  /* Text */
+  --color-text-strong: var(--ref-ink-900);
+  --color-text-body: var(--ref-ink-700);
+  --color-text-muted: var(--ref-ink-600);
+  --color-text-on-action: var(--ref-stock-050);
+
+  /* Rules */
+  --color-rule-hairline: var(--ref-stock-300);
+  --color-rule-control: var(--ref-stock-500);
+  --color-rule-heavy: var(--ref-ink-900);
+
+  /* Primary action */
+  --color-action-primary-bg: var(--ref-ink-900);
+  --color-action-primary-bg-hover: var(--ref-ink-700);
+  --color-action-primary-bg-active: var(--ref-ink-600);
+  --color-action-primary-text: var(--color-text-on-action);
+
+  /* Secondary action */
+  --color-action-secondary-bg: transparent;
+  --color-action-secondary-bg-hover: var(--ref-stock-150);
+  --color-action-secondary-bg-active: var(--ref-stock-200);
+  --color-action-secondary-text: var(--color-text-strong);
+  --color-action-secondary-rule: var(--color-rule-control);
+
+  /* Destructive action */
+  --color-action-destructive-bg: var(--ref-red-700);
+  --color-action-destructive-bg-hover: var(--ref-red-800);
+  --color-action-destructive-text: var(--color-text-on-action);
+
+  /* Interaction states */
+  --color-selected-bg: var(--ref-blue-100);
+  --color-selected-edge: var(--ref-blue-700);
+  --color-hover-bg: var(--ref-stock-150);
+  --color-focus-ring: var(--ref-blue-700);
+  --color-link: var(--ref-blue-700);
+  --color-link-hover: var(--ref-blue-800);
+
+  /* Disabled */
+  --color-disabled-text: var(--ref-ink-400);
+  --color-disabled-bg: var(--ref-stock-150);
+  --color-disabled-rule: var(--ref-stock-300);
+
+  /* Information, success, warning, critical, neutral: each has text, mark and tint; every use also carries a glyph */
+  --color-info-text: var(--ref-slate-700);
+  --color-info-mark: var(--ref-slate-700);
+  --color-info-tint: var(--ref-slate-100);
+  --color-success-text: var(--ref-green-700);
+  --color-success-mark: var(--ref-green-700);
+  --color-success-tint: var(--ref-green-100);
+  --color-warning-text: var(--ref-amber-800);
+  --color-warning-mark: var(--ref-amber-600);
+  --color-warning-tint: var(--ref-amber-100);
+  --color-critical-text: var(--ref-red-700);
+  --color-critical-mark: var(--ref-red-700);
+  --color-critical-tint: var(--ref-red-100);
+  --color-neutral-text: var(--ref-ink-600);
+  --color-neutral-mark: var(--ref-ink-600);
+  --color-neutral-tint: var(--ref-stock-150);
+
+  /* Relation: ink only, encoded by line style and glyph, so it can never collide with faction hues */
+  --color-relation-allied: var(--ref-ink-900);
+  --color-relation-neutral: var(--ref-ink-600);
+  --color-relation-hostile: var(--ref-ink-900);
+  --color-relation-unknown: var(--ref-ink-500);
+
+  /* Fog and uncertainty: unknown is hatched, estimated is dashed and labelled, stale is italic with a clock glyph */
+  --color-fog-unknown-fill: var(--ref-fog-100);
+  --color-fog-stroke: var(--ref-ink-500);
+  --color-fog-stale-text: var(--ref-ink-600);
+
+  /* Faction identity: one slot per actor; always paired with an emblem shape and a fill pattern */
+  --color-faction-1: var(--ref-faction-1);
+  --color-faction-2: var(--ref-faction-2);
+  --color-faction-3: var(--ref-faction-3);
+  --color-faction-4: var(--ref-faction-4);
+  --color-faction-5: var(--ref-faction-5);
+  --color-faction-6: var(--ref-faction-6);
+  --color-faction-7: var(--ref-faction-7);
+  --color-faction-8: var(--ref-faction-8);
+
+  /* Indicator types: stable per indicator; carry no good or bad valence, which is shown by delta glyph and word */
+  --color-indicator-stability: var(--ref-indicator-1);
+  --color-indicator-insurgency: var(--ref-indicator-2);
+  --color-indicator-civilian-support: var(--ref-indicator-3);
+  --color-indicator-global-legitimacy: var(--ref-indicator-4);
+  --color-indicator-regional-synergy: var(--ref-indicator-5);
+
+  /* Map: muted geographic palette and restrained boundary treatments after printed atlases */
+  --color-map-water: var(--ref-map-water);
+  --color-map-land: var(--ref-map-land);
+  --color-map-graticule: var(--ref-map-graticule);
+  --color-map-boundary-international: var(--ref-map-boundary-international);
+  --color-map-boundary-admin: var(--ref-map-boundary-admin);
+  --color-map-label: var(--ref-map-label);
+  --color-map-label-water: var(--ref-map-label-water);
+  --color-map-corridor: var(--ref-ink-700);
+  --color-map-boundary-on-fill: var(--ref-ink-900);
+  --color-map-ramp-1: var(--ref-map-ramp-1);
+  --color-map-ramp-2: var(--ref-map-ramp-2);
+  --color-map-ramp-3: var(--ref-map-ramp-3);
+  --color-map-ramp-4: var(--ref-map-ramp-4);
+
+  /* ===================================================================
+     3. TYPOGRAPHY
+     Why: Noto Sans for interface and data (covers the African Latin letters the setting needs,
+     has tabular figures); Charis SIL for documents (built for minority-language orthographies,
+     reads as a memorandum). Decisions and coverage test in DESIGN_DECISIONS.md.
+     Loading behaviour lives in fonts.css (font-display: swap with metric-matched fallback
+     faces), because @font-face descriptors cannot take custom properties.
+     =================================================================== */
+
+  --font-interface: "Noto Sans", "Noto Sans Fallback", system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-document: "Charis SIL", "Charis SIL Fallback", Georgia, "Times New Roman", serif;
+  --font-data: var(--font-interface);
+  --font-features-data: "tnum" 1, "lnum" 1;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Scale: sizes step on a modest ratio; line heights land on the 4px baseline */
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-md: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.25rem;
+
+  --leading-xs: 1rem;
+  --leading-sm: 1.25rem;
+  --leading-md: 1.25rem;
+  --leading-base: 1.5rem;
+  --leading-lg: 1.75rem;
+  --leading-xl: 1.75rem;
+  --leading-2xl: 2.25rem;
+  --leading-3xl: 2.75rem;
+
+  --tracking-meta: 0.06em;
+  --text-transform-meta: uppercase;
+
+  /* Roles: what a component asks for by name. Size, leading, weight. */
+  --type-meta-size: var(--text-xs);
+  --type-meta-leading: var(--leading-xs);
+  --type-meta-weight: var(--font-weight-medium);
+
+  --type-label-size: var(--text-sm);
+  --type-label-leading: var(--leading-sm);
+  --type-label-weight: var(--font-weight-medium);
+
+  --type-interface-size: var(--text-md);
+  --type-interface-leading: var(--leading-md);
+  --type-interface-weight: var(--font-weight-regular);
+
+  --type-data-size: var(--text-md);
+  --type-data-leading: var(--leading-md);
+  --type-data-weight: var(--font-weight-regular);
+
+  --type-readout-size: var(--text-2xl);
+  --type-readout-leading: var(--leading-2xl);
+  --type-readout-weight: var(--font-weight-semibold);
+
+  --type-heading-panel-size: var(--text-lg);
+  --type-heading-panel-leading: var(--leading-lg);
+  --type-heading-panel-weight: var(--font-weight-semibold);
+
+  --type-heading-section-size: var(--text-xl);
+  --type-heading-section-leading: var(--leading-xl);
+  --type-heading-section-weight: var(--font-weight-semibold);
+
+  --type-document-title-size: var(--text-2xl);
+  --type-document-title-leading: var(--leading-2xl);
+  --type-document-title-weight: var(--font-weight-bold);
+
+  --type-document-body-size: var(--text-base);
+  --type-document-body-leading: var(--leading-base);
+  --type-document-body-weight: var(--font-weight-regular);
+
+  --type-map-label-size: var(--text-xs);
+  --type-map-label-weight: var(--font-weight-medium);
+
+  /* ===================================================================
+     4. SPACING
+     Why: a 4px unit gives the Swiss-style mathematical rhythm; every step is a multiple.
+     =================================================================== */
+
+  --space-half: 0.125rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  --grid-columns: 12;
+  --grid-gutter: var(--space-4);
+  --grid-margin: var(--space-6);
+
+  /* Panels size to content within a band; they never hold a fixed width that could clip data */
+  --panel-side-min: 20rem;
+  --panel-side-max: 28rem;
+  --panel-document-measure: 38rem;
+
+  /* ===================================================================
+     5. COMPONENT-TIER SIZING
+     Why: one size scale for every control keeps targets at 32px or above for primary controls
+     and never below the 24px floor.
+     =================================================================== */
+
+  --target-min: 1.5rem;
+  --control-size-compact: 1.5rem;
+  --control-size-default: 2rem;
+  --control-size-large: 2.5rem;
+  --control-padding-inline: var(--space-3);
+  --row-height-dense: 1.75rem;
+  --row-height-default: 2.25rem;
+  --icon-size-small: 1rem;
+  --icon-size-default: 1.25rem;
+  --icon-stroke: 1.5px;
+
+  /* ===================================================================
+     6. RADIUS
+     Why: austere. Panels are square like a printed sheet; controls get a 2px relief only so
+     they read as controls. No large rounded corners.
+     =================================================================== */
+
+  --radius-none: 0;
+  --radius-control: 0.125rem;
+
+  /* ===================================================================
+     7. BORDERS AND RULES
+     Why: hierarchy comes from rule weight (heavy rule over hairline) as in editorial and
+     chart layouts, not from boxes or shadows.
+     =================================================================== */
+
+  --border-hairline: 1px;
+  --border-control: 1px;
+  --border-heavy: 2px;
+  --border-focus: 2px;
+  --border-focus-offset: 2px;
+
+  /* Relation line styles: second channel for the relation colours */
+  --line-width-allied: 3px;
+  --line-width-neutral: 1.5px;
+  --line-width-hostile: 2px;
+  --line-width-unknown: 1.5px;
+  --line-dash-hostile: 6 3;
+  --line-dash-estimated: 4 3;
+  --line-dash-unknown: 1 3;
+
+  /* Fog hatching: second channel for unknown and estimated information */
+  --fog-hatch-gap: 4px;
+  --fog-hatch-angle: 45deg;
+  --fog-hatch-width: 1px;
+
+  /* ===================================================================
+     8. ELEVATION AND LAYERING
+     Why: none by design. There are no shadows; overlays separate by a heavy rule and the scrim.
+     This group exists to record the decision, so no component adds a box-shadow.
+     =================================================================== */
+
+  --elevation-none: none;
+
+  /* ===================================================================
+     9. MOTION
+     Why: motion explains cause and state, never decorates. Duration scales by the size of the
+     change: press feedback is instant, state changes are fast, panels are base, map camera
+     moves and turn resolution are slow.
+     =================================================================== */
+
+  --duration-instant: 0ms;
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 360ms;
+  --duration-stagger: 60ms;
+  --duration-fade: 120ms;
+
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --ease-linear: linear;
+
+  /* ===================================================================
+     10. Z-INDEX LAYERS
+     Why: one named stack so a map overlay never fights a dialog.
+     =================================================================== */
+
+  --z-map: 0;
+  --z-map-overlay: 10;
+  --z-panel: 20;
+  --z-sticky: 30;
+  --z-popover: 40;
+  --z-dialog: 50;
+  --z-live-region: 60;
+  --z-skip-link: 70;
+}
+
+/*
+  Reduced motion: movement becomes instant; opacity-only changes keep --duration-fade so state
+  changes are still perceivable. Components use --duration-fade for the fade-only substitute.
+*/
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+    --duration-slow: 0ms;
+    --duration-stagger: 0ms;
+  }
+}

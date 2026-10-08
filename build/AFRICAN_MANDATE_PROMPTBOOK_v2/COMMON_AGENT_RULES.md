@@ -1,0 +1,11 @@
+# Common agent rules — African Mandate Promptbook v2
+
+Read `README.md`, `BUILD_STATE_PROTOCOL.md`, `SOURCE_PRECEDENCE.md`, the relevant `prompts/NN_*.md`, and the Build Preparation v1 canonical sources before modifying code. Domain v1.1 > Technical Architecture v2 > Data & Methodology v1.1 > Game Design v2.1 > Stage 1 approved > Stage 2 authoring > reconciled UX, except explicitly later approved decision records. When a later amendment changes a domain/technical invariant (verified leaderboard), require a versioned ADR and spec update before implementation. Do not resolve conflicts by guesswork.
+
+Approved: five countries ML/BF/NE/TD/MR; historical conflict anchor 2025-09-26; simulation start 2025-10-01; 20 monthly turns and three consequential decisions per month. Unapproved: boundary source/edition/admin level, exact balance constants, real actors' modeled private intentions, legal authorization paths, final measured indicators, leaderboard composite, production source use. Unknown data remains unknown, not zero. Real baseline immutable; October 2025 onward simulated, clearly marked SIMULATED.
+
+AI narrative changes presentation only; not state. No UI hidden-state imports. Knowledge-safe eligibility uses known facts; hidden factors resolve *after* valid commitment. Commit is atomic and durable-before-memory; no undo of committed decisions. Deterministic keyed RNG/IDs/canonical hashing. Synthetic TEST_ONLY never promoted to historical or production.
+
+**At start:** verify prerequisite status is ACCEPTED in `docs/build/BUILD_STATE.json`, working tree, hashes, and latest handoff. Refuse dependent implementation if missing; report BLOCKED and complete only independently valid, bounded preparatory work.
+
+**At finish:** produce `docs/build/handoffs/NN.md` with commits/changed paths, specification line references, exact executed commands and outputs, negative test outcomes, untouched scopes, unresolved issues, status recommendation, and next prerequisites. An agent cannot self-approve ACCEPTED: request independent verifier/owner review. Never mark tests passed unless executed. Never revise a golden expected result to match broken implementation without approved fixture change.

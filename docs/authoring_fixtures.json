@@ -1,0 +1,21 @@
+{
+  "schema": "african-mandate.package4.authoring-fixture.v0.1",
+  "classification": "TEST_ONLY_NOT_EXECUTABLE_SIMULATION",
+  "campaignStart": "2025-10-01",
+  "historicalConflictCutoff": "2025-09-26",
+  "maxMonthsUnderTest": 4,
+  "decisionsPerMonth": 3,
+  "geographicScope": ["ML", "BF", "NE", "TD", "MR"],
+  "pendingGeoSentinel": "zone_pending_mopti_adm1",
+  "caseIds": ["case_access_monitoring", "case_civilian_access", "case_corridor_resilience"],
+  "scripts": [
+    {"id":"SIM-01","script":"collect_first","months":[["action_m01_task_access_verification","action_m01_consult_au_commission"],["action_m01_adopt_access_assessment","action_m02_open_access_case"],["action_m03_negotiate_monitoring_terms"],["action_m04_revise_assessment"]],"expect":"delayed evidence, case without implicit authorization"},
+    {"id":"SIM-02","script":"diplomacy_first","months":[["action_m01_consult_mali_access","action_m01_consult_au_commission"],["action_m02_consult_civic_channel"],["action_m03_negotiate_monitoring_terms"],["action_m04_revise_case_scope"]],"expect":"issue-specific positions and once-only memory effects; prerequisites may fail, assert rejections atomically"},
+    {"id":"SIM-03","script":"alternative_bc","months":[["action_m01_task_civilian_route","action_m01_request_asset_validation"],["action_m02_consult_ocha"],["action_m03_consult_afdb"],["action_m04_reallocate_priority"]],"expect":"B/C routes remain meaningful; no asset claims without evidence"},
+    {"id":"SIM-04","script":"inaction","months":[[],[],[],[]],"expect":"four end-turns, no forced case, Month 5 review available"},
+    {"id":"SIM-05","script":"overconfident","months":[["action_m01_adopt_access_assessment"],["action_m02_open_access_case"],[],["action_m04_revise_assessment"]],"expect":"later contradiction can undermine, never auto rewrite; legal prerequisites required"},
+    {"id":"SIM-07","script":"invalid_authorization","months":[[],["action_m02_open_access_case"],[],["action_m04_seek_authorization"]],"expect":"missing known procedure rejects without slot consumption or mutation"},
+    {"id":"SIM-10","script":"monitoring_negotiation","months":[["action_m01_adopt_access_assessment"],["action_m02_open_access_case"],["action_m03_negotiate_monitoring_terms"],["action_m04_revise_case_scope"]],"expect":"one coherent negotiation slot, conditional scope and no auto authorization"}
+  ],
+  "unencodedTestIds": ["SIM-06", "SIM-08", "SIM-09", "SIM-11", "SIM-12", "SIM-13", "SIM-14", "SIM-15", "SIM-16"]
+}
