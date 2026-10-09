@@ -1,0 +1,68 @@
+AM-PB2-04 deterministic-primitives verification log
+Date: 2026-10-09 America/Indianapolis
+Base HEAD: 05f933cba84e7023009fffaee4b36f1d839ce3a7
+
+SOURCE PREFLIGHT
+
+- Working tree clean at start.
+- Prompt 03 owner-reviewed commit: 05f933cba84e7023009fffaee4b36f1d839ce3a7.
+- Technical v2 SHA-256: 982be4ecd82b996e14be83b6fd89a60a2876bb4e2505ed195889ad4f81dcee30.
+- Domain v1.1 SHA-256: aa8a03380e93bb4adee9ef6115d59f64a98409f988eeaf132fa70460dec3c75c.
+- Executable Contract Inventory SHA-256: 0a06ccf9f26c4648cb7b955c77c1bb7e8a21cb2d8934d9aa5673471282c3d432.
+- AM-BUILD-002 SHA-256: daf7a9b301a904abb4adbcd4c729df3e870f7fc95f215fc0ea5f9effb168ade1.
+- Frozen vector artifact SHA-256: 625ac8680fb97b900087da1108aaa1d5988162119e1ee18badeb611efa0b5a44.
+
+SOURCE VECTOR AUDIT
+
+Technical v2 §14.1 publishes exactly two random vectors. Both were copied without modifying their seed/key/digest/sample values. The source does not publish an exact derived-ID output or canonical-state hash output; no generated value is labeled source-canonical.
+
+NARROW CHECKS
+
+- corepack pnpm run typecheck: exit 0.
+- corepack pnpm run lint: exit 0.
+- corepack pnpm run test:unit: exit 0; initially 3 files / 29 tests, then 3 files / 31 tests after completing prohibited-value cases.
+- corepack pnpm run test:determinism: exit 0.
+  PASS: two fresh processes produced identical deterministic bytes.
+  Diagnostic output:
+  {"canonicalHash":"4aa57f67e81dc8523b49aed611338644d749c74fdfcf61a4c65e8bd18bbe0ae3","canonicalJson":"{\"meta\":{\"negativeZero\":0,\"turn\":1},\"ordered\":[\"first\",\"second\"],\"versions\":{\"schema\":1,\"simulation\":\"test-only-v1\"}}","derivedId":"consequence_f3535f1f00ebf5202db7ed96","rounding":[-2,-1,1,2],"vectors":[{"digestHex":"fa4525869c8a1b68e950dd8400f61d5836b9bb80b9ddb3b1d095aa6cec0d5cde","sample":0.9776175931588472,"vectorId":"A"},{"digestHex":"ca2ab6e11655d78db6dd5e4b829e9e644c575b6c5629cf2b8379ff611372c6b5","sample":0.7897142695931827,"vectorId":"B"}]}
+- corepack pnpm run test:boundaries: exit 0.
+  PASS: web-to-simulation import was rejected.
+  PASS: Math.random and randomUUID were rejected inside simulation scope.
+
+The diagnostic canonical hash and derived ID above are implementation-review evidence, not source-published golden values before owner acceptance.
+
+FINAL VERIFICATION
+
+1. $env:NODE_TLS_REJECT_UNAUTHORIZED = '1'; corepack pnpm install --frozen-lockfile
+   Exit: 0
+   Scope: all 9 workspace projects; already up to date; pnpm 11.23.0.
+
+2. First CI capture was launched in parallel with governance. Governance completed, while the CI output capture ended after the Vitest launch without returning a final exit code. This incomplete capture is not counted as a pass.
+
+3. Standalone $env:NODE_TLS_REJECT_UNAUTHORIZED = '1'; corepack pnpm run ci
+   Exit: 0
+   - Formatting: pass.
+   - Peer dependencies: pass.
+   - ESLint: pass.
+   - TypeScript no-emit: pass.
+   - Vitest: 3 files passed, 31 tests passed.
+   - Two fresh vector processes: pass; byte output exactly matches the diagnostic output above.
+   - Forbidden import: pass.
+   - Forbidden Math.random/randomUUID: pass.
+   - Governance/toolchain artifact schemas: pass.
+
+4. Independent corepack pnpm run test:determinism after CI
+   Exit: 0
+   PASS: two fresh processes produced identical deterministic bytes.
+   The complete output exactly matched the CI output, including both source digests/samples, canonical JSON/hash, derived ID, and rounding array.
+
+5. $env:PYTHONDONTWRITEBYTECODE = '1'; py -3 -m unittest discover -s tests/governance -p "test_*.py" -v
+   Exit: 0
+   Seven tests passed in 0.029s.
+
+6. git diff --check and final status
+   Exit: 0
+   Result: no whitespace errors. Git emitted only the repository's existing LF-to-CRLF conversion warnings. Status contained only the exact Prompt 04 paths listed in the handoff.
+
+7. Static nondeterministic-API scan
+   Result: Math.random/randomUUID occur only in the deliberate negative fixture and their ESLint selectors; no production simulation source contains either call.

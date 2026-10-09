@@ -7,6 +7,7 @@ export type DomainPackageDescriptor = typeof domainPackage;
 
 export * from "./baseline.js";
 export * from "./campaign.js";
+export * from "./determinism-vectors.js";
 export * from "./ids.js";
 export * from "./json.js";
 export * from "./references.js";

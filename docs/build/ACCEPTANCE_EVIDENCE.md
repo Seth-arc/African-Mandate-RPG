@@ -159,3 +159,41 @@ The Promptbook references an `AM-ACT` family that does not exist in the supplied
 | AC-003 | Technical v2 Zod source-of-truth; Contract Inventory | Strict unions, JSON safety, duplicate and cross-reference rejection | Schema conformance tests PASS |
 
 Prompt 03 remains unapproved until the repository owner reviews, reruns, and commits it under `AM-GOV-001`.
+
+## AM-PB2-04 — Deterministic primitives and fixed vectors
+
+**Status proposed:** READY_FOR_REVIEW
+
+**Acceptance ID:** PB2-04
+
+**Preflight HEAD:** `05f933cba84e7023009fffaee4b36f1d839ce3a7`
+
+**Prerequisite result:** PB2-03 is `ACCEPTED` by the reviewed Prompt 03 commit under `AM-GOV-001` and `AM-GOV-016`.
+
+### Evidence produced
+
+- `packages/simulation/src/determinism/`: synchronous portable SHA-256, keyed sampling, derived IDs with collision failure, canonical JSON/hash, deep-frozen snapshot hashing, and round-half-away-from-zero.
+- `packages/domain/src/determinism-vectors.ts`: Zod-authoritative fixed-vector artifact schema and inferred type.
+- `tests/fixtures/determinism/technical-v2-random-vectors.json`: byte-for-byte expected digest/sample values from Technical v2 §14.1 with pinned provenance.
+- `tests/unit/determinism.test.ts`: exact vectors, Web Crypto parity, Unicode boundaries, canonical ordering, prohibited values, collision, rounding, distinct-input, and immutability cases.
+- `scripts/verify-determinism-vectors.mjs`: two fresh processes must emit identical bytes and independently validate source vectors.
+- `docs/build/DETERMINISM_CONTRACT.md`, Prompt 04 log, and handoff: ownership, versions, source mapping, limitations, outputs, and reproduction.
+
+### Tests and negative cases
+
+- Final full CI, governance regression, two-fresh-process runs, and diff checks are recorded in `docs/build/logs/04-determinism.txt`.
+- Technical v2 source vectors A and B match their exact SHA-256 digests and IEEE-754 samples.
+- The synchronous implementation matches the standardized Web Crypto digest for ASCII, empty, Unicode, canonical state, and ID material.
+- NFC/NFD-equivalent strings remain byte-distinct; object insertion order is invariant; array order remains semantic; `-0` becomes `0`.
+- `undefined`, functions, symbols/accessors, sparse arrays, cycles, `Date`, `Map`, `Set`, `BigInt`, NaN, and infinities fail closed.
+- Derived ID collision, embedded NUL ambiguity, invalid ordinal/prefix, mutable snapshot hashing, and non-finite rounding fail closed.
+- ESLint prohibits `Math.random()` and `randomUUID()` calls inside the simulation package.
+
+### Source-to-test traceability
+
+| Acceptance ID | Source authority | Contract / evidence | Test state |
+|---|---|---|---|
+| PB2-04 | Technical v2 §§11-15, 86; Domain §3.6 and §99; AM-BUILD-002 | Public deterministic APIs, source vector artifact, two-process verifier | READY_FOR_REVIEW |
+| AC-004 | Technical v2 hashing/RNG/ID/rounding rules | Exact source vectors, Web Crypto comparisons, stable IDs, canonical hash, quantization, two fresh processes | PASS |
+
+Technical v2 publishes exact random vectors but no exact ID or canonical-state output. Generated diagnostic values are not labeled source-canonical; AM-GOV-017 records the review-required interface boundaries. Prompt 04 remains unapproved until the repository owner reviews, reruns, and commits it under `AM-GOV-001`.

@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "1.0",
+  "artifactId": "technical-v2-random-vectors",
+  "classification": "CANONICAL_SOURCE_VECTOR",
+  "provenance": {
+    "sourcePath": "docs/AFRICAN_MANDATE_TECHNICAL_ARCHITECTURE_v2.md",
+    "sourceSha256": "982be4ecd82b996e14be83b6fd89a60a2876bb4e2505ed195889ad4f81dcee30",
+    "sourceSection": "14.1 Required random test vectors",
+    "seedScopeNote": "Vector B continues the campaign-test-seed scope introduced immediately before Vector A; its published digest independently confirms that material."
+  },
+  "campaignSeed": "campaign-test-seed",
+  "vectors": [
+    {
+      "vectorId": "A",
+      "resolutionKey": "turn:01|system:event_director|subject:zone_mopti|resolution:asset_disruption",
+      "expectedSha256": "fa4525869c8a1b68e950dd8400f61d5836b9bb80b9ddb3b1d095aa6cec0d5cde",
+      "expectedSample": 0.9776175931588472
+    },
+    {
+      "vectorId": "B",
+      "resolutionKey": "turn:08|system:actor_adaptation|subject:actor_foo|resolution:position_shift",
+      "expectedSha256": "ca2ab6e11655d78db6dd5e4b829e9e644c575b6c5629cf2b8379ff611372c6b5",
+      "expectedSample": 0.7897142695931827
+    }
+  ]
+}

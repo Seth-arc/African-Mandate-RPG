@@ -4,7 +4,7 @@
 
 **Task:** AM-PB2-02
 
-**Classification:** TEST_ONLY workspace infrastructure pending Prompt 02 review
+**Classification:** ACCEPTED TEST_ONLY workspace infrastructure; deterministic primitive additions are READY_FOR_REVIEW under Prompt 04
 
 ## Dependency direction
 
@@ -30,8 +30,8 @@ The repeated arrows from `domain` show direct contract imports. `application` ma
 
 | Workspace | Public root | Allowed internal imports | Ownership |
 |---|---|---|---|
-| `packages/domain` | `@african-mandate/domain` | none | Serialized contracts and domain types; no gameplay schema exists yet |
-| `packages/simulation` | `@african-mandate/simulation` | `domain` | Deterministic engine boundary; descriptor only in Prompt 02 |
+| `packages/domain` | `@african-mandate/domain` | none | Serialized contracts, domain types, and the determinism-vector artifact schema |
+| `packages/simulation` | `@african-mandate/simulation` | `domain` | Pure deterministic primitives: SHA-256, keyed samples, derived IDs, canonical JSON/hash, immutable snapshots, and rounding |
 | `packages/application` | `@african-mandate/application` | `domain`, public `simulation` API | Operation/projection port boundary; descriptor only |
 | `packages/data-pipeline` | `@african-mandate/data-pipeline` | `domain` | Source compiler boundary; no source admission or GIS tool selected |
 | `packages/content` | `@african-mandate/content` | `domain` | Authored-content boundary; no content compiled |
@@ -45,7 +45,7 @@ The repeated arrows from `domain` show direct contract imports. `application` ma
 - Normal UI and web code cannot import `@african-mandate/simulation`, raw campaign stores, or debug projections.
 - Domain cannot import another workspace package.
 - Content and data-pipeline can import only domain.
-- Package exports contain descriptors only. No state, rule, balance, source, legal, map, narrative, or gameplay behavior was introduced.
+- Package exports expose only their public roots. Domain schemas and pure simulation determinism primitives are implemented; no reducer, state mutation, balance, source, legal, map, narrative, or gameplay behavior is present.
 
 `tests/fixtures/forbidden-import/web-imports-simulation.ts` deliberately violates the UI firewall. `scripts/verify-forbidden-import.mjs` passes only when ESLint rejects that fixture with `no-restricted-imports`.
 

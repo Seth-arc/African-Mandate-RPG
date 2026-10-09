@@ -55,9 +55,28 @@ export default tseslint.config(
     rules: { "no-restricted-imports": boundaryRule([]) },
   },
   {
-    files: ["packages/simulation/**/*.ts"],
+    files: [
+      "packages/simulation/**/*.ts",
+      "tests/fixtures/forbidden-random/simulation-uses-random.ts",
+    ],
     rules: {
       "no-restricted-imports": boundaryRule(["@african-mandate/domain"]),
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector:
+            "CallExpression[callee.object.name='Math'][callee.property.name='random']",
+          message: "Simulation code must use deterministic keyed randomness.",
+        },
+        {
+          selector: "CallExpression[callee.property.name='randomUUID']",
+          message: "Simulation-derived IDs must be deterministic.",
+        },
+        {
+          selector: "CallExpression[callee.name='randomUUID']",
+          message: "Simulation-derived IDs must be deterministic.",
+        },
+      ],
     },
   },
   {

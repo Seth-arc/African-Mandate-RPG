@@ -1,6 +1,6 @@
 # African Mandate decision ledger
 
-**Ledger version:** 1.1.0
+**Ledger version:** 1.2.0
 
 **Created by:** AM-PB2-01
 
@@ -40,6 +40,9 @@ Exact source byte hashes and admission classifications are pinned in `docs/build
 
 | AM-GOV-014 | owner | Prompt 02 acceptance and pinned workspace review | AM-GOV-001; commit metadata; Prompt 02 evidence | Commit `5c944fb501e6f091c768421eaf0c2e0452ea8245`, authored and committed by Seth-arc at `2026-10-08T16:19:00-04:00`, accepts PB2-02 and the pinned workspace/toolchain recorded in AM-GOV-012. This row supersedes only the pending approval state of AM-GOV-012; it does not rewrite that historical proposal row. | APPROVED | Seth-arc, repository owner | 03-29 |
 | AM-GOV-015 | engineering | Isolated partial `FixturePackage` serialization shape | Prompt 03; AM-BUILD-001; First Compilation Fixture Plan v1 | `FixturePackageSchema` uses explicit `fixtureSchemaVersion: 1` and `classification: TEST_ONLY_PARTIAL_FIXTURE`. These fields have no canonical upstream shape and are therefore a test-only design proposal. A fixture is rejected by `ScenarioBundleSchema`; this proposal cannot admit production content. | PROPOSED / TEST_ONLY | Domain/architecture owner review required with Prompt 03 | 03, 06, 18-19 |
+
+| AM-GOV-016 | owner | Prompt 03 acceptance and serialized-domain review | AM-GOV-001; commit metadata; Prompt 03 evidence | Commit `05f933cba84e7023009fffaee4b36f1d839ce3a7`, authored and committed by Seth-arc at `2026-10-09T11:13:45-04:00`, accepts PB2-03 and its contract version 0.1.0. This acceptance does not promote the partial fixture or admit production scenario content. | APPROVED | Seth-arc, repository owner | 04-29 |
+| AM-GOV-017 | engineering | Determinism artifact wrapper and unspecified string boundaries | Technical v2 §§13-15; Prompt 04; AM-BUILD-002 | The source-published random values remain canonical. Artifact wrapper fields, ECMAScript string key ordering, no automatic Unicode normalization, NUL-delimiter rejection, and the collision-registry call shape are TEST_ONLY implementation proposals where the source does not define an exact serialized/API field. No generated ID or state hash is source-canonical before Prompt 04 review. | PROPOSED / TEST_ONLY | Domain/architecture owner review required with Prompt 04 | 04-29 |
 
 ## Non-decisions
 
