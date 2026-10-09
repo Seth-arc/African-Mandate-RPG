@@ -1,6 +1,6 @@
 # African Mandate decision ledger
 
-**Ledger version:** 1.3.0
+**Ledger version:** 1.4.0
 
 **Created by:** AM-PB2-01
 
@@ -46,6 +46,9 @@ Exact source byte hashes and admission classifications are pinned in `docs/build
 
 | AM-GOV-018 | owner | Prompt 04 acceptance and deterministic-primitive review | AM-GOV-001; commit metadata; Prompt 04 evidence | Commit `cd1a1bd516c8a00392f4115498f3ecee50ca4286`, authored and committed by Seth-arc at `2026-10-09T11:55:19-04:00`, accepts PB2-04 and deterministic contract v1.0. This accepts AM-GOV-017's implementation boundaries for that version without converting diagnostic ID/hash output into upstream source text. | APPROVED | Seth-arc, repository owner | 05-29 |
 | AM-GOV-019 | engineering | Application port naming and minimal operation-lock shape | Technical v2 §§16-20, 23, 30, 48; Prompt 05 | Technical v2 names `CampaignPersistencePort` and `CampaignEditLockPort`; Prompt 05 requests `CampaignRepository` and `CampaignEditLock`. The public contract exports the requested names plus compatibility aliases, a minimal releasable lease, five source-listed operation kinds, and generic payload families because exact command/result/projection/reference fields belong to later prompts. These TypeScript-only call shapes are TEST_ONLY proposals; they define no new serialized artifact. | PROPOSED / TEST_ONLY | Application/domain architecture review required with Prompt 05 | 05-20 |
+
+| AM-GOV-020 | owner | Prompt 05 acceptance and application-boundary review | AM-GOV-001; commit metadata; Prompt 05 evidence | Commit `df00eadb67d75fa5a43b9cce9a49f0be12f2c525`, authored and committed by Seth-arc at `2026-10-09T12:37:11-04:00`, accepts PB2-05 and application port contract v1.0.0. This accepts AM-GOV-019's test-only interface boundary without approving a production browser adapter or durable command implementation. | APPROVED | Seth-arc, repository owner | 06-20 |
+| AM-GOV-021 | engineering | Synthetic fixture compiler artifact shapes and boundary policy | Data & Methodology §§11-14 and Appendix C; Fixture Plan v1; Prompt 06 | Version `1.0.0` defines strict TEST_ONLY synthetic input and the seven named Appendix C artifact shapes. Synthetic boundary points are held unassigned; deterministic IDs are SHA-256-derived from canonical fixture material; source rows normalize by stable row ID; unknown/missing observations remain explicit. These exact fields and policies are test-only proposals and do not establish a real Mopti boundary, source admission, asset status, or production ScenarioBundle. | PROPOSED / TEST_ONLY | Data/domain architecture review required with Prompt 06 | 06-19 |
 
 ## Non-decisions
 

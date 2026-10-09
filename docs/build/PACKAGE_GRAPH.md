@@ -4,7 +4,7 @@
 
 **Task:** AM-PB2-02
 
-**Classification:** ACCEPTED TEST_ONLY workspace infrastructure; deterministic primitive additions are READY_FOR_REVIEW under Prompt 04
+**Classification:** ACCEPTED TEST_ONLY workspace infrastructure; Prompt 06 fixture compiler is READY_FOR_REVIEW
 
 ## Dependency direction
 
@@ -33,7 +33,7 @@ The repeated arrows from `domain` show direct contract imports. `application` ma
 | `packages/domain` | `@african-mandate/domain` | none | Serialized contracts, domain types, and the determinism-vector artifact schema |
 | `packages/simulation` | `@african-mandate/simulation` | `domain` | Pure deterministic primitives: SHA-256, keyed samples, derived IDs, canonical JSON/hash, immutable snapshots, and rounding |
 | `packages/application` | `@african-mandate/application` | `domain`, public `simulation` API | Versioned operation/port boundary, serial coordinator, and in-memory TEST_ONLY adapters; no production browser adapter |
-| `packages/data-pipeline` | `@african-mandate/data-pipeline` | `domain` | Source compiler boundary; no source admission or GIS tool selected |
+| `packages/data-pipeline` | `@african-mandate/data-pipeline` | `domain` | TEST_ONLY synthetic fixture parser/compiler and versioned artifact schemas; no production source admission or GIS tool selected |
 | `packages/content` | `@african-mandate/content` | `domain` | Authored-content boundary; no content compiled |
 | `packages/ui` | `@african-mandate/ui` | `domain`, `application` | Presentation-only boundary; simulation and raw state forbidden |
 | `apps/web` | `@african-mandate/web` | `domain`, `application`, `ui` | Knowledge-safe shell boundary; no React/browser behavior yet |
@@ -45,7 +45,7 @@ The repeated arrows from `domain` show direct contract imports. `application` ma
 - Normal UI and web code cannot import `@african-mandate/simulation`, raw campaign stores, or debug projections.
 - Domain cannot import another workspace package.
 - Content and data-pipeline can import only domain.
-- Package exports expose only their public roots. Domain schemas and pure simulation determinism primitives are implemented; no reducer, state mutation, balance, source, legal, map, narrative, or gameplay behavior is present.
+- Package exports expose only their public roots. Domain schemas, pure simulation determinism primitives, and an isolated synthetic fixture compiler are implemented; no production reducer, state mutation, balance, source admission, legal, map, narrative, or gameplay behavior is present.
 
 `tests/fixtures/forbidden-import/web-imports-simulation.ts` deliberately violates the UI firewall. `scripts/verify-forbidden-import.mjs` passes only when ESLint rejects that fixture with `no-restricted-imports`.
 

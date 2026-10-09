@@ -1,0 +1,175 @@
+{
+  "fixtureCompilerVersion": "1.0.0",
+  "classification": "TEST_ONLY_SYNTHETIC",
+  "fixturePackage": {
+    "fixtureSchemaVersion": 1,
+    "classification": "TEST_ONLY_PARTIAL_FIXTURE",
+    "fixtureId": "fixture_sahel_mopti_anchor_2025_fixture_v1",
+    "scenario": {
+      "scenarioId": "scenario_synthetic_fixture_v1",
+      "titleKey": "test.fixture.synthetic.title",
+      "baselineId": "baseline_synthetic_fixture_v1",
+      "startDate": "2025-10-01",
+      "maxTurns": 20,
+      "turnDuration": "calendar_month",
+      "decisionsPerTurn": 3,
+      "representedInstitutionId": "institution_synthetic_fixture",
+      "territoryIds": ["territory_ml_synthetic_fixture"],
+      "initialInstitutionIds": ["institution_synthetic_fixture"],
+      "initialActorIds": [],
+      "difficultyProfileIds": ["difficulty_synthetic_fixture"],
+      "earlyTerminationRuleIds": [],
+      "finalEvaluationProfileId": "evaluation_synthetic_fixture"
+    },
+    "territoryDefinitions": {
+      "territory_ml_synthetic_fixture": {
+        "territoryId": "territory_ml_synthetic_fixture",
+        "nameKey": "test.fixture.synthetic.territory",
+        "geometryRef": "synthetic_test_only",
+        "zoneIds": ["zone_synthetic_square"],
+        "governmentInstitutionId": "institution_synthetic_fixture"
+      }
+    },
+    "zoneDefinitions": {
+      "zone_synthetic_square": {
+        "zoneId": "zone_synthetic_square",
+        "territoryId": "territory_ml_synthetic_fixture",
+        "nameKey": "test.fixture.synthetic.zone",
+        "geometryRef": "synthetic_test_only",
+        "adjacentZoneIds": [],
+        "tags": ["test_only", "not_a_real_boundary"]
+      }
+    },
+    "institutionDefinitions": {
+      "institution_synthetic_fixture": {
+        "institutionId": "institution_synthetic_fixture",
+        "institutionType": "au",
+        "nameKey": "test.fixture.synthetic.institution",
+        "authorityDomains": [],
+        "actorIds": [],
+        "authorizationProcedureIds": []
+      }
+    },
+    "notes": [
+      "Corresponds to Appendix C fixture intent; geometry, records, asset, claims, and values are synthetic engineering inputs only.",
+      "This is not a complete ScenarioBundle and contains no real Mopti boundary or historical totals."
+    ]
+  },
+  "cutoffDate": "2025-09-26",
+  "noncoveragePeriod": {
+    "startDate": "2025-09-27",
+    "endDate": "2025-09-30"
+  },
+  "polygon": {
+    "geometrySource": "synthetic_test_only",
+    "zoneId": "zone_synthetic_square",
+    "ring": [
+      [0, 0],
+      [10, 0],
+      [10, 10],
+      [0, 10],
+      [0, 0]
+    ]
+  },
+  "sourceDefinitions": [
+    {
+      "sourceId": "source_synthetic_observations",
+      "sourceName": "Synthetic observation rows",
+      "distributionPermission": "TEST_ONLY_LOCAL"
+    }
+  ],
+  "sourceRecords": [
+    {
+      "rowId": "row_duplicate_a",
+      "sourceId": "source_synthetic_observations",
+      "sourceRecordId": "synthetic_incident_duplicate",
+      "observedAt": "2025-09-20",
+      "coordinate": [5, 5],
+      "observedValue": 4
+    },
+    {
+      "rowId": "row_duplicate_b",
+      "sourceId": "source_synthetic_observations",
+      "sourceRecordId": "synthetic_incident_duplicate",
+      "observedAt": "2025-09-20",
+      "coordinate": [5, 5],
+      "observedValue": 4
+    },
+    {
+      "rowId": "row_missing_value",
+      "sourceId": "source_synthetic_observations",
+      "sourceRecordId": "synthetic_incident_missing_value",
+      "observedAt": "2025-09-24",
+      "coordinate": [4, 4],
+      "observedValue": null,
+      "missingReason": "Synthetic source field deliberately absent"
+    },
+    {
+      "rowId": "row_post_cutoff",
+      "sourceId": "source_synthetic_observations",
+      "sourceRecordId": "synthetic_incident_post_cutoff",
+      "observedAt": "2025-09-27",
+      "coordinate": [6, 6],
+      "observedValue": 9
+    },
+    {
+      "rowId": "row_outside",
+      "sourceId": "source_synthetic_observations",
+      "sourceRecordId": "synthetic_incident_outside",
+      "observedAt": "2025-09-22",
+      "coordinate": [20, 20],
+      "observedValue": 2
+    },
+    {
+      "rowId": "row_boundary",
+      "sourceId": "source_synthetic_observations",
+      "sourceRecordId": "synthetic_incident_boundary",
+      "observedAt": "2025-09-22",
+      "coordinate": [0, 5],
+      "observedValue": 3
+    },
+    {
+      "rowId": "row_missing_coordinate",
+      "sourceId": "source_synthetic_observations",
+      "sourceRecordId": "synthetic_incident_missing_coordinate",
+      "observedAt": "2025-09-21",
+      "coordinate": null,
+      "observedValue": 1
+    },
+    {
+      "rowId": "row_missing_date",
+      "sourceId": "source_synthetic_observations",
+      "sourceRecordId": "synthetic_incident_missing_date",
+      "observedAt": null,
+      "coordinate": [3, 3],
+      "observedValue": 1
+    }
+  ],
+  "assets": [
+    {
+      "assetKey": "synthetic_asset_alpha",
+      "name": "Synthetic engineering asset alpha",
+      "zoneId": "zone_synthetic_square",
+      "coordinate": [7, 7],
+      "statusEvidence": "SYNTHETIC_TEST_ONLY"
+    }
+  ],
+  "claims": [
+    {
+      "claimKey": "synthetic_claim_supports",
+      "subjectKey": "synthetic_subject_alpha",
+      "assertion": "Synthetic claim A",
+      "relation": "SUPPORTS",
+      "epistemicStatus": "CONTRADICTORY_SYNTHETIC_CLAIM",
+      "visibility": "PLAYER_KNOWN"
+    },
+    {
+      "claimKey": "synthetic_claim_contradicts",
+      "subjectKey": "synthetic_subject_alpha",
+      "assertion": "Synthetic claim not-A",
+      "relation": "CONTRADICTS",
+      "epistemicStatus": "CONTRADICTORY_SYNTHETIC_CLAIM",
+      "visibility": "PLAYER_KNOWN"
+    }
+  ]
+}

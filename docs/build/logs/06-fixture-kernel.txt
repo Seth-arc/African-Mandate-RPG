@@ -1,0 +1,100 @@
+AM-PB2-06 synthetic-fixture verification log
+Date: 2026-10-09 America/Indianapolis
+Base HEAD: df00eadb67d75fa5a43b9cce9a49f0be12f2c525
+
+PREFLIGHT
+
+- Working tree clean at start.
+- Prompt 05 owner-reviewed commit: df00eadb67d75fa5a43b9cce9a49f0be12f2c525.
+- Prompt 05 commit author/time: Seth-arc, 2026-10-09T12:37:11-04:00.
+- Data & Methodology v1.1 SHA-256: 90f5de5f32585297747fa8cb91eaae5ad3b98b82327c4fc680df48e145a1a42c.
+- Fixture Plan v1 SHA-256: 51e9057ba2273104679dbcf2cfc0824aa6b7b2b2bcf0577b2b68a5d287620c5d.
+- Prompt 06 SHA-256: 12e322c4bce7308132b0d08cc70c3a724669d7d174b90291eb8c4f8a86af29b0.
+- Source manifest SHA-256: 4ce13c6d0fa6eb7d99f4e7023a7c48669bb57407827dc83f661f8ab6eccbb436.
+
+VISIBLE IMPLEMENTATION ATTEMPTS
+
+1. Two large apply-patch calls stalled after writing a prefix of the requested files. Each process was stopped, the filesystem was inspected, and only missing files were applied afterward. No existing user change was overwritten.
+
+2. First `corepack pnpm install --lockfile-only`
+   Exit: 1 before pnpm started.
+   Result: Node was denied access to the user-profile path by the filesystem sandbox.
+
+3. Approved `corepack pnpm install --lockfile-only`
+   Exit: 0.
+   Result: all 9 workspace projects processed; lockfile passed supply-chain policy.
+
+4. First formatting launch
+   Exit: 1 before formatting.
+   Result: pnpm attempted to refresh the newly declared workspace dependency link but could not find its child pnpm executable in that launch context.
+
+5. Approved `corepack pnpm install --frozen-lockfile`
+   Exit: 0.
+   Result: workspace links refreshed; lockfile policy passed. Optional-platform metadata requests retried, then completed.
+
+6. Prettier write for exact Prompt 06 code, scripts, and fixture paths
+   Exit: 0.
+
+7. Narrow typecheck
+   Exit: 0.
+
+8. Narrow unit suite
+   Exit: 0.
+   Result: 5 test files passed, 48 tests passed.
+
+9. Two-process fixture verifier
+   Exit: 0.
+   Result: two fresh builds produced byte-identical canonical artifacts; baseline canonical size 888 bytes.
+
+10. First lint run
+    Exit: 1.
+    Result: one unused publish-gate parameter. The error was fixed by including the fixture ID in the fail-closed error message; no lint rule was weakened.
+
+11. Lint and typecheck retry
+    Exit: 0 for both commands.
+
+FROZEN SYNTHETIC INPUT AND OUTPUT HASHES
+
+- tests/fixtures/compilation/synthetic-fixture.json: 3984aaee5e29ff8d01fc6292527e72cab5f5e5d944bb5d15a3d9158d7bf1a33a
+- fixture-baseline.json: a6dfdbe735133bba69077e7316a2ab408e26a05c74d89f33624bba843eb8a522
+- fixture-player-knowledge.json: 1faf2202671e63480453916b8d329c0a7481fd3b10f63d7280e579abf5a6728e
+- fixture-source-audit.json: 25cebf2a18038b4af02deb8e432de78f5e49516bb71bf797403f5b0691eb1fb6
+- fixture-source-manifest.json: eadd9a946631d8f31fe6eeb47302bf3e353109fb12ffd1962434c933c4397e0d
+- fixture-test-report.json: c62493c90ac365b08bd33ad7345a126fe535d87217ceaf6e732b955929be910b
+- fixture-zone-registry.json: 58f58a1c74d741c80945fc6408f439f9684a5c6f8097b255f75bd3c227a7b9db
+
+FINAL VERIFICATION
+
+1. `corepack pnpm install --frozen-lockfile`
+   Exit: 0.
+   Result: all 9 workspace projects already up to date; pnpm 11.23.0.
+
+2. `corepack pnpm run ci`
+   Exit: 0.
+   Result:
+   - Prettier: all matched files use Prettier code style.
+   - Peer dependency check: no issues found.
+   - ESLint: passed.
+   - TypeScript `tsc --noEmit`: passed.
+   - Vitest: 5 test files passed, 49 tests passed after adding cross-package canonical JSON/SHA-256 parity coverage.
+   - Two-process deterministic-vector verifier: PASS.
+   - Two-process synthetic-fixture verifier: PASS with all seven canonical artifact files byte-identical.
+   - Forbidden web-to-simulation import verifier: PASS.
+   - Forbidden simulation randomness verifier: PASS.
+   - Governance/toolchain artifact schema verifier: PASS.
+
+3. Independent `corepack pnpm run test:fixture` after CI
+   Exit: 0.
+   Result: the same seven artifact names, 888-byte baseline, and six non-circular artifact hashes listed above were reproduced.
+
+4. `$env:PYTHONDONTWRITEBYTECODE='1'; py -3 -m unittest discover -s tests/governance -p "test_*.py" -v`
+   Exit: 0.
+   Result: final run completed 7 tests in 0.002s and passed (`OK`).
+
+5. `git diff --check`
+   Exit: 0.
+   Result: no whitespace errors. Git emitted only the repository's existing LF-to-CRLF working-copy notices.
+
+6. `git status --short`
+   Exit: 0.
+   Result: only the 21 exact Prompt 06 paths enumerated in `docs/build/handoffs/06.md` are modified or untracked. Git also reported that the user-level `.config/git/ignore` was unreadable in the sandbox; repository status was still produced.

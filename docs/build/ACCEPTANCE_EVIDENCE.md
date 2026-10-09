@@ -235,3 +235,45 @@ Technical v2 publishes exact random vectors but no exact ID or canonical-state o
 | AC-021 | Technical v2 package boundary | Existing UI/web import firewall regression | PASS for import boundary |
 
 No serialized command/result/projection/reference shape was invented. AM-GOV-019 records generic TypeScript-only boundaries and naming differences for review. Prompt 05 remains unapproved until the repository owner reviews, reruns, and commits it under `AM-GOV-001`.
+
+## AM-PB2-06 — Isolated synthetic compilation fixture
+
+**Status proposed:** READY_FOR_REVIEW
+
+**Acceptance ID:** PB2-06
+
+**Preflight HEAD:** `df00eadb67d75fa5a43b9cce9a49f0be12f2c525`
+
+**Prerequisite result:** PB2-03 and PB2-04 were already accepted. The repository-owner commit above accepts PB2-05 under AM-GOV-001 and is reconciled by AM-GOV-020.
+
+### Evidence produced
+
+- `@african-mandate/data-pipeline` exports the strict synthetic input parser, seven versioned Appendix C artifact schemas, deterministic compiler, polygon assignment, fixture-to-test initialization transform, and fail-closed production gates.
+- `tests/fixtures/compilation/synthetic-fixture.json` contains only visibly synthetic square geometry, observation rows, asset, and claims; it contains no raw historical source record.
+- `tests/unit/fixture-kernel.test.ts` pins parsing, artifact conformance, polygon edge/on/off behavior, missingness, cutoff, duplicate audit, order invariance, controlled hash mutation, initialization isolation, and publication rejection.
+- `scripts/verify-fixture-build.mjs` executes the compiler in two fresh processes and requires byte-identical canonical files.
+- `docs/build/FIXTURE_COMPILER_CONTRACT.md`, Prompt 06 log, and handoff record ownership, proposal boundaries, exact hashes, exclusions, and reproduction.
+
+### Tests and negative cases
+
+- Final full CI, governance regression, two-process fixture builds, and diff checks are recorded in `docs/build/logs/06-fixture-kernel.txt`.
+- Missing observed values remain `null` with `missingness: MISSING`; no zero is synthesized.
+- Post-`2025-09-26` rows are excluded; the `2025-09-27`–`2025-09-30` gap remains `null` with a warning.
+- Repeated source-record IDs remain visible in the audit and only the stable first row is included.
+- Inside/outside/boundary assignments are deterministic; boundary points are held unassigned.
+- Reordering source rows leaves bytes unchanged; changing one included value changes the baseline hash.
+- Compiler canonical JSON and SHA-256 output matches the accepted simulation determinism contract for representative JSON boundaries.
+- TEST_ONLY publication and production `ScenarioBundle` serialization both reject the fixture.
+
+### Source-to-test traceability
+
+| Acceptance ID | Source authority | Contract / evidence | Test state |
+|---|---|---|---|
+| PB2-06 | Data & Methodology §§11–14, Appendix C; Fixture Plan v1 | Compiler contract v1.0.0, seven artifacts, fresh-process verifier | READY_FOR_REVIEW |
+| AC-003 | Strict serialized parser/schema boundary | Fixture and artifact schema tests | PASS |
+| AC-016 | Cutoff/gap/null behavior | Synthetic fixture audit only | STATIC_PASS synthetic; BLOCKED for real data |
+| AC-017 | Duplicate grain and polygon assignment | Synthetic fixture audit only | STATIC_PASS synthetic; BLOCKED for real ACLED/GIS |
+| AC-018 | Valid production polygons and map IDs | No production geometry included | BLOCKED |
+| AC-019 | Production rights and dated asset status | Publish gate rejects TEST_ONLY | BLOCKED |
+
+AM-GOV-021 records all exact compiler-only fields and policies as a review-required TEST_ONLY proposal. Prompt 06 does not claim a real Mopti baseline, complete `ScenarioBundle`, production source admission, or historical validation.
