@@ -1,0 +1,87 @@
+AM-PB2-03 domain-contract verification log
+Date: 2026-10-09 America/Indianapolis
+Base HEAD: 5c944fb501e6f091c768421eaf0c2e0452ea8245
+
+PRELIMINARY ATTEMPTS (retained)
+
+1. corepack pnpm exec prettier --check packages/domain/src tests/unit/domain-contracts.test.ts packages/domain/package.json
+   Exit: 1 before Prettier launch
+   Result: sandboxed Node path resolution failed with EPERM on C:\Users\ssnguna.
+
+2. corepack pnpm run typecheck
+   Exit: 1 before TypeScript launch
+   Result: sandboxed Node path resolution failed with EPERM on C:\Users\ssnguna.
+
+3. Same format check outside sandbox
+   Exit: 1
+   Result: nine new source/test files required formatting.
+
+4. Same typecheck outside sandbox
+   Exit: 1
+   Result: exactOptionalPropertyTypes mismatch in recursive RuleExpressionValue optional fields.
+
+5. corepack pnpm run lint
+   Exit: 1
+   Result: two unused generic helper parameters in ids.ts and versions.ts.
+
+CORRECTIONS AND NARROW CHECKS
+
+- Pinned Prettier applied to new source/test files.
+- Recursive rule optional fields aligned with exactOptionalPropertyTypes.
+- ID/version helper brands moved to explicit generic parameters.
+- corepack pnpm run typecheck: exit 0.
+- corepack pnpm run test:unit: exit 0; 2 files passed, 10 tests passed.
+- corepack pnpm run lint: exit 0.
+
+FINAL VERIFICATION
+
+1. $env:NODE_TLS_REJECT_UNAUTHORIZED = '1'; corepack pnpm install --force --frozen-lockfile
+   Exit: 0
+   Output:
+   [WARN] using --force I sure hope you know what you are doing
+   Scope: all 9 workspace projects
+   Already up to date
+   Done in 445ms using pnpm v11.23.0
+
+2. $env:NODE_TLS_REJECT_UNAUTHORIZED = '1'; corepack pnpm run ci
+   Exit: 0
+   Output summary:
+   - Prettier: All matched files use Prettier code style.
+   - pnpm peers: No peer dependency issues found.
+   - ESLint: exit 0.
+   - TypeScript no-emit: exit 0.
+   - Vitest: 2 test files passed, 10 tests passed.
+   - Boundary negative test: PASS; web-to-simulation import rejected.
+   - Governance/toolchain artifact schemas: PASS.
+
+3. $env:PYTHONDONTWRITEBYTECODE = '1'; py -3 -m unittest discover -s tests/governance -p "test_*.py" -v
+   Exit: 0
+   Output:
+   test_accepted_without_independent_record_is_rejected ... ok
+   test_current_state_matches_public_contract ... ok
+   test_direct_self_approval_is_rejected ... ok
+   test_only_accepted_satisfies_hard_prerequisite ... ok
+   test_required_transition_paths ... ok
+   test_source_manifest_hash_is_current ... ok
+   test_unapproved_state_cannot_carry_approval ... ok
+   Ran 7 tests in 0.027s
+   OK
+
+4. git diff --check
+   Exit: 0
+   Result: no whitespace errors. Git emitted only the repository's existing LF-to-CRLF conversion warnings.
+
+5. Governance recheck after minimizing BUILD_STATE formatting
+   Exit: 0
+   Result: 7 tests passed in 0.003s.
+
+6. corepack pnpm exec vitest run tests/unit/domain-contracts.test.ts --reporter verbose
+   Result: manually terminated after more than 70 seconds with no output. This redundant reporter-only attempt is not counted as a pass. The same test file had already completed in both the narrow unit run and full CI (10 total unit tests, exit 0).
+
+7. Final full rerun after correcting canonical FactQuery from a string to its required `{ fact, subject? }` object and adding its regression case
+   - corepack pnpm run ci: exit 0; 2 test files passed, 11 tests passed; boundary and governance-artifact checks passed.
+   - governance unittest discovery: exit 0; 7 tests passed in 0.024s.
+
+SECURITY/ENVIRONMENT NOTE
+
+The first registry query and dependency install inherited NODE_TLS_REJECT_UNAUTHORIZED=0 from the host and emitted Node's warning. That insecure environment state is retained here as failed trust evidence, not counted as final verification. The final frozen install and CI commands explicitly set NODE_TLS_REJECT_UNAUTHORIZED=1 and exited 0.

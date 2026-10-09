@@ -1,6 +1,6 @@
 # African Mandate decision ledger
 
-**Ledger version:** 1.0.0
+**Ledger version:** 1.1.0
 
 **Created by:** AM-PB2-01
 
@@ -37,6 +37,9 @@ Exact source byte hashes and admission classifications are pinned in `docs/build
 | AM-GOV-011 | engineering | Exact build-state transition edges | Build State Protocol defines statuses but not every allowed edge | The `x-allowedTransitions` map in `docs/build/schemas/build-state.schema.json` is a `TEST_ONLY_DESIGN_PROPOSAL_PENDING_AM-PB2-01_REVIEW`. It exists only to exercise required transition tests and becomes binding only if the owner accepts Prompt 01 by reviewed commit. | PROPOSED / TEST_ONLY | Engineering owner review required | 01–29 |
 | AM-GOV-012 | engineering | Exact Node/pnpm workspace and development toolchain | Technical Architecture v2 §§5, 5.1, 7–9, 90, 97, 100; Repository Bootstrap | Pin Node `22.16.0`, Corepack `0.32.0`, pnpm `11.23.0`, TypeScript `6.0.3`, tsx `4.23.15`, ESLint `10.12.0`, typescript-eslint `8.71.1`, Prettier `3.9.9`, and Vitest `5.0.3`. Allow only pinned transitive `esbuild@0.28.2` to run an install script. The package graph is TEST_ONLY infrastructure and contains no gameplay contract. | READY_FOR_REVIEW | Engineering owner acceptance by reviewed Prompt 02 commit | 02–29 |
 | AM-GOV-013 | owner | Prompt 01 acceptance and transition-model review | AM-GOV-001; commit metadata; Prompt 01 evidence | Commit `3a3302099f6e78e786dbc0fc5d78f13723a366d4`, authored and committed by Seth-arc at `2026-10-08T15:53:09-04:00`, accepts PB2-01 and its reviewed build-state transition model. This row supersedes only the pending approval state of AM-GOV-011; it does not rewrite that historical proposal row. | APPROVED | Seth-arc, repository owner | 02–29 |
+
+| AM-GOV-014 | owner | Prompt 02 acceptance and pinned workspace review | AM-GOV-001; commit metadata; Prompt 02 evidence | Commit `5c944fb501e6f091c768421eaf0c2e0452ea8245`, authored and committed by Seth-arc at `2026-10-08T16:19:00-04:00`, accepts PB2-02 and the pinned workspace/toolchain recorded in AM-GOV-012. This row supersedes only the pending approval state of AM-GOV-012; it does not rewrite that historical proposal row. | APPROVED | Seth-arc, repository owner | 03-29 |
+| AM-GOV-015 | engineering | Isolated partial `FixturePackage` serialization shape | Prompt 03; AM-BUILD-001; First Compilation Fixture Plan v1 | `FixturePackageSchema` uses explicit `fixtureSchemaVersion: 1` and `classification: TEST_ONLY_PARTIAL_FIXTURE`. These fields have no canonical upstream shape and are therefore a test-only design proposal. A fixture is rejected by `ScenarioBundleSchema`; this proposal cannot admit production content. | PROPOSED / TEST_ONLY | Domain/architecture owner review required with Prompt 03 | 03, 06, 18-19 |
 
 ## Non-decisions
 

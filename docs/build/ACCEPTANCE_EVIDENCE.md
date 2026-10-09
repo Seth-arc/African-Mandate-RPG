@@ -122,3 +122,40 @@ No `AM-ACT` identifiers exist in the supplied Acceptance Matrix; the repository 
 | PB2-01 | Build State Protocol and accepted governance schema | Previous acceptance reconciled; current prompt remains `READY_FOR_REVIEW` without self-approval | PASS: governance regression suite |
 
 The Promptbook references an `AM-ACT` family that does not exist in the supplied Acceptance Matrix. This evidence uses the actual `PB2-02` and `AC-021` identifiers and does not invent aliases.
+
+## AM-PB2-03 — Canonical serialized domain contracts
+
+**Status proposed:** READY_FOR_REVIEW
+
+**Acceptance ID:** PB2-03
+
+**Preflight HEAD:** `5c944fb501e6f091c768421eaf0c2e0452ea8245`
+
+**Prerequisite result:** PB2-02 is `ACCEPTED` by the reviewed Prompt 02 commit under `AM-GOV-001` and `AM-GOV-014`.
+
+### Evidence produced
+
+- `packages/domain/src/`: Zod-authoritative scalar, ID, reference, version, scenario, baseline, campaign, JSON-safety, and isolated fixture schemas with inferred public types.
+- `docs/build/DOMAIN_CONTRACT_INVENTORY.md`: contract version 0.1.0, ownership, source mapping, explicit partial boundaries, and acceptance crosswalk.
+- `tests/unit/domain-contracts.test.ts`: structural examples and the required negative schema suite.
+- `docs/build/logs/03-domain-contracts.txt`: complete execution record, including the initial sandbox launch failures and first formatting/type failures.
+- `docs/build/handoffs/03.md`: independent reproduction, compatibility, exact paths, and remaining gates.
+
+### Tests and negative cases
+
+- Full Prompt 03 verification commands and results are recorded in `docs/build/logs/03-domain-contracts.txt`.
+- Valid structural `ScenarioBundle`, `BaselinePackage`, `CampaignState`, `PartyRef`, and `SubjectRef` examples parse.
+- Unknown top-level fields, dangling scenario references, duplicate IDs, out-of-range scores, non-JSON state, and invalid campaign status are rejected.
+- A `TEST_ONLY_PARTIAL_FIXTURE` parses only as `FixturePackage` and is rejected by `ScenarioBundleSchema`.
+- No production bundle, geography, actor priorities, legal procedure content, balance values, or evaluation formula is asserted or admitted.
+
+### Source-to-test traceability
+
+| Acceptance ID | Source authority | Contract / evidence | Test state |
+|---|---|---|---|
+| PB2-03 | Domain v1.1 §§4-15 and registries; Technical v2 Zod rule; Executable Contract Inventory | Zod schemas and inferred types under `@african-mandate/domain`; inventory crosswalk | READY_FOR_REVIEW |
+| AC-001 | Domain §§7-15; AM-DM-001/002 | Date/scalar bounds and source-compatible scenario shape; no production scenario values | Schema tests PASS; production fixture parse remains later work |
+| AC-002 | Domain truth-layer and single-writer rules | One CampaignState top-level location per mutable subsystem | Static schema/crosswalk PASS; exact later subsystem schemas remain pending |
+| AC-003 | Technical v2 Zod source-of-truth; Contract Inventory | Strict unions, JSON safety, duplicate and cross-reference rejection | Schema conformance tests PASS |
+
+Prompt 03 remains unapproved until the repository owner reviews, reruns, and commits it under `AM-GOV-001`.
