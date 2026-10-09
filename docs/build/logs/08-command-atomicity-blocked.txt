@@ -1,0 +1,57 @@
+AM-PB2-08 blocker/preflight log
+Date: 2026-10-09 (America/Indianapolis)
+Preflight HEAD: c9e65850767e2166f251f44eab7590d2908e4f3d
+Latest ACCEPTED milestone: PB2-06 at d84f62f36ecd53eb0fc7dd84bf6f48ca5efb7e75
+
+PREREQUISITE RESULT
+docs/build/BUILD_STATE.json at preflight:
+- PB2-05: ACCEPTED
+- PB2-07: READY_FOR_REVIEW
+- PB2-07 approvedCommit: null
+- PB2-07 approver: null
+
+Per BUILD_STATE_PROTOCOL.md, only ACCEPTED satisfies a hard prerequisite.
+Prompt 08 implementation and behavior tests therefore were not run.
+
+COMMAND
+$env:PYTHONDONTWRITEBYTECODE = '1'; py -3 -m unittest discover -s tests/governance -p "test_*.py" -v
+
+FIRST ATTEMPT EXIT CODE: 1
+FIRST ATTEMPT OUTPUT:
+Unable to create process using '"C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\python3.11.exe" -m unittest discover -s tests/governance -p test_*.py -v': Access is denied.
+
+The same command was rerun outside the sandbox after the Windows Store Python launcher access failure.
+
+RERUN EXIT CODE: 0
+RERUN OUTPUT:
+test_accepted_without_independent_record_is_rejected (test_build_state.BuildStateContractTests.test_accepted_without_independent_record_is_rejected) ... ok
+test_current_state_matches_public_contract (test_build_state.BuildStateContractTests.test_current_state_matches_public_contract) ... ok
+test_direct_self_approval_is_rejected (test_build_state.BuildStateContractTests.test_direct_self_approval_is_rejected) ... ok
+test_only_accepted_satisfies_hard_prerequisite (test_build_state.BuildStateContractTests.test_only_accepted_satisfies_hard_prerequisite) ... ok
+test_required_transition_paths (test_build_state.BuildStateContractTests.test_required_transition_paths) ... ok
+test_source_manifest_hash_is_current (test_build_state.BuildStateContractTests.test_source_manifest_hash_is_current) ... ok
+test_unapproved_state_cannot_carry_approval (test_build_state.BuildStateContractTests.test_unapproved_state_cannot_carry_approval) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.002s
+
+OK
+
+COMMAND
+git diff --check
+
+EXIT CODE: 0
+OUTPUT:
+warning: in the working copy of 'docs/build/ACCEPTANCE_EVIDENCE.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/build/BUILD_STATE.json', LF will be replaced by CRLF the next time Git touches it
+
+MANDATORY PROMPT 08 TESTS NOT RUN
+- duplicate submit
+- rejected command
+- injected save failure
+- concurrent click/EndTurn
+- version mismatch
+- revision mismatch
+- resources/events/slots unchanged on every failure
+
+Reason: PB2-07 is not ACCEPTED. No atomic dispatcher or persistence behavior was implemented.

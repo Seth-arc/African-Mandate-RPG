@@ -315,3 +315,37 @@ AM-GOV-021 records all exact compiler-only fields and policies as a review-requi
 | AC-008 | Hidden-state mutation cannot alter eligibility/forecast | Same known projection/two hidden intentions differential test | PASS |
 
 AM-GOV-023 records all exact non-canonical wrapper fields as TEST_ONLY proposals. Prompt 07 does not implement campaign mutation, effects, durable persistence, EndTurn, production content, legal procedures, balance values, or UI behavior.
+
+## AM-PB2-08 — Atomic decision commit and durable persistence
+
+**Status proposed:** BLOCKED
+
+**Acceptance ID:** PB2-08; related Acceptance Matrix IDs AC-005 and AC-006 remain NOT_RUN for the required atomic persistence behavior.
+
+**Preflight HEAD:** `c9e65850767e2166f251f44eab7590d2908e4f3d`
+
+**Prerequisite result:** PB2-05 is `ACCEPTED`, but PB2-07 is only `READY_FOR_REVIEW`. Its build-state entry has no approved commit or approver. Under the Build State Protocol, only `ACCEPTED` satisfies a hard prerequisite, so no Prompt 08 implementation or acceptance test was authorized.
+
+### Evidence produced
+
+- The working tree was clean at preflight; HEAD is the owner-authored `prompt 07` commit dated 2026-10-09 13:38:59 -04:00.
+- The latest accepted milestone remains PB2-06 at `d84f62f36ecd53eb0fc7dd84bf6f48ca5efb7e75`; the current HEAD differs from it only by the documented Prompt 07 change set.
+- `docs/build/BUILD_STATE.json` records PB2-07 as `READY_FOR_REVIEW` with `approvedCommit: null` and `approver: null`.
+- `docs/build/handoffs/07.md` explicitly says independent owner sign-off remains pending and Prompt 08 becomes eligible only after review, rerun, and commit acceptance of Prompt 07.
+- `docs/build/handoffs/08.md` records the blocker and reviewer-ready recovery steps. No application, domain, simulation, persistence, fixture, or test implementation file was changed.
+
+### Tests and negative cases
+
+- The mandatory Prompt 08 negative cases were **NOT RUN** because their required PB2-07 contract is not accepted: duplicate submit, rejected command, injected save failure, concurrent click/EndTurn, version mismatch, and revision mismatch.
+- No claim is made for atomicity, idempotence, durable persistence, one-slot consumption, or failure-state preservation.
+- Only governance validation and diff hygiene apply to this blocker-only documentation change; their actual results are recorded in `docs/build/logs/08-command-atomicity-blocked.txt`.
+
+### Source-to-test traceability
+
+| Acceptance ID | Source authority | Contract / evidence | Test state |
+|---|---|---|---|
+| PB2-08 | Technical Architecture v2 §§20–21 and 49; Reconciliation R-01/R-02; AM-BUILD-003 | Preflight and blocked handoff only; no dispatcher or persistence implementation authorized | BLOCKED by PB2-07 not `ACCEPTED` |
+| AC-005 | Domain v1.1 §46; Technical v2 durable commit order | Required injected-save-failure before/after state hash test | NOT_RUN; dependent implementation blocked |
+| AC-006 | Domain v1.1 §46; Technical v2 §49 | Required duplicate-command original-result/no-double-effect test | NOT_RUN; dependent implementation blocked |
+
+The smallest actionable unblock is independent review of Prompt 07, execution of its reproduction commands, and an owner acceptance record containing a reviewed commit SHA, evidence path, and approver. Prompt 08 must then move from `BLOCKED` to `IN_PROGRESS` before implementation begins.

@@ -25,7 +25,7 @@
     "05": {"status": "ACCEPTED", "approvedCommit": "df00eadb67d75fa5a43b9cce9a49f0be12f2c525", "evidencePath": "docs/build/handoffs/05.md", "approver": "Seth-arc (repository owner; acceptance by reviewed commit at 2026-10-09T12:37:11-04:00)"},
     "06": {"status": "ACCEPTED", "approvedCommit": "d84f62f36ecd53eb0fc7dd84bf6f48ca5efb7e75", "evidencePath": "docs/build/handoffs/06.md", "approver": "Seth-arc (repository owner; acceptance by reviewed commit at 2026-10-09T13:17:13-04:00)"},
     "07": {"status": "READY_FOR_REVIEW", "approvedCommit": null, "evidencePath": "docs/build/handoffs/07.md", "approver": null},
-    "08": {"status": "NOT_STARTED", "approvedCommit": null, "evidencePath": null, "approver": null},
+    "08": {"status": "BLOCKED", "approvedCommit": null, "evidencePath": "docs/build/handoffs/08.md", "approver": null},
     "09": {"status": "NOT_STARTED", "approvedCommit": null, "evidencePath": null, "approver": null},
     "10": {"status": "NOT_STARTED", "approvedCommit": null, "evidencePath": null, "approver": null},
     "11": {"status": "NOT_STARTED", "approvedCommit": null, "evidencePath": null, "approver": null},
