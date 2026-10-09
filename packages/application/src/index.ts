@@ -8,3 +8,7 @@ export const applicationPackage = {
 } as const;
 
 export type ApplicationPackageDescriptor = typeof applicationPackage;
+
+export * from "./operation-coordinator.js";
+export * from "./ports.js";
+export * from "./testing/in-memory-adapters.js";

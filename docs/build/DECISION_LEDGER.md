@@ -1,6 +1,6 @@
 # African Mandate decision ledger
 
-**Ledger version:** 1.2.0
+**Ledger version:** 1.3.0
 
 **Created by:** AM-PB2-01
 
@@ -43,6 +43,9 @@ Exact source byte hashes and admission classifications are pinned in `docs/build
 
 | AM-GOV-016 | owner | Prompt 03 acceptance and serialized-domain review | AM-GOV-001; commit metadata; Prompt 03 evidence | Commit `05f933cba84e7023009fffaee4b36f1d839ce3a7`, authored and committed by Seth-arc at `2026-10-09T11:13:45-04:00`, accepts PB2-03 and its contract version 0.1.0. This acceptance does not promote the partial fixture or admit production scenario content. | APPROVED | Seth-arc, repository owner | 04-29 |
 | AM-GOV-017 | engineering | Determinism artifact wrapper and unspecified string boundaries | Technical v2 §§13-15; Prompt 04; AM-BUILD-002 | The source-published random values remain canonical. Artifact wrapper fields, ECMAScript string key ordering, no automatic Unicode normalization, NUL-delimiter rejection, and the collision-registry call shape are TEST_ONLY implementation proposals where the source does not define an exact serialized/API field. No generated ID or state hash is source-canonical before Prompt 04 review. | PROPOSED / TEST_ONLY | Domain/architecture owner review required with Prompt 04 | 04-29 |
+
+| AM-GOV-018 | owner | Prompt 04 acceptance and deterministic-primitive review | AM-GOV-001; commit metadata; Prompt 04 evidence | Commit `cd1a1bd516c8a00392f4115498f3ecee50ca4286`, authored and committed by Seth-arc at `2026-10-09T11:55:19-04:00`, accepts PB2-04 and deterministic contract v1.0. This accepts AM-GOV-017's implementation boundaries for that version without converting diagnostic ID/hash output into upstream source text. | APPROVED | Seth-arc, repository owner | 05-29 |
+| AM-GOV-019 | engineering | Application port naming and minimal operation-lock shape | Technical v2 §§16-20, 23, 30, 48; Prompt 05 | Technical v2 names `CampaignPersistencePort` and `CampaignEditLockPort`; Prompt 05 requests `CampaignRepository` and `CampaignEditLock`. The public contract exports the requested names plus compatibility aliases, a minimal releasable lease, five source-listed operation kinds, and generic payload families because exact command/result/projection/reference fields belong to later prompts. These TypeScript-only call shapes are TEST_ONLY proposals; they define no new serialized artifact. | PROPOSED / TEST_ONLY | Application/domain architecture review required with Prompt 05 | 05-20 |
 
 ## Non-decisions
 

@@ -197,3 +197,41 @@ Prompt 03 remains unapproved until the repository owner reviews, reruns, and com
 | AC-004 | Technical v2 hashing/RNG/ID/rounding rules | Exact source vectors, Web Crypto comparisons, stable IDs, canonical hash, quantization, two fresh processes | PASS |
 
 Technical v2 publishes exact random vectors but no exact ID or canonical-state output. Generated diagnostic values are not labeled source-canonical; AM-GOV-017 records the review-required interface boundaries. Prompt 04 remains unapproved until the repository owner reviews, reruns, and commits it under `AM-GOV-001`.
+
+## AM-PB2-05 — Application ports and operation boundary
+
+**Status proposed:** READY_FOR_REVIEW
+
+**Acceptance ID:** PB2-05
+
+**Preflight HEAD:** `cd1a1bd516c8a00392f4115498f3ecee50ca4286`
+
+**Prerequisite result:** PB2-04 is `ACCEPTED` by the reviewed Prompt 04 commit under `AM-GOV-001` and `AM-GOV-018`.
+
+### Evidence produced
+
+- `packages/application/src/ports.ts`: versioned generic `SimulationPort`, `CampaignRepository`, `ArtifactRegistryClient`, `NarrativePort`, `CampaignEditLock`, and `CampaignOperationCoordinator` public interfaces.
+- `packages/application/src/operation-coordinator.ts`: per-campaign authoritative-operation serialization with injected edit locking and failure-safe release.
+- `packages/application/src/testing/in-memory-adapters.ts`: deterministic test adapters for all port families, including durable-write fault injection.
+- `tests/unit/application-ports.test.ts`: port delegation, dependency injection, repository isolation/failure, coordinator serialization, independent campaign concurrency, lock behavior, failure recovery, and invalid-input tests.
+- `docs/build/APPLICATION_PORT_CONTRACT.md`, Prompt 05 log, and handoff: version, ownership, source mapping, proposal boundaries, exclusions, and reproduction.
+
+### Tests and negative cases
+
+- Final full CI, governance regression, and diff checks are recorded in `docs/build/logs/05-application-ports.txt`.
+- Same-campaign operations serialize even with a pass-through edit-lock dependency; different campaigns proceed independently.
+- The in-memory edit-lock adapter separately proves exclusivity and rejects double release.
+- Operation and injected lease-release failures release the queue; invalid ID/kind fails before lock acquisition.
+- Repository writes are cloned, missing campaigns fail explicitly, invalid revisions fail, and injected write failure leaves the prior snapshot intact.
+- Simulation, artifact, and narrative behavior is dependency-injected; application code performs no simulation resolution.
+- Existing UI/web-to-simulation import rejection remains green. No production browser, IndexedDB, Web Locks, cloud, or narrative adapter exists.
+
+### Source-to-test traceability
+
+| Acceptance ID | Source authority | Contract / evidence | Test state |
+|---|---|---|---|
+| PB2-05 | Technical v2 §§9-10, 13, 16-20, 23, 30, 48 | Port contract v1.0.0, serial coordinator, injected in-memory adapters | READY_FOR_REVIEW |
+| AC-005 | Technical v2 §20; AM-BUILD-003 | Fault-injectable repository is prepared; atomic durable commit remains Prompt 08 | PARTIAL / NOT_RUN for atomicity |
+| AC-021 | Technical v2 package boundary | Existing UI/web import firewall regression | PASS for import boundary |
+
+No serialized command/result/projection/reference shape was invented. AM-GOV-019 records generic TypeScript-only boundaries and naming differences for review. Prompt 05 remains unapproved until the repository owner reviews, reruns, and commits it under `AM-GOV-001`.

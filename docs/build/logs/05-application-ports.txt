@@ -1,0 +1,81 @@
+AM-PB2-05 application-port verification log
+Date: 2026-10-09 America/Indianapolis
+Base HEAD: cd1a1bd516c8a00392f4115498f3ecee50ca4286
+
+PREFLIGHT
+
+- Working tree clean at start.
+- Prompt 04 owner-reviewed commit: cd1a1bd516c8a00392f4115498f3ecee50ca4286.
+- Technical v2 SHA-256: 982be4ecd82b996e14be83b6fd89a60a2876bb4e2505ed195889ad4f81dcee30.
+- Source manifest SHA-256: 4ce13c6d0fa6eb7d99f4e7023a7c48669bb57407827dc83f661f8ab6eccbb436.
+
+VISIBLE IMPLEMENTATION ATTEMPTS
+
+1. Initial multi-file apply_patch session stalled without returning a result and was terminated. Read-only inspection confirmed the three new files were written and the existing index was untouched; the index export was then applied separately. No duplicate or unrelated edit was made.
+
+2. First formatting attempt
+   Exit: 2
+   Result: Prettier reported that TypeScript private identifiers cannot be constructor parameter properties in operation-coordinator.ts and in-memory-adapters.ts.
+   Correction: replaced those parameter properties with explicit private fields and assignments.
+
+3. Formatting retry
+   Exit: 0
+
+4. Typecheck and lint launch
+   Output contained the expected tsc and ESLint commands with no diagnostics. Final full CI below is the authoritative captured pass.
+
+5. First unit suite
+   Exit: 0
+   Result: 4 test files passed, 39 tests passed.
+
+6. Test-quality correction
+   The first coordinator concurrency test used an edit-lock adapter that also serialized. The test was strengthened to use a pass-through lock for coordinator proof and a separate test for in-memory lock exclusivity.
+   Unit rerun exit: 0; 4 files passed, 40 tests passed.
+
+7. Final cleanup review
+   A lease-release failure could prevent the coordinator's own queue gate from releasing. Cleanup was nested in `finally`, and a focused recovery regression was added.
+
+8. First post-review full CI launch
+   Exit: 1 before project scripts started.
+   Result: Node could not resolve the workspace path inside the filesystem sandbox (`EPERM` on the user-profile directory). The same command was rerun through the approved project CI boundary.
+
+9. First approved post-review CI attempt
+   Exit: 1 at formatting.
+   Result: Prettier identified the newly added regression test. Prettier was run on the two touched implementation/test files; only the test file changed.
+
+FINAL VERIFICATION
+
+1. `corepack pnpm install --frozen-lockfile`
+   Exit: 0
+   Result: all 9 workspace projects already up to date; pnpm 11.23.0.
+
+2. `corepack pnpm run ci`
+   Exit: 0
+   Result:
+   - Prettier: all matched files use Prettier code style.
+   - Peer dependency check: no issues found.
+   - ESLint: passed.
+   - TypeScript `tsc --noEmit`: passed.
+   - Vitest: 4 test files passed, 41 tests passed.
+   - Two-process determinism verifier: PASS with identical deterministic bytes.
+   - Forbidden web-to-simulation import verifier: PASS.
+   - Forbidden simulation randomness verifier: PASS.
+   - Governance/toolchain artifact schema verifier: PASS.
+
+3. Governance regression, first sandboxed launch
+   Command: `py -3 -m unittest discover -s tests/governance -p "test_*.py" -v`
+   Exit: 1
+   Result: the Windows Store Python 3.11 executable was denied by the sandbox before tests started. No test failure occurred.
+
+4. Governance regression, approved interpreter launch outside the sandbox
+   Command: `py -3 -m unittest discover -s tests/governance -p "test_*.py" -v`
+   Exit: 0
+   Result: final run after the cleanup fix completed 7 tests successfully (`OK`).
+
+5. `git diff --check`
+   Exit: 0
+   Result: no whitespace errors. Git emitted only the repository's existing LF-to-CRLF working-copy notices.
+
+6. `git status --short`
+   Exit: 0
+   Result: only the 13 paths enumerated in `docs/build/handoffs/05.md` are modified or untracked. Git also reported that the user-level `.config/git/ignore` was unreadable in the sandbox; repository status was still produced.

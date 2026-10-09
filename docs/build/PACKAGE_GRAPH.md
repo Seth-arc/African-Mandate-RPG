@@ -32,7 +32,7 @@ The repeated arrows from `domain` show direct contract imports. `application` ma
 |---|---|---|---|
 | `packages/domain` | `@african-mandate/domain` | none | Serialized contracts, domain types, and the determinism-vector artifact schema |
 | `packages/simulation` | `@african-mandate/simulation` | `domain` | Pure deterministic primitives: SHA-256, keyed samples, derived IDs, canonical JSON/hash, immutable snapshots, and rounding |
-| `packages/application` | `@african-mandate/application` | `domain`, public `simulation` API | Operation/projection port boundary; descriptor only |
+| `packages/application` | `@african-mandate/application` | `domain`, public `simulation` API | Versioned operation/port boundary, serial coordinator, and in-memory TEST_ONLY adapters; no production browser adapter |
 | `packages/data-pipeline` | `@african-mandate/data-pipeline` | `domain` | Source compiler boundary; no source admission or GIS tool selected |
 | `packages/content` | `@african-mandate/content` | `domain` | Authored-content boundary; no content compiled |
 | `packages/ui` | `@african-mandate/ui` | `domain`, `application` | Presentation-only boundary; simulation and raw state forbidden |
