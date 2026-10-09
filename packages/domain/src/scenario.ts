@@ -12,7 +12,6 @@ import {
   ZoneIdSchema,
 } from "./ids.js";
 import { JsonObjectSchema } from "./json.js";
-import { SubjectKindSchema, SubjectRefSchema } from "./references.js";
 import {
   IsoDateSchema,
   NonEmptyStringSchema,
@@ -21,6 +20,8 @@ import {
   ScoreSchema,
   SignedScoreSchema,
 } from "./scalars.js";
+import { ActionTargetSchemaSchema } from "./commands.js";
+import { RuleExpressionSchema } from "./rules.js";
 
 const stringRecord = z.record(z.string(), z.number().finite());
 
@@ -220,100 +221,6 @@ export const ActorDefinitionSchema = z
   })
   .strict();
 
-type SubjectSelectorValue =
-  | { kind: "literal"; subject: z.infer<typeof SubjectRefSchema> }
-  | { kind: "command_target"; targetIndex: number }
-  | { kind: "mandate_case"; source: "current" }
-  | { kind: "assessment_subject"; source: "current" };
-
-const SubjectSelectorSchema: z.ZodType<SubjectSelectorValue> =
-  z.discriminatedUnion("kind", [
-    z
-      .object({ kind: z.literal("literal"), subject: SubjectRefSchema })
-      .strict(),
-    z
-      .object({
-        kind: z.literal("command_target"),
-        targetIndex: NonNegativeIntegerSchema,
-      })
-      .strict(),
-    z
-      .object({ kind: z.literal("mandate_case"), source: z.literal("current") })
-      .strict(),
-    z
-      .object({
-        kind: z.literal("assessment_subject"),
-        source: z.literal("current"),
-      })
-      .strict(),
-  ]);
-
-type RuleExpressionValue =
-  | {
-      kind: "predicate";
-      query: {
-        fact: string;
-        subject?: SubjectSelectorValue | undefined;
-      };
-      operator:
-        | "eq"
-        | "neq"
-        | "gt"
-        | "gte"
-        | "lt"
-        | "lte"
-        | "contains"
-        | "not_contains"
-        | "exists"
-        | "not_exists";
-      value?: string | number | boolean | undefined;
-      unknownPolicy?: "propagate" | "treat_true" | "treat_false" | undefined;
-    }
-  | { kind: "all"; rules: RuleExpressionValue[] }
-  | { kind: "any"; rules: RuleExpressionValue[] }
-  | { kind: "not"; rule: RuleExpressionValue };
-
-export const RuleExpressionSchema: z.ZodType<RuleExpressionValue> = z.lazy(() =>
-  z.discriminatedUnion("kind", [
-    z
-      .object({
-        kind: z.literal("predicate"),
-        query: z
-          .object({
-            fact: NonEmptyStringSchema,
-            subject: SubjectSelectorSchema.optional(),
-          })
-          .strict(),
-        operator: z.enum([
-          "eq",
-          "neq",
-          "gt",
-          "gte",
-          "lt",
-          "lte",
-          "contains",
-          "not_contains",
-          "exists",
-          "not_exists",
-        ]),
-        value: z
-          .union([z.string(), z.number().finite(), z.boolean()])
-          .optional(),
-        unknownPolicy: z
-          .enum(["propagate", "treat_true", "treat_false"])
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({ kind: z.literal("all"), rules: z.array(RuleExpressionSchema) })
-      .strict(),
-    z
-      .object({ kind: z.literal("any"), rules: z.array(RuleExpressionSchema) })
-      .strict(),
-    z.object({ kind: z.literal("not"), rule: RuleExpressionSchema }).strict(),
-  ]),
-);
-
 export const DoctrineDeltaSchema = z
   .object({
     prevention: z.number().finite().optional(),
@@ -331,19 +238,7 @@ export const ActionDefinitionSchema = z
     actionDomain: AuthorityDomainSchema,
     commandType: NonEmptyStringSchema,
     decisionSlotCost: z.union([z.literal(0), z.literal(1)]),
-    targetSchema: z
-      .object({
-        allowedKinds: z.array(SubjectKindSchema),
-        minTargets: NonNegativeIntegerSchema,
-        maxTargets: NonNegativeIntegerSchema,
-        mustBeWithinMandateScope: z.boolean().optional(),
-        uniqueTargets: z.boolean().optional(),
-      })
-      .strict()
-      .refine((value) => value.minTargets <= value.maxTargets, {
-        message: "minTargets must not exceed maxTargets",
-        path: ["minTargets"],
-      }),
+    targetSchema: ActionTargetSchemaSchema,
     eligibilityRule: RuleExpressionSchema,
     mandateRequirement: z.enum([
       "none",
@@ -903,4 +798,4 @@ export type AuthorityDomain = z.infer<typeof AuthorityDomainSchema>;
 export type ScenarioDefinition = z.infer<typeof ScenarioDefinitionSchema>;
 export type ScenarioBundle = z.infer<typeof ScenarioBundleSchema>;
 export type FixturePackage = z.infer<typeof FixturePackageSchema>;
-export type RuleExpression = z.infer<typeof RuleExpressionSchema>;
+export type ActionDefinition = z.infer<typeof ActionDefinitionSchema>;

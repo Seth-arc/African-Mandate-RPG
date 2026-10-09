@@ -277,3 +277,41 @@ No serialized command/result/projection/reference shape was invented. AM-GOV-019
 | AC-019 | Production rights and dated asset status | Publish gate rejects TEST_ONLY | BLOCKED |
 
 AM-GOV-021 records all exact compiler-only fields and policies as a review-required TEST_ONLY proposal. Prompt 06 does not claim a real Mopti baseline, complete `ScenarioBundle`, production source admission, or historical validation.
+
+## AM-PB2-07 — Rule facts, commands and eligibility
+
+**Status proposed:** READY_FOR_REVIEW
+
+**Acceptance ID:** PB2-07
+
+**Preflight HEAD:** `d84f62f36ecd53eb0fc7dd84bf6f48ca5efb7e75`
+
+**Prerequisite result:** PB2-03 through PB2-05 were already accepted. The repository-owner Prompt 06 commit accepts PB2-06 under AM-GOV-001 and is reconciled by AM-GOV-022.
+
+### Evidence produced
+
+- `@african-mandate/domain` command/rule contract 1.0.0: initial closed FactKey allowlist, strict fact/rule/command/target/cost/preview/menu/preparation/postcommit schemas, and inferred types.
+- `@african-mandate/simulation`: fact registry, explicit known fact source, tri-state evaluator, knowledge-safe action menu, pure command preparation, structural validator boundary, known-cost validation, duplicate classification, and postcommit hidden resolver gate.
+- `tests/unit/command-rules.test.ts`: differential, schema, unknown, target, invalid action, duplicate, structural refusal, known cost, purity, and hidden-resolution timing coverage.
+- `docs/build/COMMAND_RULE_CONTRACT.md`, Prompt 07 log, and handoff: ownership, versioning, exact source boundaries, downstream contract, exclusions, and reproduction.
+
+### Tests and negative cases
+
+- The final full CI, governance regression, focused Prompt 07 suite, and diff checks are recorded in `docs/build/logs/07-command-rules.txt`.
+- Identical known facts and preview projection produce identical eligibility and preview objects despite two distinct hidden actor intentions.
+- Missing facts remain explicit `unknown`; the default evaluator does not substitute `false`, `0`, or empty data. Player eligibility fails closed while preserving `ruleResult: unknown`.
+- Arbitrary object-path facts, unknown FactKeys, unknown schema fields, malformed target IDs, target-count/kind violations, and missing runtime registrations fail closed.
+- Unknown actions, duplicate IDs, structurally impossible terms, failed known requirements, unavailable slots, and unaffordable known costs return zero slot cost without changing campaign state.
+- Hidden resolution rejects any phase other than `postcommit`; the wrapper does not claim durable commit proof before Prompt 08.
+
+### Source-to-test traceability
+
+| Acceptance ID | Source authority | Contract / evidence | Test state |
+|---|---|---|---|
+| PB2-07 | Domain §§43-54 and Appendix F.2-F.5; Technical §§13.1, 49-51, 57, 65; GDS §§17-22, 44 | Contract 1.0.0, schemas, pure evaluator/preparer, differential and negative suite | READY_FOR_REVIEW |
+| AC-003 | Zod serialized-union authority | Strict FactKey, rule, command, target, cost, preview, result, and postcommit schemas | PASS |
+| AC-005 | Invalid command causes no slot loss | Pure invalid-action/structural/cost preparation checks | STATIC_PASS for precommit; durable failure injection remains Prompt 08 |
+| AC-006 | Duplicate command causes no duplicate effect | Duplicate ID classified zero-cost before mutation | STATIC_PASS for precommit; committed original-result behavior remains Prompt 08 |
+| AC-008 | Hidden-state mutation cannot alter eligibility/forecast | Same known projection/two hidden intentions differential test | PASS |
+
+AM-GOV-023 records all exact non-canonical wrapper fields as TEST_ONLY proposals. Prompt 07 does not implement campaign mutation, effects, durable persistence, EndTurn, production content, legal procedures, balance values, or UI behavior.

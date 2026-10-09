@@ -4,7 +4,7 @@
 
 **Task:** AM-PB2-02
 
-**Classification:** ACCEPTED TEST_ONLY workspace infrastructure; Prompt 06 fixture compiler is READY_FOR_REVIEW
+**Classification:** ACCEPTED TEST_ONLY workspace infrastructure; Prompt 06 is ACCEPTED; Prompt 07 command/rule layer is READY_FOR_REVIEW
 
 ## Dependency direction
 
@@ -30,8 +30,8 @@ The repeated arrows from `domain` show direct contract imports. `application` ma
 
 | Workspace | Public root | Allowed internal imports | Ownership |
 |---|---|---|---|
-| `packages/domain` | `@african-mandate/domain` | none | Serialized contracts, domain types, and the determinism-vector artifact schema |
-| `packages/simulation` | `@african-mandate/simulation` | `domain` | Pure deterministic primitives: SHA-256, keyed samples, derived IDs, canonical JSON/hash, immutable snapshots, and rounding |
+| `packages/domain` | `@african-mandate/domain` | none | Serialized contracts, domain types, command/rule/preview schemas, and the determinism-vector artifact schema |
+| `packages/simulation` | `@african-mandate/simulation` | `domain` | Deterministic primitives plus pure fact/rule evaluation, knowledge-safe menu construction, command preparation, and the postcommit hidden-resolution gate |
 | `packages/application` | `@african-mandate/application` | `domain`, public `simulation` API | Versioned operation/port boundary, serial coordinator, and in-memory TEST_ONLY adapters; no production browser adapter |
 | `packages/data-pipeline` | `@african-mandate/data-pipeline` | `domain` | TEST_ONLY synthetic fixture parser/compiler and versioned artifact schemas; no production source admission or GIS tool selected |
 | `packages/content` | `@african-mandate/content` | `domain` | Authored-content boundary; no content compiled |
@@ -45,7 +45,7 @@ The repeated arrows from `domain` show direct contract imports. `application` ma
 - Normal UI and web code cannot import `@african-mandate/simulation`, raw campaign stores, or debug projections.
 - Domain cannot import another workspace package.
 - Content and data-pipeline can import only domain.
-- Package exports expose only their public roots. Domain schemas, pure simulation determinism primitives, and an isolated synthetic fixture compiler are implemented; no production reducer, state mutation, balance, source admission, legal, map, narrative, or gameplay behavior is present.
+- Package exports expose only their public roots. Domain schemas, pure simulation determinism/rule/command-preparation primitives, and an isolated synthetic fixture compiler are implemented. Prompt 07 does not mutate campaign state or perform a durable commit; production reducer, persistence, balance, source admission, legal, map, narrative, and UI behavior remain outside this milestone.
 
 `tests/fixtures/forbidden-import/web-imports-simulation.ts` deliberately violates the UI firewall. `scripts/verify-forbidden-import.mjs` passes only when ESLint rejects that fixture with `no-restricted-imports`.
 

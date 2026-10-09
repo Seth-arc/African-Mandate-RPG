@@ -1,0 +1,69 @@
+AM-PB2-07 command/rule verification log
+Date: 2026-10-09 America/Indianapolis
+Base HEAD: d84f62f36ecd53eb0fc7dd84bf6f48ca5efb7e75
+
+PREFLIGHT
+
+- Working tree clean at start.
+- Prompt 06 owner-reviewed commit: d84f62f36ecd53eb0fc7dd84bf6f48ca5efb7e75.
+- Prompt 06 commit author/time: Seth-arc, 2026-10-09T13:17:13-04:00.
+- Domain Model v1.1 SHA-256: aa8a03380e93bb4adee9ef6115d59f64a98409f988eeaf132fa70460dec3c75c.
+- Technical Architecture v2 SHA-256: 982be4ecd82b996e14be83b6fd89a60a2876bb4e2505ed195889ad4f81dcee30.
+- Game Design v2.1 SHA-256: 89f7387d041e006e3cc1e21d52fdc07e2234227600321eea5601a35415341f04.
+- Executable Contract Inventory SHA-256: 0a06ccf9f26c4648cb7b955c77c1bb7e8a21cb2d8934d9aa5673471282c3d432.
+- Prompt 07 SHA-256: c8a88aa56dd15f552d1c360732f3755253f0c7be26bedfe6a8a2ad1272ea581f.
+- Source manifest SHA-256: 4ce13c6d0fa6eb7d99f4e7023a7c48669bb57407827dc83f661f8ab6eccbb436.
+
+VISIBLE IMPLEMENTATION ATTEMPTS
+
+1. The first large apply-patch was rejected atomically because it contained two update blocks for `packages/domain/src/scenario.ts`. Exit: failed before writes. No file changed.
+
+2. Initial sandboxed formatter/focused-test/typecheck launch. Exit: 1 before tools started. Node 22.16.0 reported `EPERM` while resolving `C:\Users\ssnguna`; the command was rerun through the approved execution boundary.
+
+3. First approved focused run. Formatter exit: 0. Vitest exit: 1 before test discovery. Typecheck exit: 2. Both failures identified the same missing `NonNegativeIntegerSchema` import in `scenario.ts`; the import was restored without changing accepted schema behavior.
+
+4. Corrected focused run. Exit: 0. Result: 2 test files passed, 21 tests passed; `tsc --noEmit` passed.
+
+5. First full CI run. Frozen install exit: 0. CI exit: 1 at ESLint because `SubjectRefSchema` remained as an unused import after schema extraction. The focused Prompt 07 suite independently passed 15 tests, governance passed 7 tests, and `git diff --check` passed. The stale import was removed; no lint rule was weakened.
+
+FINAL VERIFICATION
+
+1. `corepack pnpm install --frozen-lockfile`
+   Exit: 0.
+   Result: all 9 workspace projects already up to date; pnpm 11.23.0.
+
+2. `corepack pnpm run ci`
+   Exit: 0.
+   Result:
+   - Prettier: all matched files use Prettier code style.
+   - Peer dependency check: no issues found.
+   - ESLint: passed.
+   - TypeScript `tsc --noEmit`: passed.
+   - Vitest: 6 test files passed, 64 tests passed.
+   - Two-process deterministic-vector verifier: PASS and emitted the accepted vectors/canonical hash.
+   - Two-process synthetic-fixture verifier: PASS and reproduced all seven artifact files and hashes.
+   - Forbidden web-to-simulation import verifier: PASS.
+   - Forbidden simulation randomness verifier: PASS.
+   - Governance/toolchain artifact schema verifier: PASS.
+
+3. `corepack pnpm exec vitest run tests/unit/command-rules.test.ts`
+   Exit: 0.
+   Result: 1 test file passed, 15 tests passed.
+
+4. `py -3 -m unittest discover -s tests/governance -p "test_*.py" -v`
+   Exit: 0.
+   Result: 7 tests ran and passed (`OK`).
+
+5. `git diff --check`
+   Exit: 0.
+   Result: no whitespace errors. Git emitted only LF-to-CRLF working-copy notices.
+
+6. `git status --short`
+   Exit: 0.
+   Result: only the exact Prompt 07 paths enumerated in `docs/build/handoffs/07.md` are modified or untracked. The sandbox could not read the user-level `.config/git/ignore`; repository status was still produced.
+
+APPLICABILITY
+
+- No tests were skipped.
+- Playwright/browser validation was not run because Prompt 07 changes only headless domain/simulation packages and adds no UI, canvas, route, or browser interaction.
+- Durable write failure, atomic state replacement, original-result replay for duplicates, EndTurn, effects, and persistence remain Prompt 08 and are not claimed by this log.
