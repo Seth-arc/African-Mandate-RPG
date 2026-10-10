@@ -498,3 +498,40 @@ PB2-09 was subsequently accepted under AM-GOV-001/028 by repository-owner commit
 | AC-002 | Domain v1.1 canonical-state and derived-summary invariants | strict duplicate-owner rejection and key/ID agreement tests | PASS |
 
 Prompt 10 remains unapproved until independent owner review and an accepting commit. Passing tests do not promote any test fixture or production dynamic.
+
+PB2-10 was subsequently accepted under AM-GOV-001/030 by repository-owner commit `6cf2462800fc780563f819531124e69480683615` after independent reproduction reported 6/6 focused tests, 84/84 full-CI tests, 7/7 governance tests, and a clean diff check. The TEST_ONLY classification and all documented production-dynamics blockers remain unchanged.
+
+## AM-PB2-11 — player knowledge and intelligence collection
+
+**Status proposed:** READY_FOR_REVIEW
+
+**Acceptance IDs:** PB2-11; AC-008; AC-009; AC-011
+
+**Implementation base:** accepted PB2-10 commit `6cf2462800fc780563f819531124e69480683615`
+
+### Evidence produced
+
+- `CampaignState.knowledge` now has the exact canonical `PlayerKnowledgeState` shape, including strict typed evidence, reports, gaps, tasks, red-line/position/relationship knowledge, and known commitment/dispute IDs.
+- The canonical `create_collection_task` effect creates a future-due task atomically with its decision and emits no evidence. An opt-in TEST_ONLY step-12 resolver applies declared outcomes and observations only when the task is due.
+- Contradictions are derived without deleting evidence and require the same contradiction key, subject, typed claim scope, and reference interval. Different-scope records are not merged.
+- Effective confidence is derived from immutable evidence and an explicit versioned TEST_ONLY freshness table. Missing factors fail closed and missing claims remain distinct from numeric zero.
+- The player projection contains only campaign revision, the complete canonical player-knowledge state, and contradictions derived from it; raw hidden registries are never copied.
+- `docs/build/KNOWLEDGE_COLLECTION_CONTRACT.md`, AM-GOV-031, this evidence, the Prompt 11 handoff, and the raw test log publish ownership, version, proposal boundaries, and reproduction.
+
+### Tests and negative cases
+
+- The focused Prompt 11 suite covers six core properties: delayed collection/no instant intelligence, all six bounded resolution outcomes, same-scope contradiction retention, deterministic freshness and missingness, hidden-state differential projection, and typed report reference integrity.
+- Collection outcomes cannot emit evidence when inconclusive, delayed, or failed; useful/partial require evidence; contested requires two observations that actually form a derived contradiction.
+- A task cannot resolve before its due turn. Emitted observations must be eligible and match evidence subject, claim, and reliability. Duplicate evidence is rejected atomically.
+- Production coefficients, observation discovery, source-bias formulas, semantic text contradiction, real collection content, and narrative/map rendering remain BLOCKED and unimplemented.
+
+### Source-to-test traceability
+
+| Acceptance ID | Source authority | Contract / evidence | Test state |
+|---|---|---|---|
+| PB2-11 | Domain v1.1 sections 31-40, 52-53 and Appendix F.7; Technical v2 sections 45, 64-65; Package 2 content contracts | strict schemas, atomic task creation, collection resolver, confidence/contradiction derivation, projection firewall, contract doc, handoff, and log | READY_FOR_REVIEW |
+| AC-009 / SIM-01 | Domain collection/evidence rules; Package 2 delayed-intelligence contract | task creation emits no evidence; due resolver emits declared evidence; all six outcomes map to canonical task/gap statuses | PASS |
+| AC-008 / SIM-06 | Domain knowledge-state invariant; Technical player-projection firewall | different hidden world/actor state produces identical projection until evidence delivery | PASS |
+| AC-011 / SIM-14 | Domain contradiction model; Package 2 same-scope requirement | incompatible same-scope records remain and produce a contradiction; different scope does not merge | PASS |
+
+Prompt 11 remains unapproved until independent owner review and an accepting commit. Passing synthetic tests does not approve production confidence values, collection content, or hidden-state disclosure.

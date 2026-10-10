@@ -1,11 +1,14 @@
 import {
   CampaignStateSchema,
+  CollectionResolutionPlanSchema,
+  KNOWLEDGE_CONTRACT_VERSION,
   EndTurnSimulationInputSchema,
   EndTurnSimulationResultSchema,
   TURN_RESOLVER_IDS,
   WORLD_RESOLVER_CONTRACT_VERSION,
   IsoDateSchema,
   type CampaignState,
+  type CollectionResolutionPlan,
   type EndTurnRejectionReason,
   type EndTurnSimulationInput,
   type EndTurnSimulationResult,
@@ -21,6 +24,7 @@ import { hashCanonicalJson } from "./determinism/canonical-json.js";
 import { deriveSimulationId } from "./determinism/primitives.js";
 import { reservedMandatoryDecisionSlots } from "./mandatory-attention.js";
 import { resolveWorldEffects } from "./world-resolvers.js";
+import { resolveIntelligenceCollection } from "./knowledge.js";
 
 export interface TurnResolverContext {
   readonly currentTurn: number;
@@ -172,6 +176,61 @@ export const createTestOnlyWorldFixtureResolverRegistry = (
       },
     };
   });
+};
+
+export interface TestOnlyKnowledgeResolverRegistryInput {
+  readonly plans: readonly CollectionResolutionPlan[];
+  readonly baseRegistry?: readonly TurnResolverDefinition[];
+}
+
+export const createTestOnlyKnowledgeResolverRegistry = (
+  input: TestOnlyKnowledgeResolverRegistryInput,
+): readonly TurnResolverDefinition[] => {
+  const plans = input.plans.map((plan) =>
+    CollectionResolutionPlanSchema.parse(plan),
+  );
+  if (
+    new Set(plans.map((plan) => plan.collectionTaskId)).size !== plans.length
+  ) {
+    throw new TypeError("Duplicate collection resolution plan");
+  }
+  const base = input.baseRegistry ?? createInitialTurnResolverRegistry();
+  if (plans.length === 0) return base;
+  return base.map((resolver) =>
+    resolver.resolverId === "intelligence_collection"
+      ? {
+          ...resolver,
+          adapterKind: "test_only_fixture" as const,
+          resolve: (draft: CampaignState, context: TurnResolverContext) => {
+            for (const plan of plans) {
+              const task =
+                draft.knowledge.collectionTasks[plan.collectionTaskId];
+              if (task === undefined) {
+                throw new TypeError(
+                  `Collection resolution task not found: ${plan.collectionTaskId}`,
+                );
+              }
+              if (task.status === "completed" || task.status === "failed") {
+                continue;
+              }
+              if (task.dueTurn > context.currentTurn) continue;
+              const result = resolveIntelligenceCollection({
+                contractVersion: KNOWLEDGE_CONTRACT_VERSION,
+                classification: "TEST_ONLY_COLLECTION_RESOLUTION",
+                currentState: draft,
+                plan,
+              });
+              if (result.status !== "resolved") {
+                throw new TypeError(
+                  `Collection resolver rejected: ${result.reasonCode}:${result.detailCode ?? ""}`,
+                );
+              }
+              Object.assign(draft, result.nextState);
+            }
+          },
+        }
+      : resolver,
+  );
 };
 
 const registryIsExact = (

@@ -10,6 +10,8 @@ import {
   type AtomicCommandRejectionReason,
   type CampaignState,
   type KnownCostProfile,
+  type KnowledgeEffectProfile,
+  type CollectionTaskTemplate,
   type PreviewCost,
   type StrategicCommandSimulationInput,
   type StrategicCommandSimulationResult,
@@ -27,6 +29,7 @@ import {
   reservedMandatoryDecisionSlots,
   resolveMandatoryAttentionItem,
 } from "./mandatory-attention.js";
+import { createCollectionTasksFromKnowledgeProfiles } from "./knowledge.js";
 
 export interface InProcessStrategicCommandDispatcherOptions {
   readonly actions: readonly ActionDefinition[];
@@ -36,6 +39,8 @@ export interface InProcessStrategicCommandDispatcherOptions {
   readonly structuralValidators: Readonly<
     Record<string, StructuralActionValidator | undefined>
   >;
+  readonly knowledgeEffectProfiles?: readonly KnowledgeEffectProfile[];
+  readonly collectionTaskTemplates?: readonly CollectionTaskTemplate[];
 }
 
 const reject = (
@@ -199,7 +204,11 @@ export const simulateStrategicCommand = (
   if (action.decisionSlotCost !== 1) {
     return reject("CONSEQUENTIAL_SLOT_COST_REQUIRED", command.commandId);
   }
-  if (action.immediateEffectProfileIds.length > 0) {
+  if (
+    action.immediateEffectProfileIds.length > 0 &&
+    (options.knowledgeEffectProfiles === undefined ||
+      options.collectionTaskTemplates === undefined)
+  ) {
     return reject("UNSUPPORTED_IMMEDIATE_EFFECT_PROFILE", command.commandId);
   }
   if (action.consequenceProfileIds.length > 0) {
@@ -259,6 +268,24 @@ export const simulateStrategicCommand = (
   };
 
   nextState.decisions.push(decisionRecord);
+  let createdCollectionTaskIds: string[];
+  try {
+    createdCollectionTaskIds = [
+      ...createCollectionTasksFromKnowledgeProfiles(
+        nextState,
+        options.knowledgeEffectProfiles ?? [],
+        options.collectionTaskTemplates ?? [],
+        action.immediateEffectProfileIds,
+        decisionId,
+      ),
+    ];
+  } catch {
+    return reject(
+      "CONFIGURATION_ERROR",
+      command.commandId,
+      "COLLECTION_TASK_CREATION_FAILED",
+    );
+  }
   nextState.domainEvents.push({
     domainEventId,
     turn: currentState.meta.currentTurn,
@@ -269,6 +296,7 @@ export const simulateStrategicCommand = (
     payload: {
       commandId: command.commandId,
       actionId: action.actionId,
+      createdCollectionTaskIds,
     },
   });
   nextState.processedCommandIds[command.commandId] = true;

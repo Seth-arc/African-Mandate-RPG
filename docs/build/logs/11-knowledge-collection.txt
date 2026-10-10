@@ -1,0 +1,112 @@
+AM-PB2-11 verification log
+Date: 2026-10-09
+Base HEAD: 6cf2462800fc780563f819531124e69480683615
+Base milestone: PB2-10 ACCEPTED under AM-GOV-030
+
+PRE-EXISTING WORKTREE AT PREFLIGHT
+The following four post-acceptance governance edits were present and preserved:
+  M docs/build/ACCEPTANCE_EVIDENCE.md
+  M docs/build/BUILD_STATE.json
+  M docs/build/DECISION_LEDGER.md
+  M tests/governance/test_build_state.py
+No unrelated dirty path was present.
+
+INITIAL SANDBOX TYPECHECK ATTEMPT
+Command: corepack pnpm run typecheck
+Exit: 1
+Result: Node failed before TypeScript execution with EPERM while resolving
+`C:\Users\ssnguna`. The command was rerun outside the filesystem sandbox.
+
+FIRST OUTSIDE-SANDBOX TYPECHECK
+Command: corepack pnpm run typecheck
+Exit: 1
+Result: test fixture values were plain numbers rather than branded Score values.
+Representative final diagnostic before correction:
+  tests/unit/knowledge-collection.test.ts(260,7): error TS2322:
+  Type 'number' is not assignable to type 'number & $brand<"Score">'.
+
+FINAL STANDALONE TYPECHECK
+Command: corepack pnpm run typecheck
+Exit: 0
+Output:
+  $ tsc --noEmit -p tsconfig.json
+
+INITIAL FOCUSED PROMPT 11 SUITE
+Command: corepack pnpm exec vitest run tests/unit/knowledge-collection.test.ts
+Exit: 0
+Output:
+  Test Files  1 passed (1)
+       Tests  6 passed (6)
+    Duration  989ms
+
+FINAL FOCUSED PROMPT 11 SUITE
+Command: corepack pnpm exec vitest run tests/unit/knowledge-collection.test.ts
+Exit: 0
+Output:
+  Test Files  1 passed (1)
+       Tests  7 passed (7)
+    Duration  951ms
+
+INITIAL FORMAT GATE
+Command: corepack pnpm run format:check
+Exit: 1
+Result: Prettier reported five new Prompt 11 files. They were formatted with:
+  corepack pnpm exec prettier --write \
+    packages/domain/src/knowledge-operations.ts \
+    packages/domain/src/knowledge-state.ts \
+    packages/simulation/src/knowledge.ts \
+    packages/simulation/src/turn-engine.ts \
+    tests/unit/knowledge-collection.test.ts
+
+INITIAL LINT GATE
+Command: corepack pnpm run lint
+Exit: 1
+Diagnostic:
+  packages/simulation/src/atomic-command.ts
+  271:7 error The value assigned to 'createdCollectionTaskIds' is not used in subsequent statements no-useless-assignment
+Correction: removed the redundant initializer without changing behavior.
+
+PUBLIC-CONTRACT REVIEW TYPECHECK
+Command: corepack pnpm run typecheck
+Exit: 1
+Result: three newly added cross-registry checks indexed branded-ID records with
+plain strings returned by Object.keys. The checks were changed to key-membership
+tests; the subsequent standalone typecheck and final CI both pass.
+
+FINAL STANDALONE FORMAT / LINT / TYPE GATES
+Commands:
+  corepack pnpm run format:check
+  corepack pnpm run lint
+  corepack pnpm run typecheck
+Exit: 0 for each command
+Output summaries:
+  All matched files use Prettier code style!
+  ESLint reported no issue.
+  tsc --noEmit -p tsconfig.json reported no issue.
+
+FULL REPOSITORY CI
+Command: corepack pnpm run ci
+Exit: 0
+Output:
+  $ corepack pnpm run format:check && corepack pnpm run deps:check && corepack pnpm run lint && corepack pnpm run typecheck && corepack pnpm run test && corepack pnpm run schema:check
+  All matched files use Prettier code style!
+  No peer dependency issues found
+  Test Files  10 passed (10)
+       Tests  91 passed (91)
+  PASS: two fresh processes produced identical deterministic bytes.
+  PASS: two fresh fixture builds produced byte-identical artifacts.
+  PASS: web-to-simulation import was rejected by no-restricted-imports.
+  PASS: Math.random and randomUUID were rejected inside simulation scope.
+  PASS: governance and toolchain artifacts match their public schemas.
+
+GOVERNANCE REGRESSION
+Command: $env:PYTHONDONTWRITEBYTECODE = '1'; py -3 -m unittest discover -s tests/governance -p "test_*.py" -v
+Exit: 0
+Output:
+  Ran 7 tests in 0.019s
+  OK
+
+FINAL DIFF HYGIENE
+Command: git diff --check
+Exit: 0
+Result: no whitespace errors. Git emitted only expected Windows LF-to-CRLF working-copy warnings.

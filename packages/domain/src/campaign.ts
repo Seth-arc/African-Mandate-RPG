@@ -40,6 +40,7 @@ import {
   InstitutionRuntimeStateSchema,
   WorldRuntimeStateSchema,
 } from "./world-state.js";
+import { PlayerKnowledgeStateSchema } from "./knowledge-state.js";
 
 export const CampaignMetaSchema = z
   .object({
@@ -142,7 +143,7 @@ export const CampaignStateSchema = z
     commitments: z.record(CommitmentIdSchema, JsonObjectSchema),
     redLines: z.record(RedLineIdSchema, JsonObjectSchema),
     disputes: z.record(DisputeIdSchema, JsonObjectSchema),
-    knowledge: JsonObjectSchema,
+    knowledge: PlayerKnowledgeStateSchema,
     assessments: z.record(AssessmentIdSchema, JsonObjectSchema),
     mandateCases: z.record(MandateCaseIdSchema, JsonObjectSchema),
     implementations: z.record(ProjectIdSchema, JsonObjectSchema),
@@ -168,6 +169,85 @@ export const CampaignStateSchema = z
           code: "custom",
           message: "institution key must match institutionId",
           path: ["institutions", key, "institutionId"],
+        });
+      }
+    }
+    for (const [taskId, task] of Object.entries(
+      state.knowledge.collectionTasks,
+    )) {
+      if (
+        !state.decisions.some(
+          (decision) => decision.decisionId === task.sourceDecisionId,
+        )
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          message: "collection task sourceDecisionId must reference a decision",
+          path: ["knowledge", "collectionTasks", taskId, "sourceDecisionId"],
+        });
+      }
+    }
+    for (const [reportId, report] of Object.entries(state.knowledge.reports)) {
+      report.relatedAssessmentIds.forEach((assessmentId, index) => {
+        if (state.assessments[assessmentId] === undefined) {
+          ctx.addIssue({
+            code: "custom",
+            message: "knowledge report assessment must reference an assessment",
+            path: [
+              "knowledge",
+              "reports",
+              reportId,
+              "relatedAssessmentIds",
+              index,
+            ],
+          });
+        }
+      });
+    }
+    for (const commitmentId of state.knowledge.knownCommitmentIds) {
+      if (state.commitments[commitmentId] === undefined) {
+        ctx.addIssue({
+          code: "custom",
+          message: "known commitment must reference a commitment",
+          path: ["knowledge", "knownCommitmentIds"],
+        });
+      }
+    }
+    for (const disputeId of state.knowledge.knownDisputeIds) {
+      if (state.disputes[disputeId] === undefined) {
+        ctx.addIssue({
+          code: "custom",
+          message: "known dispute must reference a dispute",
+          path: ["knowledge", "knownDisputeIds"],
+        });
+      }
+    }
+    for (const redLineId of Object.keys(state.knowledge.redLineKnowledge)) {
+      if (!(redLineId in state.redLines)) {
+        ctx.addIssue({
+          code: "custom",
+          message: "red-line knowledge must reference a red line",
+          path: ["knowledge", "redLineKnowledge", redLineId],
+        });
+      }
+    }
+    for (const positionId of Object.keys(state.knowledge.positionKnowledge)) {
+      if (!(positionId in state.positions)) {
+        ctx.addIssue({
+          code: "custom",
+          message: "position knowledge must reference a position",
+          path: ["knowledge", "positionKnowledge", positionId],
+        });
+      }
+    }
+    for (const relationshipId of Object.keys(
+      state.knowledge.relationshipKnowledge,
+    )) {
+      if (!(relationshipId in state.relationships)) {
+        ctx.addIssue({
+          code: "custom",
+          message: "relationship knowledge must reference a relationship",
+          path: ["knowledge", "relationshipKnowledge", relationshipId],
         });
       }
     }

@@ -3,7 +3,7 @@
 **Contract version:** 1.1.0
 **Task:** AM-PB2-09 / PB2-09
 **Owners:** serialized state and operation schemas in `@african-mandate/domain`; deterministic resolver/calendar execution in `@african-mandate/simulation`; serialized durable commit in `@african-mandate/application`
-**Classification:** TEST_ONLY lifecycle kernel; Prompt 10 adds opt-in fixture-only world adapters while default world, actor, assessment, doctrine, event, and evaluation adapters remain initial no-ops
+**Classification:** TEST_ONLY lifecycle kernel; Prompt 10 adds opt-in fixture-only world adapters and Prompt 11 adds an opt-in fixture-only intelligence-collection adapter while all unimplemented defaults remain initial no-ops
 
 ## Canonical state
 
@@ -35,7 +35,7 @@ Only two initial adapters implement state behavior:
 - `scheduled_consequences`: expires an unresolved consequence only after an explicit `latestTurn`;
 - `attention`: preserves authoritative attention across the rollover.
 
-The other 20 default adapters are labeled `initial_no_op` in every trace. They neither fabricate a crisis/event nor falsely mark subsystem resolution. Prompt 10 adds the `test_only_fixture` trace label and an opt-in registry factory that replaces only world phases 8a through 8d with declared canonical effects. Phase 8e remains a no-op. Changing order requires the source-mandated simulation-model version bump.
+The other 20 default adapters are labeled `initial_no_op` in every trace. They neither fabricate a crisis/event nor falsely mark subsystem resolution. Prompt 10 adds the `test_only_fixture` trace label and an opt-in registry factory that replaces only world phases 8a through 8d with declared canonical effects. Prompt 11 uses the same accepted adapter label in a separate opt-in registry factory that replaces only source step 12, `intelligence_collection`, with declared resolution plans; tasks before their explicit due turn are unchanged. Phase 8e and every other unimplemented default remain no-ops. Changing order requires the source-mandated simulation-model version bump.
 
 ## Mandatory attention capacity
 

@@ -1,15 +1,15 @@
 # Serialized domain contract inventory
 
-**Contract version:** 0.5.0
-**Task:** AM-PB2-03 / PB2-03 through AM-PB2-10 / PB2-10
+**Contract version:** 0.6.0
+**Task:** AM-PB2-03 / PB2-03 through AM-PB2-11 / PB2-11
 **Owner:** `@african-mandate/domain`  
-**Status:** PB2-03 and PB2-07 through PB2-09 ACCEPTED; Prompt 10 world resolver contract 1.0.0 is READY_FOR_REVIEW; no production scenario admission
+**Status:** PB2-03 and PB2-07 through PB2-10 ACCEPTED; Prompt 11 knowledge contract 1.0.0 is READY_FOR_REVIEW; no production scenario admission
 
 ## Authority and boundary
 
 Zod schemas exported by `@african-mandate/domain` are the executable serialization authority. TypeScript types are inferred from those schemas; no parallel handwritten public interface is maintained. The source shapes come from Domain Model v1.1, with Zod/JSON mechanics from Technical Architecture v2 and validation requirements from the Executable Contract Inventory.
 
-This contract set does not claim a production-valid scenario. The upstream AM-BUILD-001 contract explicitly reserves that claim until all registries are complete and reviewed. Prompt 10 closes the world/institution runtime envelopes and its bounded world-effect union; other later-prompt CampaignState registries and `EffectProfile.effects` remain JSON-safe envelopes until their assigned milestones. No partial typed contract admits production content.
+This contract set does not claim a production-valid scenario. The upstream AM-BUILD-001 contract explicitly reserves that claim until all registries are complete and reviewed. Prompt 10 closes the world/institution runtime envelopes and its bounded world-effect union. Prompt 11 closes the canonical player-knowledge envelope and canonical `create_collection_task` effect subset; unrelated later-prompt CampaignState registries and the remainder of `EffectProfile.effects` remain JSON-safe envelopes until their assigned milestones. No partial typed contract admits production content.
 
 ## Crosswalk
 
@@ -35,6 +35,8 @@ This contract set does not claim a production-valid scenario. The upstream AM-BU
 | EndTurn lifecycle | `EndTurnRequestSchema`, `EndTurnSimulation*Schema`, `AtomicEndTurnResultSchema`, `TurnResolverTraceSchema` | Domain sections 14, 47, 97, 123-126; GDS sections 11, 23, 76-77; Prompt 09 | Exact wrappers/trace/resolver IDs are AM-GOV-027 TEST_ONLY proposals; state remains snapshot-authoritative |
 | World runtime state | `WorldRuntimeStateSchema`, subsystem state schemas, `InstitutionRuntimeStateSchema` | Domain sections 17-21, 82, 85-88 | Strict canonical owners replace world/institution JSON envelopes; duplicate summary fields rejected |
 | World effects and trace | `WorldEffectSchema`, `WorldResolutionRequestSchema`, `WorldResolutionResultSchema`, `WorldSubsystemCoverageSchema` | Domain Appendix F.7; Prompt 10 | Canonical effects inside AM-GOV-029 TEST_ONLY orchestration/trace wrappers; production dynamics explicitly BLOCKED |
+| Player knowledge state | `PlayerKnowledgeStateSchema`, `EvidenceClaimSchema`, `EvidenceRecordSchema`, `IntelligenceReportSchema`, `IntelligenceGapSchema`, `CollectionTaskSchema`, `ObservationCandidateSchema` | Domain sections 31-40 | Exact canonical fields, strict record/reference checks, immutable evidence inputs, and no hidden truth in the registry |
+| Knowledge operations | `CreateCollectionTaskEffectSchema`, `EvidenceFreshnessProfileSchema`, `CollectionResolution*Schema`, `PlayerKnowledgeProjectionSchema` | Domain sections 35-36, 52-53 and Appendix F.7; Technical sections 45, 64-65; Prompt 11 | Canonical task effect inside AM-GOV-031 TEST_ONLY freshness/orchestration/projection wrappers; production coefficients and content remain BLOCKED |
 
 ## Referential validation
 
@@ -63,3 +65,7 @@ The following remain intentionally outside Prompt 03: production content admissi
 | AC-025 | Reserved mandatory capacity, blocked EndTurn, and final-response-slot success | Prompt 09 lifecycle tests |
 | PB2-10 | Typed world owners, canonical effect handlers, deterministic traces, and coverage declaration | `tests/unit/world-subsystems.test.ts`; `docs/build/WORLD_SUBSYSTEM_CONTRACT.md` |
 | AC-002 | Strict schemas reject duplicated writable subsystem summaries | Prompt 10 duplicate-owner negative test |
+| PB2-11 | Typed knowledge authority, delayed collection, derived confidence/contradictions, and projection firewall | `tests/unit/knowledge-collection.test.ts`; `docs/build/KNOWLEDGE_COLLECTION_CONTRACT.md` |
+| AC-008 | Hidden-state mutations leave knowledge projection unchanged until evidence delivery | Prompt 11 SIM-06 differential test |
+| AC-009 | Collection creates no instant evidence and supports delayed/useful/partial/contested/inconclusive/failed results | Prompt 11 SIM-01 lifecycle and outcome tests |
+| AC-011 | Same-scope incompatible evidence remains contested while different scopes remain distinct | Prompt 11 SIM-14 contradiction test |

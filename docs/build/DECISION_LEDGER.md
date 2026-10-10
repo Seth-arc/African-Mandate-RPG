@@ -1,6 +1,6 @@
 # African Mandate decision ledger
 
-**Ledger version:** 1.8.0
+**Ledger version:** 2.0.0
 
 **Created by:** AM-PB2-01
 
@@ -62,6 +62,8 @@ Exact source byte hashes and admission classifications are pinned in `docs/build
 
 | AM-GOV-028 | owner | Prompt 09 acceptance and lifecycle-contract review | AM-GOV-001; owner reproduction transcript; commit metadata; Prompt 09 evidence | Commit `201f3d3fd7ab5d5ebaf5c587f53cec47529884fd`, authored and committed by Seth-arc at `2026-10-09T21:53:35-04:00`, accepts PB2-09 after independent reproduction of the 24-test focused suite, 78-test full CI, 7-test governance suite, and diff check. This accepts lifecycle contract `1.0.0` and AM-GOV-027's TEST_ONLY interfaces without converting initial no-op subsystem adapters or synthetic content into production behavior. | APPROVED | Seth-arc, repository owner | 10-20 |
 | AM-GOV-029 | engineering | World resolution wrapper, trace, coverage, and fixture adapter fields | Domain v1.1 sections 17-21, 82-89 and Appendix F.7; Technical v2 sections 54-56; Prompt 10 | World resolver contract `1.0.0` and lifecycle contract `1.1.0` use canonical state/effect fields inside exact request/source/declared-owner/result/trace/coverage wrappers that upstream sources do not serialize. Those wrapper fields, rejection codes, changed-field paths, and `test_only_fixture` adapter label are TEST_ONLY proposals. The fixed seed identifies declared fixtures but does not generate values. All production dynamics remain `BLOCKED`; external environment stays an initial no-op because it has no approved effect contract. | PROPOSED / TEST_ONLY | Domain/simulation architecture owner review required with Prompt 10 | 10-20 |
+| AM-GOV-030 | owner | Prompt 10 acceptance and world-subsystem contract review | AM-GOV-001; owner reproduction transcript; commit metadata; Prompt 10 evidence | Commit `6cf2462800fc780563f819531124e69480683615`, authored and committed by Seth-arc at `2026-10-09T23:22:40-04:00`, accepts PB2-10 after independent reproduction of the 6-test focused suite, 84-test full CI, 7-test governance suite, and clean diff check. This accepts world resolver contract `1.0.0`, lifecycle contract `1.1.0`, and AM-GOV-029's TEST_ONLY interfaces without approving production dynamics, real values, formulas, or external-environment mutation. | APPROVED | Seth-arc, repository owner | 11-20 |
+| AM-GOV-031 | engineering | Knowledge collection, freshness, contradiction, and projection wrapper fields | Domain v1.1 sections 31-40, 52-53 and Appendix F.7; Technical v2 sections 45, 64-65; Package 2 content contracts; Prompt 11 | Knowledge contract `1.0.0` uses canonical knowledge, evidence, report, gap, task, observation, and task-effect fields. Exact freshness-profile tables, collection templates, emitted-observation and resolution request/result/trace wrappers, six outcome labels, rejection codes, claim lookup result, projection wrapper, and opt-in step-12 adapter are TEST_ONLY proposals where upstream sources define semantics but no serialized API. No production coefficients, generated intelligence, or hidden truth are admitted. | PROPOSED / TEST_ONLY | Domain/simulation architecture owner review required with Prompt 11 | 11-20 |
 
 ## Non-decisions
 

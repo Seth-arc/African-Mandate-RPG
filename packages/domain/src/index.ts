@@ -12,6 +12,8 @@ export * from "./commands.js";
 export * from "./determinism-vectors.js";
 export * from "./ids.js";
 export * from "./json.js";
+export * from "./knowledge-operations.js";
+export * from "./knowledge-state.js";
 export * from "./lifecycle-state.js";
 export * from "./references.js";
 export * from "./rules.js";
