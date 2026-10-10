@@ -19,3 +19,5 @@ export * from "./scalars.js";
 export * from "./scenario.js";
 export * from "./turn-lifecycle.js";
 export * from "./versions.js";
+export * from "./world-state.js";
+export * from "./world-resolver-contract.js";

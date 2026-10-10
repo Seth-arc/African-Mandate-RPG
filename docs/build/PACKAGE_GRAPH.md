@@ -4,7 +4,7 @@
 
 **Task:** AM-PB2-02
 
-**Classification:** ACCEPTED TEST_ONLY workspace infrastructure through Prompt 08; Prompt 09 lifecycle layer is READY_FOR_REVIEW
+**Classification:** ACCEPTED TEST_ONLY workspace infrastructure through Prompt 09; Prompt 10 world resolver layer is READY_FOR_REVIEW
 
 ## Dependency direction
 
@@ -30,8 +30,8 @@ The repeated arrows from `domain` show direct contract imports. `application` ma
 
 | Workspace | Public root | Allowed internal imports | Ownership |
 |---|---|---|---|
-| `packages/domain` | `@african-mandate/domain` | none | Serialized contracts, domain types, typed lifecycle state, command/EndTurn request/results, save snapshots, and deterministic artifacts |
-| `packages/simulation` | `@african-mandate/simulation` | `domain` | Deterministic primitives, pure command logic, mandatory-capacity rules, exact calendar, and ordered lifecycle resolver registry |
+| `packages/domain` | `@african-mandate/domain` | none | Serialized contracts, domain types, typed lifecycle/world state and effects, command/EndTurn/world request/results, save snapshots, and deterministic artifacts |
+| `packages/simulation` | `@african-mandate/simulation` | `domain` | Deterministic primitives, pure command/world-effect logic, mandatory-capacity rules, exact calendar, and ordered lifecycle resolver registry |
 | `packages/application` | `@african-mandate/application` | `domain`, public `simulation` API | Versioned ports, serial coordinator, atomic durable command/EndTurn services, one frozen runtime store, and in-memory TEST_ONLY adapters; no production browser adapter |
 | `packages/data-pipeline` | `@african-mandate/data-pipeline` | `domain` | TEST_ONLY synthetic fixture parser/compiler and versioned artifact schemas; no production source admission or GIS tool selected |
 | `packages/content` | `@african-mandate/content` | `domain` | Authored-content boundary; no content compiled |
@@ -45,7 +45,7 @@ The repeated arrows from `domain` show direct contract imports. `application` ma
 - Normal UI and web code cannot import `@african-mandate/simulation`, raw campaign stores, or debug projections.
 - Domain cannot import another workspace package.
 - Content and data-pipeline can import only domain.
-- Package exports expose only their public roots. Prompt 09 adds the bounded lifecycle transaction without relaxing package boundaries. World/actor/event/evaluation resolvers remain labeled initial no-ops. Production effect handlers, IndexedDB/Web Locks, recovery, cloud sync, balance, source admission, legal, map, narrative, and UI behavior remain outside this milestone.
+- Package exports expose only their public roots. Prompt 10 adds pure TEST_ONLY world-effect handlers and opt-in ordered fixture adapters without relaxing package boundaries. Default world and all actor/event/evaluation resolvers remain labeled initial no-ops. Production formulas, IndexedDB/Web Locks, recovery, cloud sync, balance, source admission, legal, map, narrative, and UI behavior remain outside this milestone.
 
 `tests/fixtures/forbidden-import/web-imports-simulation.ts` deliberately violates the UI firewall. `scripts/verify-forbidden-import.mjs` passes only when ESLint rejects that fixture with `no-restricted-imports`.
 

@@ -12,7 +12,7 @@ import {
 import { CampaignVersionsSchema } from "./versions.js";
 import { AuthoritativeStateHashSchema } from "./atomic-commit.js";
 
-export const TURN_LIFECYCLE_CONTRACT_VERSION = "1.0.0" as const;
+export const TURN_LIFECYCLE_CONTRACT_VERSION = "1.1.0" as const;
 
 export const TURN_RESOLVER_IDS = [
   "scheduled_consequences",
@@ -69,7 +69,7 @@ export const TurnResolverTraceSchema = z
   .object({
     resolverId: TurnResolverIdSchema,
     sourceStep: TurnResolverSourceStepSchema,
-    adapterKind: z.enum(["implemented", "initial_no_op"]),
+    adapterKind: z.enum(["implemented", "initial_no_op", "test_only_fixture"]),
     outcome: z.enum(["applied", "no_change", "skipped_not_final"]),
   })
   .strict();

@@ -3,6 +3,7 @@ import {
   EndTurnSimulationInputSchema,
   EndTurnSimulationResultSchema,
   TURN_RESOLVER_IDS,
+  WORLD_RESOLVER_CONTRACT_VERSION,
   IsoDateSchema,
   type CampaignState,
   type EndTurnRejectionReason,
@@ -11,11 +12,15 @@ import {
   type TurnResolverId,
   type TurnResolverSourceStep,
   type TurnResolverTrace,
+  type BaselinePackage,
+  type WorldEffectEnvelope,
+  type WorldSubsystemId,
 } from "@african-mandate/domain";
 
 import { hashCanonicalJson } from "./determinism/canonical-json.js";
 import { deriveSimulationId } from "./determinism/primitives.js";
 import { reservedMandatoryDecisionSlots } from "./mandatory-attention.js";
+import { resolveWorldEffects } from "./world-resolvers.js";
 
 export interface TurnResolverContext {
   readonly currentTurn: number;
@@ -25,7 +30,7 @@ export interface TurnResolverContext {
 export interface TurnResolverDefinition {
   readonly resolverId: TurnResolverId;
   readonly sourceStep: TurnResolverSourceStep;
-  readonly adapterKind: "implemented" | "initial_no_op";
+  readonly adapterKind: "implemented" | "initial_no_op" | "test_only_fixture";
   resolve(draft: CampaignState, context: TurnResolverContext): void;
 }
 
@@ -109,6 +114,65 @@ export const createInitialTurnResolverRegistry =
       }
       return noopResolver(resolverId, sourceStep);
     });
+
+const worldPhaseSubsystems = {
+  world_conflict: "conflict",
+  world_civilian: "civilian",
+  world_infrastructure: "infrastructure",
+  world_development: "development",
+} as const satisfies Partial<Record<TurnResolverId, WorldSubsystemId>>;
+
+export interface TestOnlyWorldFixtureRegistryInput {
+  readonly baseline: BaselinePackage;
+  readonly effects: readonly WorldEffectEnvelope[];
+}
+
+export const createTestOnlyWorldFixtureResolverRegistry = (
+  input: TestOnlyWorldFixtureRegistryInput,
+): readonly TurnResolverDefinition[] => {
+  const unsupported = input.effects.find(
+    (envelope) =>
+      !Object.values(worldPhaseSubsystems).includes(
+        envelope.declaredSubsystem as (typeof worldPhaseSubsystems)[keyof typeof worldPhaseSubsystems],
+      ),
+  );
+  if (unsupported !== undefined) {
+    throw new TypeError(
+      `Effect ${unsupported.effect.effectId} does not belong to a source-ordered world phase`,
+    );
+  }
+
+  return createInitialTurnResolverRegistry().map((resolver) => {
+    const subsystem = worldPhaseSubsystems[
+      resolver.resolverId as keyof typeof worldPhaseSubsystems
+    ] as WorldSubsystemId | undefined;
+    if (subsystem === undefined) return resolver;
+    const effects = input.effects.filter(
+      (envelope) => envelope.declaredSubsystem === subsystem,
+    );
+    if (effects.length === 0) return resolver;
+    return {
+      ...resolver,
+      adapterKind: "test_only_fixture" as const,
+      resolve: (draft: CampaignState, context: TurnResolverContext) => {
+        const result = resolveWorldEffects({
+          contractVersion: WORLD_RESOLVER_CONTRACT_VERSION,
+          classification: "TEST_ONLY_WORLD_RESOLUTION",
+          turn: context.currentTurn,
+          baseline: input.baseline,
+          currentState: draft,
+          effects,
+        });
+        if (result.status !== "resolved") {
+          throw new TypeError(
+            `World fixture resolver rejected: ${result.reasonCode}:${result.detailCode ?? ""}`,
+          );
+        }
+        Object.assign(draft, result.nextState);
+      },
+    };
+  });
+};
 
 const registryIsExact = (
   registry: readonly TurnResolverDefinition[],
@@ -308,7 +372,7 @@ export const simulateEndTurn = (
       commandId: command.commandId,
       resolvedTurn,
       finalTurn,
-      resolverContractVersion: "1.0.0",
+      resolverContractVersion: "1.1.0",
       resolverOrder: resolverTrace.map((entry) => entry.resolverId),
     },
   });

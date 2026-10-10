@@ -1,15 +1,15 @@
 # Serialized domain contract inventory
 
-**Contract version:** 0.4.0
-**Task:** AM-PB2-03 / PB2-03; AM-PB2-07 / PB2-07; AM-PB2-08 / PB2-08; AM-PB2-09 / PB2-09
+**Contract version:** 0.5.0
+**Task:** AM-PB2-03 / PB2-03 through AM-PB2-10 / PB2-10
 **Owner:** `@african-mandate/domain`  
-**Status:** PB2-03, PB2-07, and PB2-08 ACCEPTED; Prompt 09 lifecycle contract 1.0.0 is READY_FOR_REVIEW; no production scenario admission
+**Status:** PB2-03 and PB2-07 through PB2-09 ACCEPTED; Prompt 10 world resolver contract 1.0.0 is READY_FOR_REVIEW; no production scenario admission
 
 ## Authority and boundary
 
 Zod schemas exported by `@african-mandate/domain` are the executable serialization authority. TypeScript types are inferred from those schemas; no parallel handwritten public interface is maintained. The source shapes come from Domain Model v1.1, with Zod/JSON mechanics from Technical Architecture v2 and validation requirements from the Executable Contract Inventory.
 
-This first wave does not claim a production-valid scenario. The upstream AM-BUILD-001 contract explicitly reserves that claim until all registries are complete and reviewed. In particular, `EffectProfile.effects` and the later-prompt CampaignState subsystem entries are presently bounded only to JSON-safe objects. Their exact discriminated contracts remain assigned to prompts 07-16 and must replace those envelopes before production admission.
+This contract set does not claim a production-valid scenario. The upstream AM-BUILD-001 contract explicitly reserves that claim until all registries are complete and reviewed. Prompt 10 closes the world/institution runtime envelopes and its bounded world-effect union; other later-prompt CampaignState registries and `EffectProfile.effects` remain JSON-safe envelopes until their assigned milestones. No partial typed contract admits production content.
 
 ## Crosswalk
 
@@ -33,6 +33,8 @@ This first wave does not claim a production-valid scenario. The upstream AM-BUIL
 | Atomic request/result and durable snapshot | `AtomicStrategicCommandRequestSchema`, `StrategicCommandSimulation*Schema`, `AtomicStrategicCommandResultSchema`, `SaveSnapshotSchema` | Domain §§46, 123–126; Technical §§20, 48–49, 57; Prompt 08 | Strict revision/version preconditions, result classifications, authoritative hash, and snapshot consistency; exact wrappers are AM-GOV-025 TEST_ONLY proposals |
 | Lifecycle state | `ScheduledConsequenceSchema`, `SituationStateSchema`, `AttentionStateSchema`, `AttentionItemSchema` | Domain sections 68, 73, 77 | Canonical fields replace JSON envelopes; record-key/source/window and resolved-state invariants are strict |
 | EndTurn lifecycle | `EndTurnRequestSchema`, `EndTurnSimulation*Schema`, `AtomicEndTurnResultSchema`, `TurnResolverTraceSchema` | Domain sections 14, 47, 97, 123-126; GDS sections 11, 23, 76-77; Prompt 09 | Exact wrappers/trace/resolver IDs are AM-GOV-027 TEST_ONLY proposals; state remains snapshot-authoritative |
+| World runtime state | `WorldRuntimeStateSchema`, subsystem state schemas, `InstitutionRuntimeStateSchema` | Domain sections 17-21, 82, 85-88 | Strict canonical owners replace world/institution JSON envelopes; duplicate summary fields rejected |
+| World effects and trace | `WorldEffectSchema`, `WorldResolutionRequestSchema`, `WorldResolutionResultSchema`, `WorldSubsystemCoverageSchema` | Domain Appendix F.7; Prompt 10 | Canonical effects inside AM-GOV-029 TEST_ONLY orchestration/trace wrappers; production dynamics explicitly BLOCKED |
 
 ## Referential validation
 
@@ -59,3 +61,5 @@ The following remain intentionally outside Prompt 03: production content admissi
 | PB2-09 | Typed calendar/scheduling/attention lifecycle and EndTurn artifacts | `tests/unit/turn-lifecycle.test.ts`; `docs/build/TURN_LIFECYCLE_CONTRACT.md` |
 | AC-007 | Four exact rollovers, unused-slot forfeiture/reset, and final Month 20 no-advance | Prompt 09 lifecycle tests |
 | AC-025 | Reserved mandatory capacity, blocked EndTurn, and final-response-slot success | Prompt 09 lifecycle tests |
+| PB2-10 | Typed world owners, canonical effect handlers, deterministic traces, and coverage declaration | `tests/unit/world-subsystems.test.ts`; `docs/build/WORLD_SUBSYSTEM_CONTRACT.md` |
+| AC-002 | Strict schemas reject duplicated writable subsystem summaries | Prompt 10 duplicate-owner negative test |

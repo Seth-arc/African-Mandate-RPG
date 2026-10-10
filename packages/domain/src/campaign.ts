@@ -36,6 +36,10 @@ import {
   ScheduledConsequenceSchema,
   SituationStateSchema,
 } from "./lifecycle-state.js";
+import {
+  InstitutionRuntimeStateSchema,
+  WorldRuntimeStateSchema,
+} from "./world-state.js";
 
 export const CampaignMetaSchema = z
   .object({
@@ -129,8 +133,8 @@ export const CampaignStateSchema = z
   .object({
     meta: CampaignMetaSchema,
     player: EnvoyStateSchema,
-    world: JsonObjectSchema,
-    institutions: z.record(InstitutionIdSchema, JsonObjectSchema),
+    world: WorldRuntimeStateSchema,
+    institutions: z.record(InstitutionIdSchema, InstitutionRuntimeStateSchema),
     actors: z.record(ActorIdSchema, JsonObjectSchema),
     relationships: z.record(RelationshipIdSchema, JsonObjectSchema),
     positions: z.record(PositionIdSchema, JsonObjectSchema),
@@ -158,6 +162,15 @@ export const CampaignStateSchema = z
   })
   .strict()
   .superRefine((state, ctx) => {
+    for (const [key, institution] of Object.entries(state.institutions)) {
+      if (institution.institutionId !== key) {
+        ctx.addIssue({
+          code: "custom",
+          message: "institution key must match institutionId",
+          path: ["institutions", key, "institutionId"],
+        });
+      }
+    }
     for (const [key, situation] of Object.entries(state.situations)) {
       if (situation.situationId !== key) {
         ctx.addIssue({

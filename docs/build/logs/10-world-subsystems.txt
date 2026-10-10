@@ -1,0 +1,102 @@
+AM-PB2-10 world state subsystem resolver execution log
+Date: 2026-10-09
+Base HEAD: 201f3d3fd7ab5d5ebaf5c587f53cec47529884fd
+
+1. Initial sandboxed typecheck
+Command: corepack pnpm run typecheck
+Exit: 1
+Actual outcome: Node failed before TypeScript with EPERM lstat C:\Users\ssnguna. This sandbox/toolchain failure remains visible.
+
+2. Escalated typecheck after initial contracts
+Command: corepack pnpm run typecheck
+Exit: 0
+Actual output:
+$ tsc --noEmit -p tsconfig.json
+
+3. Focused resolver tests before ordered turn adapter
+Command: corepack pnpm exec vitest run tests/unit/world-subsystems.test.ts
+Exit: 0
+Actual output: Test Files 1 passed (1); Tests 5 passed (5).
+
+4. Typecheck after ordered adapter integration
+Command: corepack pnpm run typecheck
+Exit: 0
+Actual output:
+$ tsc --noEmit -p tsconfig.json
+
+5. Focused final resolver tests
+Command: corepack pnpm exec vitest run tests/unit/world-subsystems.test.ts
+Exit: 0
+Actual output: Test Files 1 passed (1); Tests 6 passed (6).
+
+6. First full CI attempt
+Command: corepack pnpm run ci
+Exit: 1
+Actual outcome: format, peer, and lint checks passed; TypeScript rejected unbranded literal fixture IDs passed to the typed registry. The fixture was corrected to use parsed branded IDs. The failure remains visible.
+
+7. Repaired typecheck
+Command: corepack pnpm run typecheck
+Exit: 0
+Actual output:
+$ tsc --noEmit -p tsconfig.json
+
+8. Final full CI
+Command: corepack pnpm run ci
+Exit: 0
+Actual output summary:
+Formatting PASS; peer dependencies PASS; ESLint PASS; TypeScript PASS.
+Test Files 9 passed (9); Tests 84 passed (84).
+Determinism: PASS, two fresh processes identical.
+Fixture build: PASS, two fresh builds byte-identical.
+Forbidden import/random checks: PASS.
+Governance/toolchain artifact schema: PASS.
+
+9. Governance regression
+Command: py -3 -m unittest discover -s tests/governance -p "test_*.py" -v
+Exit: 0
+Actual output summary: Ran 7 tests in 0.012s; OK.
+
+10. Diff hygiene
+Command: git diff --check
+Exit: 0
+Actual outcome: no diff errors; Git emitted only LF-to-CRLF checkout warnings.
+
+11. Final focused suite after phase-refusal assertion
+Command: corepack pnpm exec vitest run tests/unit/world-subsystems.test.ts
+Exit: 0
+Actual output: Test Files 1 passed (1); Tests 6 passed (6).
+
+12. Final CI launch with inconclusive approval review
+Command: corepack pnpm run ci
+Exit: unavailable
+Actual outcome: the tool's automatic permission approval review timed out. No CI result was inferred from this launch; one allowed retry follows.
+
+13. Final CI retry
+Command: corepack pnpm run ci
+Exit: 0
+Actual output summary: formatting, peer dependencies, ESLint, TypeScript, 84/84 unit tests, determinism, fixture build, forbidden import/random, and governance-artifact checks all PASS.
+
+14. Final governance regression
+Command: py -3 -m unittest discover -s tests/governance -p "test_*.py" -v
+Exit: 0
+Actual output summary: Ran 7 tests in 0.003s; OK.
+
+15. Final diff hygiene and scope audit
+Command: git diff --check; git status --short; git diff --stat
+Exit: 0
+Actual outcome: no diff errors; only the 23 paths documented in the Prompt 10 handoff are changed/untracked. Git emitted only line-ending and inaccessible global-ignore warnings.
+
+16. Final CI after undeclared-phase no-op pin
+Command: corepack pnpm run ci
+Exit: 0
+Actual output summary: formatting, peer dependencies, ESLint, TypeScript, 84/84 unit tests, determinism, fixture build, forbidden import/random, and governance-artifact checks all PASS. The focused coverage now also proves an undeclared world phase retains `initial_no_op`.
+
+17. Focused two-turn baseline check
+Command: corepack pnpm exec vitest run tests/unit/world-subsystems.test.ts
+Exit: 0
+Actual output: Test Files 1 passed (1); Tests 6 passed (6). The ordered adapter test executes two turns and preserves the exact baseline hash.
+
+18. Final full CI
+Command: corepack pnpm run ci
+Exit: 0
+Actual output summary: formatting, peer dependencies, ESLint, TypeScript, 84/84 unit tests, determinism, fixture build, forbidden import/random, and governance-artifact checks all PASS.

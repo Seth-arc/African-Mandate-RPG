@@ -465,3 +465,36 @@ PB2-08 was subsequently accepted by the repository owner at commit `6d78e4b67c52
 | AC-025 | Domain v1.1 section 47; GDS v2.1 sections 23, 77 and Appendix G | mandatory reserve, blocked EndTurn, last-slot response, and bounded-capacity tests | PASS |
 
 Exact EndTurn wrapper/trace fields, resolver IDs, application `turnCommand`, and `mandatoryResponseAttentionItemId` are TEST_ONLY design proposals under AM-GOV-027 because the sources define semantics but not those API fields. Prompt 09 remains unapproved until independent owner review and an accepting commit.
+
+PB2-09 was subsequently accepted under AM-GOV-001/028 by repository-owner commit `201f3d3fd7ab5d5ebaf5c587f53cec47529884fd` after independent reproduction reported 24/24 focused tests, 78/78 full-CI tests, 7/7 governance tests, and a clean diff check. The TEST_ONLY and initial-no-op limitations remain unchanged.
+
+## AM-PB2-10 — world state subsystem resolvers
+
+**Status proposed:** READY_FOR_REVIEW
+
+**Acceptance IDs:** PB2-10; AC-002
+
+**Implementation base:** accepted PB2-09 commit `201f3d3fd7ab5d5ebaf5c587f53cec47529884fd`
+
+### Evidence produced
+
+- Strict canonical world and institution runtime schemas replace their former JSON envelopes without adding another mutable store.
+- Canonical institution-resource, territory, zone, conflict, civilian, infrastructure, asset-status, and development effects apply atomically through a versioned TEST_ONLY request/result/trace contract.
+- The accepted source order is preserved. Opt-in fixture adapters run only at 8a through 8d; default adapters and external environment remain visibly `initial_no_op`.
+- `WORLD_SUBSYSTEM_COVERAGE` declares the sole owner, mode, and explicit production blocker for every requested subsystem.
+- AM-GOV-029 records every non-canonical wrapper/trace field as a review-required test-only proposal.
+
+### Tests and negative cases
+
+- The focused Prompt 10 suite covers strict single ownership, immutable baseline/input, deterministic repeatability, declared multi-subsystem fixture changes, atomic cross-system/target rejection, coverage declarations, invalid infrastructure targeting, and ordered EndTurn integration.
+- Synthetic values are fixed and labeled TEST_ONLY. The seed identifies the fixture and does not create effect magnitudes.
+- Production coefficients, formulas, real values, adjacency propagation, shocks, event generation, and external-environment dynamics remain BLOCKED and unimplemented.
+
+### Source-to-test traceability
+
+| Acceptance ID | Source authority | Contract / evidence | Test state |
+|---|---|---|---|
+| PB2-10 | Domain v1.1 sections 17-21, 82-89 and Appendix F.7; Technical v2 sections 54-56; Data & Methodology guardrails | world schemas, effect resolver, coverage declaration, ordered fixture registry, contract doc, handoff, log | READY_FOR_REVIEW |
+| AC-002 | Domain v1.1 canonical-state and derived-summary invariants | strict duplicate-owner rejection and key/ID agreement tests | PASS |
+
+Prompt 10 remains unapproved until independent owner review and an accepting commit. Passing tests do not promote any test fixture or production dynamic.
