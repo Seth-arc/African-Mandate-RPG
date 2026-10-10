@@ -316,11 +316,11 @@ AM-GOV-021 records all exact compiler-only fields and policies as a review-requi
 
 AM-GOV-023 records all exact non-canonical wrapper fields as TEST_ONLY proposals. Prompt 07 does not implement campaign mutation, effects, durable persistence, EndTurn, production content, legal procedures, balance values, or UI behavior.
 
-## AM-PB2-08 — Atomic decision commit and durable persistence
+## AM-PB2-08 — initial blocked preflight (superseded)
 
-**Status proposed:** BLOCKED
+**Historical status:** BLOCKED; superseded after the owner accepted PB2-07 and authorized implementation on 2026-10-09.
 
-**Acceptance ID:** PB2-08; related Acceptance Matrix IDs AC-005 and AC-006 remain NOT_RUN for the required atomic persistence behavior.
+**Historical acceptance state at that preflight:** PB2-08 was blocked; AC-005 and AC-006 were NOT_RUN. The current implementation evidence below supersedes this state.
 
 **Preflight HEAD:** `c9e65850767e2166f251f44eab7590d2908e4f3d`
 
@@ -348,4 +348,81 @@ AM-GOV-023 records all exact non-canonical wrapper fields as TEST_ONLY proposals
 | AC-005 | Domain v1.1 §46; Technical v2 durable commit order | Required injected-save-failure before/after state hash test | NOT_RUN; dependent implementation blocked |
 | AC-006 | Domain v1.1 §46; Technical v2 §49 | Required duplicate-command original-result/no-double-effect test | NOT_RUN; dependent implementation blocked |
 
-The smallest actionable unblock is independent review of Prompt 07, execution of its reproduction commands, and an owner acceptance record containing a reviewed commit SHA, evidence path, and approver. Prompt 08 must then move from `BLOCKED` to `IN_PROGRESS` before implementation begins.
+The historical unblock was independent Prompt 07 acceptance. That acceptance is now recorded by AM-GOV-024, and Prompt 08 implementation resumed.
+
+## AM-PB2-09 — premature blocked preflight (withdrawn)
+
+**Historical local status:** withdrawn. PB2-09 remains `NOT_STARTED`; its uncommitted handoff/log were removed when PB2-08 became eligible.
+
+**Acceptance IDs:** PB2-09; related Acceptance Matrix IDs AC-007 and AC-025 remain NOT_RUN.
+
+**Preflight HEAD:** `078ef75a5cf38673e5f45ba04a3596e2f02beb04`
+
+**Historical prerequisite result:** At this withdrawn preflight, PB2-08 was `BLOCKED`. Prompt 09 still requires PB2-08 to be `ACCEPTED`, so no Prompt 09 implementation was authorized.
+
+### Evidence produced
+
+- The working tree was clean at preflight. HEAD is the repository-owner `prompt 08` commit dated 2026-10-09 15:03:24 -04:00.
+- The latest accepted milestone remains PB2-06 at `d84f62f36ecd53eb0fc7dd84bf6f48ca5efb7e75`. The accepted-to-HEAD path difference consists of the recorded Prompt 07 implementation/evidence and Prompt 08 blocker evidence; it does not contain an accepted atomic dispatcher or persistence implementation.
+- `docs/build/BUILD_STATE.json` records PB2-07 as `READY_FOR_REVIEW` and PB2-08 as `BLOCKED`; neither has an approved commit or approver.
+- `docs/build/handoffs/08.md` records that no atomic command dispatcher, durable repository transaction, runtime replacement, idempotent result replay, or EndTurn concurrency behavior was implemented or tested.
+- The uncommitted Prompt 09 handoff/log created during that preflight were withdrawn and removed when Prompt 08 became eligible.
+
+### Tests and negative cases
+
+- Prompt 09 lifecycle tests were **NOT RUN** because the required PB2-08 contract is not accepted and the dependent implementation is prohibited.
+- The October 2025 to February 2026 four-rollover case, final Month 20 no-advance case, mandatory-slot reserve case, final-command no-softlock case, and explicit persistence/expiry-only case all remain NOT_RUN.
+- No claim is made for calendar advancement, unused-slot forfeiture, final-month completion, scheduled consequence persistence, situation/attention lifecycle, mandatory-response bounds, or resolver ordering.
+- Only governance validation and diff hygiene apply to this blocker-only documentation change; actual outputs are recorded in `docs/build/logs/09-turn-engine-blocked.txt`.
+
+### Source-to-test traceability
+
+| Acceptance ID | Source authority | Contract / evidence | Test state |
+|---|---|---|---|
+| PB2-09 | Domain v1.1 §§14, 44, 47, 70–77, 96–97, 110–112; GDS v2.1 §§11, 15, 23, 75–78, 89, 105 and Appendix G | Preflight and blocked handoff only; no lifecycle contract or implementation authorized | BLOCKED by PB2-08 not `ACCEPTED` |
+| AC-007 | Domain v1.1 §§14, 44, 47, 97; GDS v2.1 §§11, 15 | Required three-slot/no-rollover/calendar/final-turn lifecycle traces | NOT_RUN; dependent implementation blocked |
+| AC-025 | Domain v1.1 §47; GDS v2.1 §§23, 77 and Appendix G | Required mandatory-slot reserve and last-command no-softlock adverse traces | NOT_RUN; dependent implementation blocked |
+
+The current unblock is independent review and owner acceptance of the implemented PB2-08 change, followed by a fresh Prompt 09 preflight against that accepted commit.
+
+The preceding PB2-09 preflight was never committed as a milestone artifact and is withdrawn by the current Prompt 08 implementation. PB2-09 remains `NOT_STARTED` pending independent acceptance of PB2-08.
+
+## AM-PB2-08 — atomic decision commit implementation (current)
+
+**Status proposed:** READY_FOR_REVIEW
+
+**Acceptance IDs:** PB2-08; AC-005 and AC-006 PASS. AC-007 one-slot coverage and AC-025 operation-serialization coverage pass within Prompt 08's bounded scope; their turn/mandatory-response portions remain Prompt 09.
+
+**Implementation base:** `078ef75a5cf38673e5f45ba04a3596e2f02beb04`
+
+**Prerequisite result:** the repository owner explicitly accepted PB2-07 at commit `c9e65850767e2166f251f44eab7590d2908e4f3d` on 2026-10-09. `docs/build/BUILD_STATE.json` and AM-GOV-024 now record that acceptance. PB2-05 was already accepted.
+
+### Evidence produced
+
+- Atomic commit contract `1.0.0` and `SaveSnapshot` version `1` are documented in `docs/build/ATOMIC_COMMIT_CONTRACT.md`; exact non-canonical wrapper fields remain the review-required TEST_ONLY proposal AM-GOV-025.
+- `@african-mandate/domain` publishes strict request, simulation-result, application-result, state-hash, and save-snapshot schemas.
+- `@african-mandate/simulation` calculates a candidate next state without mutating current authority, applies exact known costs, creates deterministic decision/audit IDs, appends the immutable journal, marks the command processed, consumes one slot, and increments revision once.
+- `@african-mandate/application` serializes the command through the accepted coordinator, validates the result, hashes the authoritative candidate state, writes the snapshot, and replaces the frozen runtime authority only after the durable write resolves.
+- Unsupported effect/consequence payloads, stale revisions, version mismatches, malformed simulation output, and unapproved exact-cost semantics fail closed.
+
+### Tests and negative cases
+
+- Focused Prompt 08 suite: PASS, 1 file / 7 tests.
+- Full repository CI: PASS, 7 files / 71 tests plus formatting, dependency, lint, type, determinism, fixture, boundary, and governance-artifact checks.
+- Governance regression: the initial run exposed two stale Prompt 07 negative fixtures after acceptance; that failure is retained in the log. The fixtures now target unapproved Prompt 09 and the final suite passes 7/7.
+- Duplicate submission returns the original decision identity and causes no second write, resource cost, slot use, revision, decision, or event.
+- Known-rule rejection, revision mismatch, version mismatch, invalid simulation output, and injected save failure leave the prior runtime/durable state unchanged.
+- Concurrent EndTurn cannot enter while the command's durable write holds the campaign operation.
+- Tampering with the authoritative state hash is detected.
+
+### Source-to-test traceability
+
+| Acceptance ID | Source authority | Contract / evidence | Test state |
+|---|---|---|---|
+| PB2-08 | Domain v1.1 §§46, 123–126; Technical v2 §§19–20, 48–49, 57; Reconciliation R-01/R-02; AM-BUILD-003 | Atomic contract, domain schemas, simulation dispatcher, application commit service, focused suite, handoff, and raw log | READY_FOR_REVIEW |
+| AC-005 | Domain v1.1 §46; Technical v2 §20 | Injected durable-write failure pins prior runtime hash, repository snapshot, resources, events, slots, and revision | PASS |
+| AC-006 | Domain v1.1 §46; Technical v2 §49 | Duplicate command returns original decision identity with no second effect/write | PASS |
+| AC-007 | Domain v1.1 §§44, 46 | Successful consequential command changes slots 3 → 2 exactly once | PARTIAL PASS; EndTurn chronology remains Prompt 09 |
+| AC-025 | Technical v2 §§19–20; GDS blocking-attention rule | Command durable write and concurrent EndTurn serialize under one coordinator | PARTIAL PASS; mandatory-response lifecycle remains Prompt 09 |
+
+Prompt 08 does not implement EndTurn resolution, non-empty effect/consequence profiles, production persistence, UI, cloud sync, recovery, or narrative. These exclusions remain visible and do not weaken the tested atomic command boundary.

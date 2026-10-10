@@ -3,7 +3,7 @@
 **Contract version:** 1.0.0  
 **Task:** AM-PB2-05 / PB2-05  
 **Owner:** `@african-mandate/application`  
-**Status:** READY_FOR_REVIEW; synthetic/test-only adapters, no production browser adapter
+**Status:** PB2-05 ACCEPTED; Prompt 08 binds the accepted ports to a TEST_ONLY atomic service; no production browser adapter
 
 ## Ownership boundary
 
@@ -35,7 +35,7 @@ No new serialized artifact is created by Prompt 05, so no new artifact schema is
 - Invalid campaign IDs and operation kinds fail before lock acquisition.
 - Narrative and cloud synchronization are separate ports and never enter the authoritative operation API.
 
-Prompt 05 does not implement the durable commit sequence. Prompt 08 must implement and test simulation → validation/hash → durable local write → in-memory replacement → optional cloud/narrative ordering without adding another coordinator or dispatcher.
+Prompt 08 adds `AtomicCampaignCommandService` without adding another coordinator. It binds the accepted operation boundary to a typed simulation dispatcher, canonical state hash, `SaveSnapshot`, durable repository write, and post-write runtime replacement. Cloud, narrative, projection-store, and production browser adapters remain later work.
 
 ## Test adapters
 
@@ -46,6 +46,6 @@ The public root exposes in-memory adapters for injected simulation handlers, loc
 | Acceptance ID | Assertion | Executable evidence |
 |---|---|---|
 | PB2-05 | Ports frozen/versioned before engine and UI work | `tests/unit/application-ports.test.ts`; Prompt 05 CI log and handoff |
-| AC-005 | Durable failure must not acknowledge or replace state | In-memory repository fault injection exists for Prompt 08; atomic commit behavior remains NOT_RUN |
+| AC-005 | Durable failure must not acknowledge or replace state | `tests/unit/command-atomicity.test.ts` injects a failed write and pins prior runtime/repository hashes and state |
+| AC-006 | Duplicate command cannot double-apply | Prompt 08 duplicate submission test pins one decision, event, revision, cost, and slot charge |
 | AC-021 | UI/web may not import simulation or hidden state | Existing forbidden-import fixture remains green; no UI change in Prompt 05 |
-

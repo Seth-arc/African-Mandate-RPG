@@ -1,9 +1,9 @@
 # Serialized domain contract inventory
 
-**Contract version:** 0.2.0
-**Task:** AM-PB2-03 / PB2-03; AM-PB2-07 / PB2-07
+**Contract version:** 0.3.0
+**Task:** AM-PB2-03 / PB2-03; AM-PB2-07 / PB2-07; AM-PB2-08 / PB2-08
 **Owner:** `@african-mandate/domain`  
-**Status:** PB2-03 ACCEPTED at `05f933cba84e7023009fffaee4b36f1d839ce3a7`; Prompt 07 command/rule contract 1.0.0 is READY_FOR_REVIEW; no production scenario admission
+**Status:** PB2-03 and PB2-07 ACCEPTED; Prompt 08 atomic-commit contract 1.0.0 is READY_FOR_REVIEW; no production scenario admission
 
 ## Authority and boundary
 
@@ -30,6 +30,8 @@ This first wave does not claim a production-valid scenario. The upstream AM-BUIL
 | Strategic command and target | `CommandIdSchema`, `ActionTargetSchemaSchema`, `StrategicActionCommandSchema`, `CommandPreparationResultSchema` | Domain §§43-46 and Appendix F.5; Technical §§13.1, 49, 57 | Strict external command/action/target envelope; duplicate and rejected results carry zero slot cost; no state mutation in Prompt 07 |
 | Known preview and hidden-resolution boundary | `PreviewCostSchema`, `KnownCostProfileSchema`, `DecisionPreviewSchema`, `ActionMenuEntrySchema`, `PostCommitHiddenResolution*Schema` | Domain §54; GDS §§20-22; Prompt 07 | Knowledge-only menu/preview; hidden resolver request requires postcommit phase and decision ID; exact wrappers are AM-GOV-023 TEST_ONLY proposals |
 
+| Atomic request/result and durable snapshot | `AtomicStrategicCommandRequestSchema`, `StrategicCommandSimulation*Schema`, `AtomicStrategicCommandResultSchema`, `SaveSnapshotSchema` | Domain §§46, 123–126; Technical §§20, 48–49, 57; Prompt 08 | Strict revision/version preconditions, result classifications, authoritative hash, and snapshot consistency; exact wrappers are AM-GOV-025 TEST_ONLY proposals |
+
 ## Referential validation
 
 `ScenarioBundleSchema` checks record key/embedded ID agreement and references among scenario, territories, zones, assets, corridors, institutions, actors, authorization procedures, actions, events, effect profiles, and difficulty profiles. Duplicate ID arrays are rejected where set semantics apply. Baseline arrays and source-manifest entries reject duplicate identifiers.
@@ -49,3 +51,6 @@ The following remain intentionally outside Prompt 03: production content admissi
 | AC-005 | Invalid preparation result is pure and carries zero slot cost | Prompt 07 precommit test only; durable write atomicity remains Prompt 08 |
 | AC-006 | Duplicate command ID is detected with zero slot cost | Prompt 07 precommit test only; full idempotent effect test remains Prompt 08 |
 | AC-008 | Same known projection under distinct hidden states yields equal menu/preview objects | Prompt 07 differential unit test |
+| PB2-08 | Typed atomic request/result and snapshot artifacts | `tests/unit/command-atomicity.test.ts`; `docs/build/ATOMIC_COMMIT_CONTRACT.md` |
+| AC-005 | Durable write failure preserves prior runtime and repository state | Prompt 08 injected-write-failure test |
+| AC-006 | Duplicate command returns its original decision identity with no second effect | Prompt 08 duplicate-submit test |

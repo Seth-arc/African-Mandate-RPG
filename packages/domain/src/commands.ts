@@ -168,6 +168,22 @@ export const ActionMenuEntrySchema = z
   })
   .strict();
 
+export const CommandPreparationRejectionReasonSchema = z.enum([
+  "INVALID_COMMAND_SCHEMA",
+  "CAMPAIGN_NOT_ACTIVE",
+  "CAMPAIGN_MISMATCH",
+  "TURN_MISMATCH",
+  "UNKNOWN_ACTION",
+  "COMMAND_TYPE_MISMATCH",
+  "INVALID_TARGETS",
+  "STRUCTURALLY_IMPOSSIBLE_TERM",
+  "KNOWN_REQUIREMENT_FAILED",
+  "INSUFFICIENT_KNOWN_INFORMATION",
+  "INSUFFICIENT_DECISION_SLOTS",
+  "KNOWN_COST_UNAFFORDABLE",
+  "CONFIGURATION_ERROR",
+]);
+
 export const CommandPreparationResultSchema = z.discriminatedUnion("status", [
   z
     .object({
@@ -189,21 +205,7 @@ export const CommandPreparationResultSchema = z.discriminatedUnion("status", [
       status: z.literal("rejected"),
       commandId: CommandIdSchema.optional(),
       decisionSlotCost: z.literal(0),
-      reasonCode: z.enum([
-        "INVALID_COMMAND_SCHEMA",
-        "CAMPAIGN_NOT_ACTIVE",
-        "CAMPAIGN_MISMATCH",
-        "TURN_MISMATCH",
-        "UNKNOWN_ACTION",
-        "COMMAND_TYPE_MISMATCH",
-        "INVALID_TARGETS",
-        "STRUCTURALLY_IMPOSSIBLE_TERM",
-        "KNOWN_REQUIREMENT_FAILED",
-        "INSUFFICIENT_KNOWN_INFORMATION",
-        "INSUFFICIENT_DECISION_SLOTS",
-        "KNOWN_COST_UNAFFORDABLE",
-        "CONFIGURATION_ERROR",
-      ]),
+      reasonCode: CommandPreparationRejectionReasonSchema,
       ruleResult: RuleResultSchema.optional(),
       detailCode: NonEmptyStringSchema.optional(),
     })
@@ -247,6 +249,9 @@ export type StrategicActionCommand = z.infer<
 export type ActionMenuEntry = z.infer<typeof ActionMenuEntrySchema>;
 export type CommandPreparationResult = z.infer<
   typeof CommandPreparationResultSchema
+>;
+export type CommandPreparationRejectionReason = z.infer<
+  typeof CommandPreparationRejectionReasonSchema
 >;
 export type PostCommitHiddenResolutionRequest = z.infer<
   typeof PostCommitHiddenResolutionRequestSchema

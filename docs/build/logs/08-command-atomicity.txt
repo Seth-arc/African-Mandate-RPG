@@ -1,0 +1,200 @@
+AM-PB2-08 atomic command implementation log
+Date: 2026-10-09 (America/Indianapolis)
+Implementation base HEAD: 078ef75a5cf38673e5f45ba04a3596e2f02beb04
+Accepted prerequisite: PB2-07 at c9e65850767e2166f251f44eab7590d2908e4f3d
+
+PREREQUISITE RECONCILIATION
+The repository owner explicitly accepted committed Prompt 07 on 2026-10-09.
+BUILD_STATE now records PB2-07 ACCEPTED and AM-GOV-024 records the owner event.
+
+INSTALL
+COMMAND: corepack pnpm install --frozen-lockfile
+SANDBOX ATTEMPT EXIT CODE: 1
+OUTPUT: EPERM: operation not permitted, lstat 'C:\Users\ssnguna'
+
+RERUN OUTSIDE SANDBOX EXIT CODE: 0
+OUTPUT:
+Scope: all 9 workspace projects
+Already up to date
+Done in 645ms using pnpm v11.23.0
+
+INITIAL TYPECHECK
+COMMAND: npm run typecheck
+FIRST SANDBOX ATTEMPT EXIT CODE: 1
+OUTPUT: Cannot find module 'C:\Users\ssnguna\Local Sites\African-Mandate-RPG\node_modules\typescript\bin\tsc'
+
+FIRST OUTSIDE-SANDBOX IMPLEMENTATION CHECK EXIT CODE: 1
+OUTPUT:
+packages/application/src/atomic-command-service.ts(232,62): error TS2379: exact optional property mismatch for rejected-result options.
+packages/simulation/src/atomic-command.ts(84,5): error TS2322: number not assignable to branded Score.
+packages/simulation/src/atomic-command.ts(88,5): error TS2322: number not assignable to branded Score.
+packages/simulation/src/atomic-command.ts(91,3): error TS2322: number not assignable to branded Score.
+tests/unit/command-atomicity.test.ts(229,40): error TS4111: index-signature property requires bracket access.
+
+These errors were corrected with conditional optional fields, ScoreSchema parsing,
+and bracket access. No test expectation was weakened.
+
+TYPECHECK RERUN
+COMMAND: npm run typecheck
+EXIT CODE: 0
+OUTPUT:
+> african-mandate@0.0.0-test-only typecheck
+> tsc --noEmit -p tsconfig.json
+
+INITIAL FOCUSED SUITE
+COMMAND: corepack pnpm exec vitest run tests/unit/command-atomicity.test.ts
+EXIT CODE: 0
+OUTPUT:
+Test Files  1 passed (1)
+Tests       7 passed (7)
+
+LINT
+COMMAND: npm run lint
+EXIT CODE: 0
+OUTPUT:
+> eslint apps packages scripts tests/unit
+
+INITIAL FORMAT CHECK
+COMMAND: npm run format:check
+EXIT CODE: 1
+OUTPUT:
+[warn] packages/application/src/atomic-command-service.ts
+[warn] packages/domain/src/atomic-commit.ts
+[warn] packages/simulation/src/atomic-command.ts
+[warn] tests/unit/command-atomicity.test.ts
+[warn] Code style issues found in 4 files. Run Prettier with --write to fix.
+
+The pinned formatter was run only on the listed Prompt 08 TypeScript files.
+
+FINAL FOCUSED SUITE
+COMMAND: corepack pnpm exec vitest run tests/unit/command-atomicity.test.ts
+EXIT CODE: 0
+OUTPUT:
+RUN  v5.0.3 C:/Users/ssnguna/Local Sites/African-Mandate-RPG
+Test Files  1 passed (1)
+Tests       7 passed (7)
+Duration    902ms
+
+FULL CI
+COMMAND: corepack pnpm run ci
+EXIT CODE: 0
+OUTPUT:
+$ corepack pnpm run format:check && corepack pnpm run deps:check && corepack pnpm run lint && corepack pnpm run typecheck && corepack pnpm run test && corepack pnpm run schema:check
+$ prettier --check package.json pnpm-workspace.yaml tsconfig.base.json tsconfig.json eslint.config.js toolchain.json .github/workflows/ci.yml apps packages scripts tests/unit tests/fixtures
+All matched files use Prettier code style!
+$ corepack pnpm peers check
+No peer dependency issues found
+$ eslint apps packages scripts tests/unit
+$ tsc --noEmit -p tsconfig.json
+$ vitest run tests/unit
+Test Files  7 passed (7)
+Tests       71 passed (71)
+$ node scripts/verify-determinism-vectors.mjs
+PASS: two fresh processes produced identical deterministic bytes.
+$ node scripts/verify-fixture-build.mjs
+PASS: two fresh fixture builds produced byte-identical artifacts.
+$ node scripts/verify-forbidden-import.mjs && node scripts/verify-forbidden-random.mjs
+PASS: web-to-simulation import was rejected by no-restricted-imports.
+PASS: Math.random and randomUUID were rejected inside simulation scope.
+$ node scripts/verify-governance-artifacts.mjs
+PASS: governance and toolchain artifacts match their public schemas.
+
+INITIAL GOVERNANCE REGRESSION
+COMMAND: $env:PYTHONDONTWRITEBYTECODE = '1'; py -3 -m unittest discover -s tests/governance -p "test_*.py" -v
+EXIT CODE: 1
+OUTPUT:
+test_accepted_without_independent_record_is_rejected ... FAIL
+test_current_state_matches_public_contract ... ok
+test_direct_self_approval_is_rejected ... ok
+test_only_accepted_satisfies_hard_prerequisite ... ok
+test_required_transition_paths ... ok
+test_source_manifest_hash_is_current ... ok
+test_unapproved_state_cannot_carry_approval ... FAIL
+
+Both failures were stale negative fixtures that mutated Prompt 07 after Prompt 07
+became ACCEPTED. The tests were moved to still-unapproved Prompt 09; validation
+semantics were not changed.
+
+FINAL GOVERNANCE REGRESSION
+COMMAND: $env:PYTHONDONTWRITEBYTECODE = '1'; py -3 -m unittest discover -s tests/governance -p "test_*.py" -v
+EXIT CODE: 0
+OUTPUT:
+test_accepted_without_independent_record_is_rejected ... ok
+test_current_state_matches_public_contract ... ok
+test_direct_self_approval_is_rejected ... ok
+test_only_accepted_satisfies_hard_prerequisite ... ok
+test_required_transition_paths ... ok
+test_source_manifest_hash_is_current ... ok
+test_unapproved_state_cannot_carry_approval ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.002s
+
+OK
+
+MANDATORY NEGATIVE CASES
+- duplicate submit: PASS
+- rejected command and no state change: PASS
+- injected save failure and prior snapshot retained: PASS
+- concurrent command/EndTurn serialization: PASS
+- version mismatch and no state change: PASS
+- revision mismatch and no state change: PASS
+- resources/events/slots/revision unchanged on every applicable failure: PASS
+- malformed simulation result rejected before write/replacement: PASS
+- tampered authoritative hash rejected by validation helper: PASS
+
+FINAL DIFF/STATUS CHECKS
+COMMAND: corepack pnpm run schema:check
+EXIT CODE: 0
+OUTPUT: PASS: governance and toolchain artifacts match their public schemas.
+
+COMMAND: $env:PYTHONDONTWRITEBYTECODE = '1'; py -3 -m unittest discover -s tests/governance -p "test_*.py" -v
+EXIT CODE: 0
+OUTPUT: Ran 7 tests in 0.003s — OK
+
+COMMAND: git diff --check
+EXIT CODE: 0
+OUTPUT:
+LF-to-CRLF working-copy warnings were emitted for existing tracked text-file
+conventions. No whitespace error was reported.
+
+COMMAND: git status --short --branch
+OUTPUT:
+18 documented Prompt 08 paths are modified or untracked. No Prompt 09 handoff or
+log remains in the working tree. No unrelated implementation path is changed.
+
+FINAL SIMULATIONPORT TYPE-BINDING REVALIDATION
+The service's dispatch-only simulation dependency was made an explicit `Pick` of
+the accepted generic `SimulationPort`, avoiding a parallel port definition.
+
+The first parallel verification launch ended before returning results because the
+automatic approval review timed out. This was not treated as a test result.
+
+RETRY COMMAND:
+corepack pnpm exec vitest run tests/unit/command-atomicity.test.ts; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; corepack pnpm run ci
+
+FOCUSED RESULT:
+Test Files  1 passed (1)
+Tests       7 passed (7)
+
+CI COMPONENT RESULTS RETURNED:
+- formatting: PASS
+- dependency peers: PASS
+- lint: PASS
+- typecheck: PASS
+- unit tests: 7 files / 71 tests PASS
+- deterministic vectors: PASS
+- fixture reproducibility: PASS
+- forbidden import/random boundaries: PASS
+
+The combined command yielded before returning its final schema-check line. The
+schema stage was rerun directly:
+
+COMMAND: corepack pnpm run schema:check
+EXIT CODE: 0
+OUTPUT: PASS: governance and toolchain artifacts match their public schemas.
+
+FINAL GOVERNANCE RESULT:
+Ran 7 tests in 0.026s — OK
+
+FINAL git diff --check EXIT CODE: 0

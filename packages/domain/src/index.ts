@@ -5,6 +5,7 @@ export const domainPackage = {
 
 export type DomainPackageDescriptor = typeof domainPackage;
 
+export * from "./atomic-commit.js";
 export * from "./baseline.js";
 export * from "./campaign.js";
 export * from "./commands.js";

@@ -1,6 +1,6 @@
 # African Mandate decision ledger
 
-**Ledger version:** 1.4.0
+**Ledger version:** 1.5.0
 
 **Created by:** AM-PB2-01
 
@@ -52,6 +52,10 @@ Exact source byte hashes and admission classifications are pinned in `docs/build
 
 | AM-GOV-022 | owner | Prompt 06 acceptance and synthetic fixture review | AM-GOV-001; commit metadata; Prompt 06 evidence | Commit `d84f62f36ecd53eb0fc7dd84bf6f48ca5efb7e75`, authored and committed by Seth-arc at `2026-10-09T13:17:13-04:00`, accepts PB2-06 and fixture compiler contract v1.0.0. This accepts AM-GOV-021's TEST_ONLY compiler boundary without admitting production source data, geometry, or publication. | APPROVED | Seth-arc, repository owner | 07-19 |
 | AM-GOV-023 | engineering | Command/rule artifact envelopes and preparation boundary | Domain v1.1 §§43-54 and Appendix F.2-F.5; Technical v2 §§13.1, 49-51, 57, 65; GDS v2.1 §§17-22 and 44; Prompt 07 | Command/rule contract `1.0.0` uses the 12 source-listed example FactKeys as the initial closed allowlist; registry metadata remains explicit because exact allowed scopes/resolver IDs are not canonical. `KnownCostProfile`, action-menu, command-preparation, and postcommit hidden-resolution envelopes are strict TEST_ONLY design proposals. The Prompt 07 phrase “signed action/target schema” has no canonical signing fields; this milestone implements strict schema-validated action/target envelopes and does not invent a cryptographic signature. Structural-term semantics remain injected, engine-owned validators until exact term unions are approved. | PROPOSED / TEST_ONLY | Domain/architecture owner review required with Prompt 07 | 07-20 |
+
+| AM-GOV-024 | owner | Prompt 07 acceptance and command/rule boundary review | Owner instruction on 2026-10-09; AM-GOV-001; commit metadata; Prompt 07 evidence | Commit `c9e65850767e2166f251f44eab7590d2908e4f3d`, authored and committed by Seth-arc at `2026-10-09T13:38:59-04:00`, is explicitly accepted by the repository owner for PB2-07. This accepts command/rule contract `1.0.0` and AM-GOV-023's TEST_ONLY boundary without claiming durable mutation or persistence. | APPROVED | Seth-arc, repository owner | 08-20 |
+
+| AM-GOV-025 | engineering | Atomic command envelopes, snapshot version, and first-wave mutation boundary | Domain v1.1 §§46, 123–126; Technical v2 §§20, 48–49, 57; Prompt 08 | Atomic commit contract `1.0.0` and snapshot version `1` bind a command to expected revision/all pinned versions, classify committed/duplicate/rejected results, and expose the canonical source-listed `SaveSnapshot` fields. Exact wrapper fields and rejection codes are TEST_ONLY proposals where upstream sources provide semantics but no serialized API. Until closed effect/consequence unions are accepted, the dispatcher supports only empty effect/consequence profile lists and fails closed otherwise; it applies exact known costs plus canonical decision/event/processed-ID/revision bookkeeping. | PROPOSED / TEST_ONLY | Domain/application architecture owner review required with Prompt 08 | 08-20 |
 
 ## Non-decisions
 

@@ -9,6 +9,7 @@ export const applicationPackage = {
 
 export type ApplicationPackageDescriptor = typeof applicationPackage;
 
+export * from "./atomic-command-service.js";
 export * from "./operation-coordinator.js";
 export * from "./ports.js";
 export * from "./testing/in-memory-adapters.js";
