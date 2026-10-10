@@ -192,7 +192,7 @@ const campaignState = () => ({
   implementations: {},
   worldEvents: {},
   situations: {},
-  attention: {},
+  attention: { items: {} },
   scheduledConsequences: {},
   doctrine: {},
   evaluation: {},

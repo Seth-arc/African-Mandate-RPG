@@ -22,6 +22,11 @@ import {
   type StructuralActionValidator,
 } from "./command-rules.js";
 import { deriveSimulationId } from "./determinism/primitives.js";
+import {
+  mandatoryResponseItem,
+  reservedMandatoryDecisionSlots,
+  resolveMandatoryAttentionItem,
+} from "./mandatory-attention.js";
 
 export interface InProcessStrategicCommandDispatcherOptions {
   readonly actions: readonly ActionDefinition[];
@@ -133,6 +138,24 @@ export const simulateStrategicCommand = (
   }
   if (!versionsMatch(request.expectedVersions, currentState.versions)) {
     return reject("VERSION_MISMATCH", command.commandId);
+  }
+
+  const reservedSlots = reservedMandatoryDecisionSlots(currentState);
+  const mandatoryResponseId = request.mandatoryResponseAttentionItemId;
+  if (reservedSlots > currentState.meta.decisionsRemaining) {
+    return reject("MANDATORY_RESPONSE_SOFTLOCK", command.commandId);
+  }
+  if (
+    mandatoryResponseId !== undefined &&
+    mandatoryResponseItem(currentState, mandatoryResponseId) === undefined
+  ) {
+    return reject("INVALID_MANDATORY_RESPONSE", command.commandId);
+  }
+  if (
+    mandatoryResponseId === undefined &&
+    currentState.meta.decisionsRemaining <= reservedSlots
+  ) {
+    return reject("DECISION_SLOTS_RESERVED", command.commandId);
   }
 
   const preparation = prepareStrategicCommand({
@@ -250,6 +273,15 @@ export const simulateStrategicCommand = (
   });
   nextState.processedCommandIds[command.commandId] = true;
   nextState.meta.decisionsRemaining -= 1;
+  if (mandatoryResponseId !== undefined) {
+    resolveMandatoryAttentionItem(nextState, mandatoryResponseId);
+  }
+  if (
+    reservedMandatoryDecisionSlots(nextState) >
+    nextState.meta.decisionsRemaining
+  ) {
+    return reject("MANDATORY_RESPONSE_SOFTLOCK", command.commandId);
+  }
   nextState.meta.revision += 1;
 
   const validatedState = CampaignStateSchema.safeParse(nextState);

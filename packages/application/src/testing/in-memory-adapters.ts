@@ -71,7 +71,9 @@ export interface SimulationPortHandlers<Types extends SimulationPortTypes> {
   readonly dispatch: (
     command: Types["command"],
   ) => Promise<Types["commandResult"]>;
-  readonly endTurn: () => Promise<Types["turnResult"]>;
+  readonly endTurn: (
+    command: Types["turnCommand"],
+  ) => Promise<Types["turnResult"]>;
   readonly initialize: (
     input: Types["initializationInput"],
   ) => Promise<Types["campaignState"]>;
@@ -93,8 +95,8 @@ export class InMemorySimulationPort<
     return this.#handlers.dispatch(command);
   }
 
-  public endTurn(): Promise<Types["turnResult"]> {
-    return this.#handlers.endTurn();
+  public endTurn(command: Types["turnCommand"]): Promise<Types["turnResult"]> {
+    return this.#handlers.endTurn(command);
   }
 
   public initialize(

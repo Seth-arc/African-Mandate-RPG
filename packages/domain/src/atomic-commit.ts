@@ -6,12 +6,16 @@ import {
   CommandPreparationRejectionReasonSchema,
   StrategicActionCommandSchema,
 } from "./commands.js";
-import { CampaignIdSchema, DecisionIdSchema } from "./ids.js";
+import {
+  AttentionItemIdSchema,
+  CampaignIdSchema,
+  DecisionIdSchema,
+} from "./ids.js";
 import { JsonObjectSchema } from "./json.js";
 import { NonNegativeIntegerSchema } from "./scalars.js";
 import { CampaignVersionsSchema } from "./versions.js";
 
-export const ATOMIC_COMMIT_CONTRACT_VERSION = "1.0.0" as const;
+export const ATOMIC_COMMIT_CONTRACT_VERSION = "1.1.0" as const;
 export const SAVE_SNAPSHOT_VERSION = 1 as const;
 
 export const AuthoritativeStateHashSchema = z.string().regex(/^[0-9a-f]{64}$/u);
@@ -78,6 +82,7 @@ export const AtomicStrategicCommandRequestSchema = z
     command: StrategicActionCommandSchema,
     expectedRevision: NonNegativeIntegerSchema,
     expectedVersions: CampaignVersionsSchema,
+    mandatoryResponseAttentionItemId: AttentionItemIdSchema.optional(),
   })
   .strict();
 
@@ -92,6 +97,9 @@ export const AtomicCommandRejectionReasonSchema = z.union([
     "UNSUPPORTED_IMMEDIATE_EFFECT_PROFILE",
     "UNSUPPORTED_CONSEQUENCE_PROFILE",
     "UNSUPPORTED_ESTIMATED_COST",
+    "DECISION_SLOTS_RESERVED",
+    "INVALID_MANDATORY_RESPONSE",
+    "MANDATORY_RESPONSE_SOFTLOCK",
     "INVALID_SIMULATION_RESULT",
   ]),
 ]);

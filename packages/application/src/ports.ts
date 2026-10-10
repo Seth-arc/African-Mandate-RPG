@@ -1,10 +1,11 @@
 import type { CampaignId } from "@african-mandate/domain";
 
-export const APPLICATION_PORT_CONTRACT_VERSION = "1.0.0" as const;
+export const APPLICATION_PORT_CONTRACT_VERSION = "1.1.0" as const;
 
 export interface SimulationPortTypes {
   readonly command: unknown;
   readonly commandResult: unknown;
+  readonly turnCommand: unknown;
   readonly turnResult: unknown;
   readonly initializationInput: unknown;
   readonly campaignState: unknown;
@@ -14,7 +15,7 @@ export interface SimulationPortTypes {
 
 export interface SimulationPort<Types extends SimulationPortTypes> {
   dispatch(command: Types["command"]): Promise<Types["commandResult"]>;
-  endTurn(): Promise<Types["turnResult"]>;
+  endTurn(command: Types["turnCommand"]): Promise<Types["turnResult"]>;
   initialize(
     input: Types["initializationInput"],
   ): Promise<Types["campaignState"]>;

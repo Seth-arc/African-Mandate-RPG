@@ -123,7 +123,7 @@ const campaignState = (): CampaignState =>
     implementations: {},
     worldEvents: {},
     situations: {},
-    attention: {},
+    attention: { items: {} },
     scheduledConsequences: {},
     doctrine: {},
     evaluation: {},

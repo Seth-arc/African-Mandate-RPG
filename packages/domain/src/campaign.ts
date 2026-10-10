@@ -31,6 +31,11 @@ import {
 } from "./scalars.js";
 import { DoctrineDeltaSchema } from "./scenario.js";
 import { CampaignVersionsSchema } from "./versions.js";
+import {
+  AttentionStateSchema,
+  ScheduledConsequenceSchema,
+  SituationStateSchema,
+} from "./lifecycle-state.js";
 
 export const CampaignMetaSchema = z
   .object({
@@ -138,9 +143,12 @@ export const CampaignStateSchema = z
     mandateCases: z.record(MandateCaseIdSchema, JsonObjectSchema),
     implementations: z.record(ProjectIdSchema, JsonObjectSchema),
     worldEvents: z.record(WorldEventIdSchema, JsonObjectSchema),
-    situations: z.record(SituationIdSchema, JsonObjectSchema),
-    attention: JsonObjectSchema,
-    scheduledConsequences: z.record(ConsequenceIdSchema, JsonObjectSchema),
+    situations: z.record(SituationIdSchema, SituationStateSchema),
+    attention: AttentionStateSchema,
+    scheduledConsequences: z.record(
+      ConsequenceIdSchema,
+      ScheduledConsequenceSchema,
+    ),
     doctrine: JsonObjectSchema,
     evaluation: JsonObjectSchema,
     decisions: z.array(DecisionRecordSchema),
@@ -148,7 +156,29 @@ export const CampaignStateSchema = z
     processedCommandIds: z.record(z.string(), z.literal(true)),
     versions: CampaignVersionsSchema,
   })
-  .strict();
+  .strict()
+  .superRefine((state, ctx) => {
+    for (const [key, situation] of Object.entries(state.situations)) {
+      if (situation.situationId !== key) {
+        ctx.addIssue({
+          code: "custom",
+          message: "situation key must match situationId",
+          path: ["situations", key, "situationId"],
+        });
+      }
+    }
+    for (const [key, consequence] of Object.entries(
+      state.scheduledConsequences,
+    )) {
+      if (consequence.consequenceId !== key) {
+        ctx.addIssue({
+          code: "custom",
+          message: "consequence key must match consequenceId",
+          path: ["scheduledConsequences", key, "consequenceId"],
+        });
+      }
+    }
+  });
 
 export type CampaignMeta = z.infer<typeof CampaignMetaSchema>;
 export type EnvoyState = z.infer<typeof EnvoyStateSchema>;

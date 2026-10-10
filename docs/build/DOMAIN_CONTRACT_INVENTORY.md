@@ -1,9 +1,9 @@
 # Serialized domain contract inventory
 
-**Contract version:** 0.3.0
-**Task:** AM-PB2-03 / PB2-03; AM-PB2-07 / PB2-07; AM-PB2-08 / PB2-08
+**Contract version:** 0.4.0
+**Task:** AM-PB2-03 / PB2-03; AM-PB2-07 / PB2-07; AM-PB2-08 / PB2-08; AM-PB2-09 / PB2-09
 **Owner:** `@african-mandate/domain`  
-**Status:** PB2-03 and PB2-07 ACCEPTED; Prompt 08 atomic-commit contract 1.0.0 is READY_FOR_REVIEW; no production scenario admission
+**Status:** PB2-03, PB2-07, and PB2-08 ACCEPTED; Prompt 09 lifecycle contract 1.0.0 is READY_FOR_REVIEW; no production scenario admission
 
 ## Authority and boundary
 
@@ -31,6 +31,8 @@ This first wave does not claim a production-valid scenario. The upstream AM-BUIL
 | Known preview and hidden-resolution boundary | `PreviewCostSchema`, `KnownCostProfileSchema`, `DecisionPreviewSchema`, `ActionMenuEntrySchema`, `PostCommitHiddenResolution*Schema` | Domain §54; GDS §§20-22; Prompt 07 | Knowledge-only menu/preview; hidden resolver request requires postcommit phase and decision ID; exact wrappers are AM-GOV-023 TEST_ONLY proposals |
 
 | Atomic request/result and durable snapshot | `AtomicStrategicCommandRequestSchema`, `StrategicCommandSimulation*Schema`, `AtomicStrategicCommandResultSchema`, `SaveSnapshotSchema` | Domain §§46, 123–126; Technical §§20, 48–49, 57; Prompt 08 | Strict revision/version preconditions, result classifications, authoritative hash, and snapshot consistency; exact wrappers are AM-GOV-025 TEST_ONLY proposals |
+| Lifecycle state | `ScheduledConsequenceSchema`, `SituationStateSchema`, `AttentionStateSchema`, `AttentionItemSchema` | Domain sections 68, 73, 77 | Canonical fields replace JSON envelopes; record-key/source/window and resolved-state invariants are strict |
+| EndTurn lifecycle | `EndTurnRequestSchema`, `EndTurnSimulation*Schema`, `AtomicEndTurnResultSchema`, `TurnResolverTraceSchema` | Domain sections 14, 47, 97, 123-126; GDS sections 11, 23, 76-77; Prompt 09 | Exact wrappers/trace/resolver IDs are AM-GOV-027 TEST_ONLY proposals; state remains snapshot-authoritative |
 
 ## Referential validation
 
@@ -54,3 +56,6 @@ The following remain intentionally outside Prompt 03: production content admissi
 | PB2-08 | Typed atomic request/result and snapshot artifacts | `tests/unit/command-atomicity.test.ts`; `docs/build/ATOMIC_COMMIT_CONTRACT.md` |
 | AC-005 | Durable write failure preserves prior runtime and repository state | Prompt 08 injected-write-failure test |
 | AC-006 | Duplicate command returns its original decision identity with no second effect | Prompt 08 duplicate-submit test |
+| PB2-09 | Typed calendar/scheduling/attention lifecycle and EndTurn artifacts | `tests/unit/turn-lifecycle.test.ts`; `docs/build/TURN_LIFECYCLE_CONTRACT.md` |
+| AC-007 | Four exact rollovers, unused-slot forfeiture/reset, and final Month 20 no-advance | Prompt 09 lifecycle tests |
+| AC-025 | Reserved mandatory capacity, blocked EndTurn, and final-response-slot success | Prompt 09 lifecycle tests |

@@ -135,7 +135,7 @@ const campaign = CampaignStateSchema.parse({
   implementations: {},
   worldEvents: {},
   situations: {},
-  attention: {},
+  attention: { items: {} },
   scheduledConsequences: {},
   doctrine: {},
   evaluation: {},

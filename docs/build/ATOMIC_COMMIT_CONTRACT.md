@@ -1,6 +1,6 @@
 # Atomic command and durable snapshot contract
 
-**Contract version:** 1.0.0  
+**Contract version:** 1.1.0 (`1.0.0` accepted by PB2-08; Prompt 09 extension pending review)
 **Snapshot version:** 1  
 **Task:** AM-PB2-08 / PB2-08  
 **Owners:** serialized contracts in `@african-mandate/domain`; deterministic next-state calculation in `@african-mandate/simulation`; operation serialization and durable commit in `@african-mandate/application`  
@@ -15,7 +15,7 @@
 - simulation input/result envelopes used behind the accepted `SimulationPort` boundary; and
 - committed, duplicate, and rejected application results.
 
-The exact request/result envelopes, rejection codes, and snapshot version literal were not assigned exact upstream serialized fields. They are the bounded TEST_ONLY proposal recorded as AM-GOV-025. They do not add gameplay values or modify the canonical `CampaignState` shape.
+The exact request/result envelopes, rejection codes, and snapshot version literal were not assigned exact upstream serialized fields. PB2-08 accepted the bounded TEST_ONLY proposal recorded as AM-GOV-025. Prompt 09 extends the request with optional `mandatoryResponseAttentionItemId` and bounded reservation rejection codes under AM-GOV-027; this `1.1.0` extension remains review-required.
 
 ## Ownership and commit order
 
@@ -47,7 +47,7 @@ The durable repository is persistence, not a second independently mutable simula
 
 Prompt 08 has no accepted closed effect or scheduled-consequence payload union. The first-wave dispatcher therefore supports a synthetic consequential action only when `immediateEffectProfileIds` and `consequenceProfileIds` are empty. Non-empty profiles fail closed with explicit rejection codes. Exact effect handlers and consequence scheduling remain assigned to their later canonical prompts; no arbitrary mutation callback or content-authored code was introduced.
 
-EndTurn calendar/resolver behavior remains Prompt 09. Prompt 08 proves that a command's durable write holds the same coordinator lock against a concurrent `end_turn` operation; it does not advance a month.
+Prompt 09 supplies EndTurn calendar/resolver behavior. The command dispatcher now preserves enough capacity for every known unresolved blocking `decision_required` item. A command may claim one such item through the explicit TEST_ONLY request field, resolve it in the same atomic decision package, and spend the final reserved slot without producing a same-month softlock.
 
 Production IndexedDB, Web Locks, cloud synchronization, recovery snapshots, projection caching, narrative, UI, and multi-tab conflict handling remain outside this milestone.
 

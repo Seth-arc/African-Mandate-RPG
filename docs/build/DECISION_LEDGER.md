@@ -1,6 +1,6 @@
 # African Mandate decision ledger
 
-**Ledger version:** 1.5.0
+**Ledger version:** 1.6.0
 
 **Created by:** AM-PB2-01
 
@@ -56,6 +56,9 @@ Exact source byte hashes and admission classifications are pinned in `docs/build
 | AM-GOV-024 | owner | Prompt 07 acceptance and command/rule boundary review | Owner instruction on 2026-10-09; AM-GOV-001; commit metadata; Prompt 07 evidence | Commit `c9e65850767e2166f251f44eab7590d2908e4f3d`, authored and committed by Seth-arc at `2026-10-09T13:38:59-04:00`, is explicitly accepted by the repository owner for PB2-07. This accepts command/rule contract `1.0.0` and AM-GOV-023's TEST_ONLY boundary without claiming durable mutation or persistence. | APPROVED | Seth-arc, repository owner | 08-20 |
 
 | AM-GOV-025 | engineering | Atomic command envelopes, snapshot version, and first-wave mutation boundary | Domain v1.1 §§46, 123–126; Technical v2 §§20, 48–49, 57; Prompt 08 | Atomic commit contract `1.0.0` and snapshot version `1` bind a command to expected revision/all pinned versions, classify committed/duplicate/rejected results, and expose the canonical source-listed `SaveSnapshot` fields. Exact wrapper fields and rejection codes are TEST_ONLY proposals where upstream sources provide semantics but no serialized API. Until closed effect/consequence unions are accepted, the dispatcher supports only empty effect/consequence profile lists and fails closed otherwise; it applies exact known costs plus canonical decision/event/processed-ID/revision bookkeeping. | PROPOSED / TEST_ONLY | Domain/application architecture owner review required with Prompt 08 | 08-20 |
+
+| AM-GOV-026 | owner | Prompt 08 acceptance and atomic-commit review | Owner instructions on 2026-10-09; AM-GOV-001; commit metadata; Prompt 08 evidence | Commit `6d78e4b67c5201c76e3327a597113ebfbda260d5`, authored and committed by Seth-arc at `2026-10-09T21:11:12-04:00`, accepts PB2-08 and atomic commit contract `1.0.0` / snapshot version `1`. This accepts AM-GOV-025's TEST_ONLY boundary without approving production persistence, non-empty effect profiles, or later subsystem behavior. | APPROVED | Seth-arc, repository owner | 09-20 |
+| AM-GOV-027 | engineering | Turn lifecycle envelopes, resolver registry, and mandatory-response binding | Domain v1.1 sections 14, 47, 68, 73, 77, 97, 123-126; Technical v2 sections 19-20, 54-56; GDS v2.1 sections 11, 23, 76-77; Prompt 09 | Turn lifecycle contract `1.0.0`, application port contract `1.1.0`, and atomic command contract `1.1.0` publish strict EndTurn request/result/trace envelopes, source-step resolver IDs, and optional `mandatoryResponseAttentionItemId`. Upstream sources define semantics but not these exact API fields. They are TEST_ONLY proposals. The identifier lets one accepted strategic command consume a reserved slot and resolve one known blocking attention item; it does not authorize production content or infer a response from hidden state. | PROPOSED / TEST_ONLY | Domain/application architecture owner review required with Prompt 09 | 09-20 |
 
 ## Non-decisions
 

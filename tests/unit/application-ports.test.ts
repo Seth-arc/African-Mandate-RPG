@@ -41,6 +41,7 @@ const deferred = <Value = void>() => {
 interface TestSimulationTypes extends SimulationPortTypes {
   readonly command: { readonly commandId: string };
   readonly commandResult: { readonly accepted: boolean };
+  readonly turnCommand: { readonly commandId: string };
   readonly turnResult: { readonly turn: number };
   readonly initializationInput: { readonly seed: string };
   readonly campaignState: { readonly revision: number };
@@ -76,7 +77,7 @@ interface TestNarrativeTypes extends NarrativePortTypes {
 
 describe("application port contract", () => {
   it("freezes a public contract version before command and UI implementation", () => {
-    expect(APPLICATION_PORT_CONTRACT_VERSION).toBe("1.0.0");
+    expect(APPLICATION_PORT_CONTRACT_VERSION).toBe("1.1.0");
   });
 
   it("injects every SimulationPort operation without resolving effects in application", async () => {
@@ -93,7 +94,9 @@ describe("application port contract", () => {
         accepted: true,
       },
     );
-    await expect(port.endTurn()).resolves.toEqual({ turn: 2 });
+    await expect(
+      port.endTurn({ commandId: "command_end_turn" }),
+    ).resolves.toEqual({ turn: 2 });
     await expect(port.initialize({ seed: "seed" })).resolves.toEqual({
       revision: 0,
     });
@@ -102,6 +105,9 @@ describe("application port contract", () => {
     ).resolves.toEqual({ title: "Known projection" });
     expect(handlers.dispatch).toHaveBeenCalledOnce();
     expect(handlers.endTurn).toHaveBeenCalledOnce();
+    expect(handlers.endTurn).toHaveBeenCalledWith({
+      commandId: "command_end_turn",
+    });
     expect(handlers.initialize).toHaveBeenCalledOnce();
     expect(handlers.buildProjection).toHaveBeenCalledOnce();
   });

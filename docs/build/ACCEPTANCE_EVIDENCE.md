@@ -426,3 +426,42 @@ The preceding PB2-09 preflight was never committed as a milestone artifact and i
 | AC-025 | Technical v2 §§19–20; GDS blocking-attention rule | Command durable write and concurrent EndTurn serialize under one coordinator | PARTIAL PASS; mandatory-response lifecycle remains Prompt 09 |
 
 Prompt 08 does not implement EndTurn resolution, non-empty effect/consequence profiles, production persistence, UI, cloud sync, recovery, or narrative. These exclusions remain visible and do not weaken the tested atomic command boundary.
+
+PB2-08 was subsequently accepted by the repository owner at commit `6d78e4b67c5201c76e3327a597113ebfbda260d5` after the independently reproduced focused, full-CI, governance, and diff checks. AM-GOV-026 and `docs/build/BUILD_STATE.json` hold the durable acceptance record.
+
+## AM-PB2-09 — calendar, scheduling, and attention lifecycle
+
+**Status proposed:** READY_FOR_REVIEW
+
+**Acceptance IDs:** PB2-09; AC-007; AC-025
+
+**Implementation base:** accepted PB2-08 commit `6d78e4b67c5201c76e3327a597113ebfbda260d5`
+
+### Evidence produced
+
+- `@african-mandate/domain` now owns strict canonical lifecycle-state schemas plus versioned EndTurn request/result/trace artifacts.
+- `@african-mandate/simulation` advances ISO calendar months deterministically, completes but does not advance Month 20, preserves situations/attention, expires consequences only after an explicit window, reserves known mandatory capacity, and executes an exact source-step resolver registry.
+- Twenty subsystem adapters are explicitly traced as `initial_no_op`; only explicit consequence-window expiry and attention persistence have implemented adapters. No crisis, spontaneous event, world effect, or evaluation value is invented.
+- `@african-mandate/application` commits EndTurn through the accepted coordinator and existing runtime/repository/snapshot authority, durably before replacing memory.
+- `docs/build/TURN_LIFECYCLE_CONTRACT.md`, AM-GOV-027, this evidence, the Prompt 09 handoff, and the raw log publish ownership, versions, proposal boundaries, and reproduction.
+
+### Tests and negative cases
+
+- The focused affected suite passes 3 files / 24 tests.
+- October 2025 rolls through November, December, January, and February exactly; every new month resets to three slots and no unused slot carries.
+- Month 20 runs the resolver/final-evaluation trace, becomes completed with zero remaining slots, and retains turn/date.
+- An ordinary command cannot spend a slot reserved for blocking attention; an explicit response may spend the final slot, resolves its item atomically, and then EndTurn succeeds.
+- EndTurn rejects unresolved blocking attention without mutating state.
+- Open situations and unresolved ordinary attention persist. Only an unresolved consequence whose explicit `latestTurn` has passed expires; a future-window consequence stays scheduled.
+- Resolver removal/reordering is rejected. Initial no-op adapters are visible in the trace.
+- EndTurn writes durably before runtime replacement; injected write failure preserves the prior runtime hash and durable snapshot. Duplicate EndTurn is idempotent.
+
+### Source-to-test traceability
+
+| Acceptance ID | Source authority | Contract / evidence | Test state |
+|---|---|---|---|
+| PB2-09 | Domain v1.1 sections 14, 47, 68, 73, 77, 97, 123-126; Technical v2 sections 19-20, 54-56; GDS v2.1 sections 11, 23, 76-77 | lifecycle schemas, ordered dispatcher, atomic service, contract doc, handoff, log | READY_FOR_REVIEW |
+| AC-007 | Domain v1.1 sections 14, 44, 47, 97; GDS v2.1 sections 11, 15 | four-rollover, slot reset/forfeiture, and Month 20 tests | PASS |
+| AC-025 | Domain v1.1 section 47; GDS v2.1 sections 23, 77 and Appendix G | mandatory reserve, blocked EndTurn, last-slot response, and bounded-capacity tests | PASS |
+
+Exact EndTurn wrapper/trace fields, resolver IDs, application `turnCommand`, and `mandatoryResponseAttentionItemId` are TEST_ONLY design proposals under AM-GOV-027 because the sources define semantics but not those API fields. Prompt 09 remains unapproved until independent owner review and an accepting commit.

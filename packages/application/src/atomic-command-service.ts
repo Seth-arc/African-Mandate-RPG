@@ -34,6 +34,7 @@ export interface AtomicCommandRepositoryTypes extends CampaignRepositoryTypes {
 export interface AtomicCommandSimulationPortTypes extends SimulationPortTypes {
   readonly command: StrategicCommandSimulationInput;
   readonly commandResult: StrategicCommandSimulationResult;
+  readonly turnCommand: never;
   readonly turnResult: never;
   readonly initializationInput: never;
   readonly campaignState: CampaignState;

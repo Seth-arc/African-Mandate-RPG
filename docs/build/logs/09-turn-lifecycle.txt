@@ -1,0 +1,74 @@
+AM-PB2-09 calendar, scheduling, and attention lifecycle execution log
+Date: 2026-10-09
+Base HEAD: 6d78e4b67c5201c76e3327a597113ebfbda260d5
+
+1. Initial sandboxed typecheck
+Command: corepack pnpm run typecheck
+Exit: 1
+Actual outcome: Node failed before TypeScript with EPERM lstat C:\Users\ssnguna. This sandbox/toolchain failure remains visible.
+
+2. Escalated typecheck after initial implementation
+Command: corepack pnpm run typecheck
+Exit: 1
+Actual outcome: TypeScript reported branded record-key/date access errors in atomic-turn-service.ts, turn-engine.ts, and turn-lifecycle.test.ts. These implementation errors were repaired without weakening schemas or tests.
+
+3. Repaired typecheck
+Command: corepack pnpm run typecheck
+Exit: 0
+Actual output:
+$ tsc --noEmit -p tsconfig.json
+
+4. Focused affected tests
+Command: corepack pnpm exec vitest run tests/unit/turn-lifecycle.test.ts tests/unit/command-atomicity.test.ts tests/unit/application-ports.test.ts
+Exit: 0
+Actual output:
+Test Files  3 passed (3)
+Tests       24 passed (24)
+
+5. Full CI
+Command: corepack pnpm run ci
+Exit: 0
+Actual output summary:
+Formatting PASS; peer dependencies PASS; ESLint PASS; TypeScript PASS.
+Test Files  8 passed (8)
+Tests       78 passed (78)
+Determinism: PASS, two fresh processes identical.
+Fixture build: PASS, two fresh builds byte-identical.
+Forbidden import/random checks: PASS.
+Governance/toolchain artifact schema: PASS.
+
+6. Governance regression
+Initial sandboxed command exit: 1, Windows Python launcher access denied.
+Escalated command: py -3 -m unittest discover -s tests/governance -p "test_*.py" -v
+Exit: 0
+Final actual output summary: Ran 7 tests in 0.002s; OK.
+
+7. Diff hygiene
+Initial command: git diff --check
+Exit: 2
+Actual outcome: three Markdown metadata lines introduced trailing spaces. They were removed; final result follows below.
+
+8. Final bounded-capacity focused test
+Command: corepack pnpm exec vitest run tests/unit/turn-lifecycle.test.ts
+Exit: 0
+Actual output:
+Test Files  1 passed (1)
+Tests       7 passed (7)
+
+9. Final full CI after all code/test changes
+Command: corepack pnpm run ci
+Exit: 0
+Actual output summary:
+Test Files  8 passed (8)
+Tests       78 passed (78)
+All formatting, peers, lint, type, determinism, fixture, boundary, and governance-artifact checks PASS.
+
+10. Final governance regression
+Command: py -3 -m unittest discover -s tests/governance -p "test_*.py" -v
+Exit: 0
+Actual output summary: Ran 7 tests in 0.002s; OK.
+
+11. Final diff hygiene and scope audit
+Command: git diff --check plus trailing-whitespace scan of all new files
+Exit: 0
+Actual outcome: no diff errors and no trailing whitespace in new files. Git emitted only existing LF-to-CRLF checkout warnings. `git status --short` listed exactly the 29 paths documented in the Prompt 09 handoff.
