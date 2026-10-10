@@ -1,5 +1,8 @@
 import {
   CampaignStateSchema,
+  ACTOR_CONTRACT_VERSION,
+  ActorAdaptationPlanSchema,
+  ActorAdaptationProfileSchema,
   CollectionResolutionPlanSchema,
   KNOWLEDGE_CONTRACT_VERSION,
   EndTurnSimulationInputSchema,
@@ -8,6 +11,8 @@ import {
   WORLD_RESOLVER_CONTRACT_VERSION,
   IsoDateSchema,
   type CampaignState,
+  type ActorAdaptationPlan,
+  type ActorAdaptationProfile,
   type CollectionResolutionPlan,
   type EndTurnRejectionReason,
   type EndTurnSimulationInput,
@@ -25,6 +30,7 @@ import { deriveSimulationId } from "./determinism/primitives.js";
 import { reservedMandatoryDecisionSlots } from "./mandatory-attention.js";
 import { resolveWorldEffects } from "./world-resolvers.js";
 import { resolveIntelligenceCollection } from "./knowledge.js";
+import { resolveActorAdaptation } from "./actors.js";
 
 export interface TurnResolverContext {
   readonly currentTurn: number;
@@ -223,6 +229,55 @@ export const createTestOnlyKnowledgeResolverRegistry = (
               if (result.status !== "resolved") {
                 throw new TypeError(
                   `Collection resolver rejected: ${result.reasonCode}:${result.detailCode ?? ""}`,
+                );
+              }
+              Object.assign(draft, result.nextState);
+            }
+          },
+        }
+      : resolver,
+  );
+};
+
+export interface TestOnlyActorResolverRegistryInput {
+  readonly profiles: readonly ActorAdaptationProfile[];
+  readonly plans: readonly ActorAdaptationPlan[];
+  readonly baseRegistry?: readonly TurnResolverDefinition[];
+}
+
+export const createTestOnlyActorResolverRegistry = (
+  input: TestOnlyActorResolverRegistryInput,
+): readonly TurnResolverDefinition[] => {
+  const profiles = input.profiles.map((profile) =>
+    ActorAdaptationProfileSchema.parse(profile),
+  );
+  const plans = input.plans.map((plan) =>
+    ActorAdaptationPlanSchema.parse(plan),
+  );
+  const planKeys = plans.map((plan) => `${plan.turn}:${plan.adaptationKey}`);
+  if (new Set(planKeys).size !== planKeys.length) {
+    throw new TypeError("Duplicate actor adaptation plan");
+  }
+  const base = input.baseRegistry ?? createInitialTurnResolverRegistry();
+  if (plans.length === 0) return base;
+  return base.map((resolver) =>
+    resolver.resolverId === "actors_and_positions"
+      ? {
+          ...resolver,
+          adapterKind: "test_only_fixture" as const,
+          resolve: (draft: CampaignState, context: TurnResolverContext) => {
+            for (const plan of plans) {
+              if (plan.turn !== context.currentTurn) continue;
+              const result = resolveActorAdaptation({
+                contractVersion: ACTOR_CONTRACT_VERSION,
+                classification: "TEST_ONLY_ACTOR_ADAPTATION",
+                currentState: draft,
+                profiles,
+                plan,
+              });
+              if (result.status !== "resolved") {
+                throw new TypeError(
+                  `Actor adaptation rejected: ${result.reasonCode}:${result.detailCode ?? ""}`,
                 );
               }
               Object.assign(draft, result.nextState);

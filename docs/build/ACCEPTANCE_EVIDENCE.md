@@ -535,3 +535,40 @@ PB2-10 was subsequently accepted under AM-GOV-001/030 by repository-owner commit
 | AC-011 / SIM-14 | Domain contradiction model; Package 2 same-scope requirement | incompatible same-scope records remain and produce a contradiction; different scope does not merge | PASS |
 
 Prompt 11 remains unapproved until independent owner review and an accepting commit. Passing synthetic tests does not approve production confidence values, collection content, or hidden-state disclosure.
+
+PB2-11 was subsequently accepted under AM-GOV-001/032 by repository-owner commit `571d5b287c88f872811c0fd46b02b8b9957027c3` after independent reproduction reported a frozen install, 7/7 focused tests, 91/91 full-CI tests, 7/7 governance tests, and a clean diff check. The TEST_ONLY classification and all documented production-content and coefficient blockers remain unchanged.
+
+## AM-PB2-12 — actor relationships, positions and memory
+
+**Status proposed:** READY_FOR_REVIEW
+
+**Acceptance IDs:** PB2-12; AC-010 / SIM-02
+
+**Implementation base:** accepted PB2-11 commit `571d5b287c88f872811c0fd46b02b8b9957027c3`
+
+### Evidence produced
+
+- `CampaignState` now owns strict actor, directional-relationship, issue-position, memory, and red-line registries; no parallel mutable store was added.
+- Canonical `create_memory`, relationship-adjustment, and position-change effects are exposed through versioned TEST_ONLY templates and profiles. Memory relationship effects apply once during atomic creation and are retained as audit data, not replayed every turn.
+- Consultation repetition requires an explicit interaction tag, cooldown, repeat relationship effect, and fatigue delta. The fixed fixture gives no repeat relationship gain and increases fatigue, so repeated diplomacy cannot farm support.
+- Conditional adaptation runs only through an opt-in TEST_ONLY source-step-7 adapter, clamps canonical scores, enforces directional/holder ownership, and records a once-only domain event.
+- Red-line discovery requires existing evidence and writes only knowledge status. Hidden actor intent, position stance, and red-line rules remain absent from player projection.
+- `docs/build/ACTOR_MEMORY_CONTRACT.md`, AM-GOV-033, this evidence, the Prompt 12 handoff, and the raw log publish ownership, version, proposal boundaries, and reproduction.
+
+### Tests and negative cases
+
+- Reverse relations are not inferred; duplicate direction ownership is invalid; a reverse-direction effect is rejected without changing input.
+- A consultation creates one memory and applies its relationship/fatigue effect once. Duplicate command submission is inert. A repeated consultation creates auditable memory but uses the explicit zero-gain/increased-fatigue repeat profile.
+- Hidden intent and stance changes leave the player-knowledge projection byte-equivalent.
+- Red-line discovery rejects missing or different-party evidence and never reveals the trigger rule.
+- Eligible adaptation changes multiple actor subsystems, an ineligible actor stays unchanged, all numeric state is bounded, duplicate plan references are invalid, and an applied adaptation key cannot run again.
+- Production intent, stance, balance values, adaptation formulas, salience/decay, real-person claims, and unified AES positions remain BLOCKED and unimplemented.
+
+### Source-to-test traceability
+
+| Acceptance ID | Source authority | Contract / evidence | Test state |
+|---|---|---|---|
+| PB2-12 | Domain v1.1 sections 20-29, 100 and Appendix F.7; Package 1 actor registry sections 5-7 | strict schemas, atomic memory, directional lookup, discovery firewall, adaptation resolver, contract doc, handoff, and log | READY_FOR_REVIEW |
+| AC-010 / SIM-02 | Domain memory-effect rule and actor adaptation; Package 1 non-farming rule | once-only consultation effect, duplicate-command inertness, and explicit repeat policy | PASS |
+
+Prompt 12 remains unapproved until independent owner review and an accepting commit. Passing synthetic tests does not approve production profiles, factual intentions, or real institutional positions.

@@ -41,6 +41,13 @@ import {
   WorldRuntimeStateSchema,
 } from "./world-state.js";
 import { PlayerKnowledgeStateSchema } from "./knowledge-state.js";
+import {
+  ActorRuntimeStateSchema,
+  MemoryRecordSchema,
+  PositionStateSchema,
+  RedLineStateSchema,
+  RelationshipStateSchema,
+} from "./actor-state.js";
 
 export const CampaignMetaSchema = z
   .object({
@@ -136,12 +143,12 @@ export const CampaignStateSchema = z
     player: EnvoyStateSchema,
     world: WorldRuntimeStateSchema,
     institutions: z.record(InstitutionIdSchema, InstitutionRuntimeStateSchema),
-    actors: z.record(ActorIdSchema, JsonObjectSchema),
-    relationships: z.record(RelationshipIdSchema, JsonObjectSchema),
-    positions: z.record(PositionIdSchema, JsonObjectSchema),
-    memories: z.record(MemoryIdSchema, JsonObjectSchema),
+    actors: z.record(ActorIdSchema, ActorRuntimeStateSchema),
+    relationships: z.record(RelationshipIdSchema, RelationshipStateSchema),
+    positions: z.record(PositionIdSchema, PositionStateSchema),
+    memories: z.record(MemoryIdSchema, MemoryRecordSchema),
     commitments: z.record(CommitmentIdSchema, JsonObjectSchema),
-    redLines: z.record(RedLineIdSchema, JsonObjectSchema),
+    redLines: z.record(RedLineIdSchema, RedLineStateSchema),
     disputes: z.record(DisputeIdSchema, JsonObjectSchema),
     knowledge: PlayerKnowledgeStateSchema,
     assessments: z.record(AssessmentIdSchema, JsonObjectSchema),
@@ -163,12 +170,231 @@ export const CampaignStateSchema = z
   })
   .strict()
   .superRefine((state, ctx) => {
+    const partyExists = (
+      party:
+        | { readonly kind: "actor"; readonly actorId: string }
+        | { readonly kind: "institution"; readonly institutionId: string },
+    ): boolean =>
+      party.kind === "actor"
+        ? party.actorId in state.actors
+        : party.institutionId in state.institutions;
+    const partyKey = (
+      party:
+        | { readonly kind: "actor"; readonly actorId: string }
+        | { readonly kind: "institution"; readonly institutionId: string },
+    ): string =>
+      party.kind === "actor"
+        ? `actor:${party.actorId}`
+        : `institution:${party.institutionId}`;
+    const addKeyMismatch = (
+      registry: Record<string, Record<string, unknown>>,
+      idField: string,
+      path: string,
+    ): void => {
+      for (const [key, value] of Object.entries(registry)) {
+        if (value[idField] !== key) {
+          ctx.addIssue({
+            code: "custom",
+            message: `${path} key must match ${idField}`,
+            path: [path, key, idField],
+          });
+        }
+      }
+    };
+
+    addKeyMismatch(state.actors, "actorId", "actors");
+    addKeyMismatch(state.relationships, "relationshipId", "relationships");
+    addKeyMismatch(state.positions, "positionId", "positions");
+    addKeyMismatch(state.memories, "memoryId", "memories");
+    addKeyMismatch(state.redLines, "redLineId", "redLines");
+
     for (const [key, institution] of Object.entries(state.institutions)) {
       if (institution.institutionId !== key) {
         ctx.addIssue({
           code: "custom",
           message: "institution key must match institutionId",
           path: ["institutions", key, "institutionId"],
+        });
+      }
+      institution.activeCommitmentIds.forEach((commitmentId, index) => {
+        if (state.commitments[commitmentId] === undefined) {
+          ctx.addIssue({
+            code: "custom",
+            message: "institution commitment must reference a commitment",
+            path: ["institutions", key, "activeCommitmentIds", index],
+          });
+        }
+      });
+      institution.activeDisputeIds.forEach((disputeId, index) => {
+        if (state.disputes[disputeId] === undefined) {
+          ctx.addIssue({
+            code: "custom",
+            message: "institution dispute must reference a dispute",
+            path: ["institutions", key, "activeDisputeIds", index],
+          });
+        }
+      });
+    }
+    for (const [actorId, actor] of Object.entries(state.actors)) {
+      actor.issuePositionIds.forEach((positionId, index) => {
+        const position = state.positions[positionId];
+        if (
+          position === undefined ||
+          position.holder.kind !== "actor" ||
+          position.holder.actorId !== actorId
+        ) {
+          ctx.addIssue({
+            code: "custom",
+            message: "actor position must reference a position held by actor",
+            path: ["actors", actorId, "issuePositionIds", index],
+          });
+        }
+      });
+      actor.memoryIds.forEach((memoryId, index) => {
+        const memory = state.memories[memoryId];
+        if (
+          memory === undefined ||
+          memory.owner.kind !== "actor" ||
+          memory.owner.actorId !== actorId
+        ) {
+          ctx.addIssue({
+            code: "custom",
+            message: "actor memory must reference a memory owned by actor",
+            path: ["actors", actorId, "memoryIds", index],
+          });
+        }
+      });
+      actor.commitmentIds.forEach((commitmentId, index) => {
+        if (state.commitments[commitmentId] === undefined) {
+          ctx.addIssue({
+            code: "custom",
+            message: "actor commitment must reference a commitment",
+            path: ["actors", actorId, "commitmentIds", index],
+          });
+        }
+      });
+      actor.redLineIds.forEach((redLineId, index) => {
+        const redLine = state.redLines[redLineId];
+        if (
+          redLine === undefined ||
+          redLine.holder.kind !== "actor" ||
+          redLine.holder.actorId !== actorId
+        ) {
+          ctx.addIssue({
+            code: "custom",
+            message: "actor red line must reference a red line held by actor",
+            path: ["actors", actorId, "redLineIds", index],
+          });
+        }
+      });
+      actor.disputeIds.forEach((disputeId, index) => {
+        if (state.disputes[disputeId] === undefined) {
+          ctx.addIssue({
+            code: "custom",
+            message: "actor dispute must reference a dispute",
+            path: ["actors", actorId, "disputeIds", index],
+          });
+        }
+      });
+    }
+    const relationshipDirections = new Set<string>();
+    for (const [relationshipId, relationship] of Object.entries(
+      state.relationships,
+    )) {
+      if (!partyExists(relationship.source)) {
+        ctx.addIssue({
+          code: "custom",
+          message: "relationship source must reference a party",
+          path: ["relationships", relationshipId, "source"],
+        });
+      }
+      if (!partyExists(relationship.target)) {
+        ctx.addIssue({
+          code: "custom",
+          message: "relationship target must reference a party",
+          path: ["relationships", relationshipId, "target"],
+        });
+      }
+      const directionKey = `${partyKey(relationship.source)}->${partyKey(
+        relationship.target,
+      )}`;
+      if (relationshipDirections.has(directionKey)) {
+        ctx.addIssue({
+          code: "custom",
+          message: "relationship direction must be unique",
+          path: ["relationships", relationshipId],
+        });
+      }
+      relationshipDirections.add(directionKey);
+    }
+    for (const [positionId, position] of Object.entries(state.positions)) {
+      if (!partyExists(position.holder)) {
+        ctx.addIssue({
+          code: "custom",
+          message: "position holder must reference a party",
+          path: ["positions", positionId, "holder"],
+        });
+      }
+      if (
+        position.subject.kind === "assessment" &&
+        state.assessments[position.subject.id] === undefined
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          message: "position subject must reference an assessment",
+          path: ["positions", positionId, "subject", "id"],
+        });
+      }
+      if (
+        position.subject.kind === "mandate_case" &&
+        state.mandateCases[position.subject.id] === undefined
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          message: "position subject must reference a mandate case",
+          path: ["positions", positionId, "subject", "id"],
+        });
+      }
+    }
+    for (const [memoryId, memory] of Object.entries(state.memories)) {
+      if (!partyExists(memory.owner)) {
+        ctx.addIssue({
+          code: "custom",
+          message: "memory owner must reference a party",
+          path: ["memories", memoryId, "owner"],
+        });
+      }
+      if (
+        memory.sourceDecisionId !== undefined &&
+        !state.decisions.some(
+          (decision) => decision.decisionId === memory.sourceDecisionId,
+        )
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          message: "memory sourceDecisionId must reference a decision",
+          path: ["memories", memoryId, "sourceDecisionId"],
+        });
+      }
+      if (
+        memory.sourceDomainEventId !== undefined &&
+        !state.domainEvents.some(
+          (event) => event.domainEventId === memory.sourceDomainEventId,
+        )
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          message: "memory sourceDomainEventId must reference a domain event",
+          path: ["memories", memoryId, "sourceDomainEventId"],
+        });
+      }
+    }
+    for (const [redLineId, redLine] of Object.entries(state.redLines)) {
+      if (!partyExists(redLine.holder)) {
+        ctx.addIssue({
+          code: "custom",
+          message: "red-line holder must reference a party",
+          path: ["redLines", redLineId, "holder"],
         });
       }
     }

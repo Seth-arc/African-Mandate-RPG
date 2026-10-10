@@ -7,6 +7,7 @@ import {
   StrategicCommandSimulationInputSchema,
   StrategicCommandSimulationResultSchema,
   type ActionDefinition,
+  type ActorMemoryEffectProfile,
   type AtomicCommandRejectionReason,
   type CampaignState,
   type KnownCostProfile,
@@ -15,6 +16,7 @@ import {
   type PreviewCost,
   type StrategicCommandSimulationInput,
   type StrategicCommandSimulationResult,
+  type TestOnlyMemoryTemplate,
 } from "@african-mandate/domain";
 
 import {
@@ -30,6 +32,7 @@ import {
   resolveMandatoryAttentionItem,
 } from "./mandatory-attention.js";
 import { createCollectionTasksFromKnowledgeProfiles } from "./knowledge.js";
+import { createMemoriesFromActorProfiles } from "./actors.js";
 
 export interface InProcessStrategicCommandDispatcherOptions {
   readonly actions: readonly ActionDefinition[];
@@ -41,6 +44,8 @@ export interface InProcessStrategicCommandDispatcherOptions {
   >;
   readonly knowledgeEffectProfiles?: readonly KnowledgeEffectProfile[];
   readonly collectionTaskTemplates?: readonly CollectionTaskTemplate[];
+  readonly actorMemoryEffectProfiles?: readonly ActorMemoryEffectProfile[];
+  readonly memoryTemplates?: readonly TestOnlyMemoryTemplate[];
 }
 
 const reject = (
@@ -204,10 +209,42 @@ export const simulateStrategicCommand = (
   if (action.decisionSlotCost !== 1) {
     return reject("CONSEQUENTIAL_SLOT_COST_REQUIRED", command.commandId);
   }
+  const knowledgeProfileIds = new Set(
+    (options.knowledgeEffectProfiles ?? []).map(
+      (profile) => profile.effectProfileId,
+    ),
+  );
+  const actorProfileIds = new Set(
+    (options.actorMemoryEffectProfiles ?? []).map(
+      (profile) => profile.effectProfileId,
+    ),
+  );
+  for (const profileId of action.immediateEffectProfileIds) {
+    const owners =
+      Number(knowledgeProfileIds.has(profileId)) +
+      Number(actorProfileIds.has(profileId));
+    if (owners === 0) {
+      return reject("UNSUPPORTED_IMMEDIATE_EFFECT_PROFILE", command.commandId);
+    }
+    if (owners > 1) {
+      return reject(
+        "CONFIGURATION_ERROR",
+        command.commandId,
+        "AMBIGUOUS_IMMEDIATE_EFFECT_PROFILE",
+      );
+    }
+  }
   if (
-    action.immediateEffectProfileIds.length > 0 &&
-    (options.knowledgeEffectProfiles === undefined ||
-      options.collectionTaskTemplates === undefined)
+    action.immediateEffectProfileIds.some((id) =>
+      knowledgeProfileIds.has(id),
+    ) &&
+    options.collectionTaskTemplates === undefined
+  ) {
+    return reject("UNSUPPORTED_IMMEDIATE_EFFECT_PROFILE", command.commandId);
+  }
+  if (
+    action.immediateEffectProfileIds.some((id) => actorProfileIds.has(id)) &&
+    options.memoryTemplates === undefined
   ) {
     return reject("UNSUPPORTED_IMMEDIATE_EFFECT_PROFILE", command.commandId);
   }
@@ -269,21 +306,35 @@ export const simulateStrategicCommand = (
 
   nextState.decisions.push(decisionRecord);
   let createdCollectionTaskIds: string[];
+  let createdMemoryIds: string[];
   try {
+    const selectedKnowledgeProfileIds = action.immediateEffectProfileIds.filter(
+      (profileId) => knowledgeProfileIds.has(profileId),
+    );
+    const selectedActorProfileIds = action.immediateEffectProfileIds.filter(
+      (profileId) => actorProfileIds.has(profileId),
+    );
     createdCollectionTaskIds = [
       ...createCollectionTasksFromKnowledgeProfiles(
         nextState,
         options.knowledgeEffectProfiles ?? [],
         options.collectionTaskTemplates ?? [],
-        action.immediateEffectProfileIds,
+        selectedKnowledgeProfileIds,
         decisionId,
       ),
     ];
+    createdMemoryIds = createMemoriesFromActorProfiles(
+      nextState,
+      options.actorMemoryEffectProfiles ?? [],
+      options.memoryTemplates ?? [],
+      selectedActorProfileIds,
+      decisionId,
+    ).map((trace) => trace.memoryId);
   } catch {
     return reject(
       "CONFIGURATION_ERROR",
       command.commandId,
-      "COLLECTION_TASK_CREATION_FAILED",
+      "IMMEDIATE_EFFECT_APPLICATION_FAILED",
     );
   }
   nextState.domainEvents.push({
@@ -297,6 +348,7 @@ export const simulateStrategicCommand = (
       commandId: command.commandId,
       actionId: action.actionId,
       createdCollectionTaskIds,
+      createdMemoryIds,
     },
   });
   nextState.processedCommandIds[command.commandId] = true;

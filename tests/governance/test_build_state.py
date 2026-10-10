@@ -106,17 +106,17 @@ class BuildStateContractTests(unittest.TestCase):
 
     def test_accepted_without_independent_record_is_rejected(self) -> None:
         candidate = copy.deepcopy(self.state)
-        candidate["prompts"]["11"]["status"] = "ACCEPTED"
+        candidate["prompts"]["12"]["status"] = "ACCEPTED"
         errors = validate_state(candidate, self.schema)
-        self.assertIn("11: approved state requires a commit SHA", errors)
-        self.assertIn("11: approved state requires an approver", errors)
+        self.assertIn("12: approved state requires a commit SHA", errors)
+        self.assertIn("12: approved state requires an approver", errors)
 
     def test_unapproved_state_cannot_carry_approval(self) -> None:
         candidate = copy.deepcopy(self.state)
-        candidate["prompts"]["11"]["approvedCommit"] = "0" * 40
-        candidate["prompts"]["11"]["approver"] = "self"
+        candidate["prompts"]["12"]["approvedCommit"] = "0" * 40
+        candidate["prompts"]["12"]["approver"] = "self"
         errors = validate_state(candidate, self.schema)
-        self.assertIn("11: unapproved state cannot claim approval", errors)
+        self.assertIn("12: unapproved state cannot claim approval", errors)
 
 
 if __name__ == "__main__":

@@ -655,7 +655,27 @@ describe("player knowledge and intelligence collection", () => {
       ScoreSchema.parse(99);
     right.world.zones[zoneId]!.controlContest = ScoreSchema.parse(1);
     right.actors[ActorIdSchema.parse("actor_hidden_test")] = {
-      hiddenIntent: "different",
+      actorId: ActorIdSchema.parse("actor_hidden_test"),
+      capabilities: {
+        political: ScoreSchema.parse(1),
+        coercive: ScoreSchema.parse(99),
+        financial: ScoreSchema.parse(1),
+        information: ScoreSchema.parse(99),
+        implementation: ScoreSchema.parse(1),
+      },
+      activeIntent: {
+        activeGoalCodes: ["hidden_test_goal"],
+        aggressiveness: ScoreSchema.parse(99),
+        opportunism: ScoreSchema.parse(99),
+        compromiseWillingness: ScoreSchema.parse(1),
+        strategyTags: ["hidden_test_strategy"],
+      },
+      issuePositionIds: [],
+      memoryIds: [],
+      commitmentIds: [],
+      redLineIds: [],
+      disputeIds: [],
+      fatigue: ScoreSchema.parse(99),
     };
 
     expect(buildPlayerKnowledgeProjection(left)).toEqual(

@@ -1,0 +1,132 @@
+AM-PB2-12 verification log
+Date: 2026-10-10
+Base HEAD: 571d5b287c88f872811c0fd46b02b8b9957027c3
+Base milestone: PB2-11 ACCEPTED under AM-GOV-032
+
+PREFLIGHT
+The repository began clean at the owner commit above. Prompt 11 had been
+independently reproduced with a frozen install, focused 7/7, full CI 91/91,
+governance 7/7, and a clean diff check. Its four acceptance-reconciliation
+paths were then changed and preserved:
+  M docs/build/ACCEPTANCE_EVIDENCE.md
+  M docs/build/BUILD_STATE.json
+  M docs/build/DECISION_LEDGER.md
+  M tests/governance/test_build_state.py
+
+INITIAL TYPECHECK DURING IMPLEMENTATION
+Command: corepack pnpm run typecheck
+Exit: 1
+Result: TypeScript rejected plain-string indexing of branded relationship
+records, an unbranded source decision ID, a possibly undefined delta, a
+non-canonical resolver ID, and the older Prompt 11 untyped hidden-actor test
+fixture. The implementation and fixture were corrected. A subsequent
+standalone typecheck exited 0.
+
+INITIAL SANDBOX FORMAT ATTEMPT
+Command: corepack pnpm exec prettier --check [touched TypeScript paths]
+Exit: 1
+Result: Node failed before Prettier execution with EPERM while resolving
+`C:\Users\ssnguna`. The command was rerun outside the filesystem sandbox.
+
+FIRST OUTSIDE-SANDBOX FORMAT CHECK
+Command: corepack pnpm exec prettier --check [touched TypeScript paths]
+Exit: 1
+Output:
+  [warn] packages/domain/src/actor-state.ts
+  [warn] packages/domain/src/actor-operations.ts
+  [warn] packages/simulation/src/actors.ts
+  [warn] packages/simulation/src/turn-engine.ts
+  [warn] tests/unit/actor-memory.test.ts
+  [warn] Code style issues found in 5 files.
+Correction: the five reported files were formatted with repository Prettier.
+
+INITIAL FOCUSED PROMPT 12 SUITE
+Command: corepack pnpm exec vitest run tests/unit/actor-memory.test.ts
+Exit: 0
+Output:
+  Test Files  1 passed (1)
+       Tests  6 passed (6)
+    Duration  972ms
+
+INITIAL LINT GATE
+Command: corepack pnpm run lint
+Exit: 1
+Diagnostic:
+  packages/simulation/src/actors.ts
+  13:8 error 'ActorAdaptationPlan' is defined but never used
+Correction: removed the unused type import. The concurrently run standalone
+typecheck exited 0.
+
+FINAL FROZEN INSTALL
+Command: corepack pnpm install --frozen-lockfile
+Exit: 0
+Output:
+  Scope: all 9 workspace projects
+  Already up to date
+  Done in 439ms using pnpm v11.23.0
+
+FINAL FOCUSED PROMPT 12 SUITE
+Command: corepack pnpm exec vitest run tests/unit/actor-memory.test.ts
+Exit: 0
+Output:
+  Test Files  1 passed (1)
+       Tests  6 passed (6)
+    Duration  997ms
+
+FINAL STANDALONE LINT
+Command: corepack pnpm run lint
+Exit: 0
+Output:
+  $ eslint apps packages scripts tests/unit
+
+FULL REPOSITORY CI
+Command: corepack pnpm run ci
+Exit: 0
+Output:
+  All matched files use Prettier code style!
+  No peer dependency issues found
+  Test Files  11 passed (11)
+       Tests  97 passed (97)
+  PASS: two fresh processes produced identical deterministic bytes.
+  PASS: two fresh fixture builds produced byte-identical artifacts.
+  PASS: web-to-simulation import was rejected by no-restricted-imports.
+  PASS: Math.random and randomUUID were rejected inside simulation scope.
+  PASS: governance and toolchain artifacts match their public schemas.
+
+GOVERNANCE SUITE
+Command: py -3 -m unittest discover -s tests/governance -p "test_*.py" -v
+Exit: 0
+Output:
+  Ran 7 tests in 0.003s
+  OK
+
+DIFF CHECK
+Command: git diff --check
+Exit: 0
+Result: no whitespace error. Git emitted only line-ending conversion warnings
+for existing tracked Windows working-copy paths.
+
+FINAL STATUS
+Command: git status --short --branch
+Exit: 0
+Result: branch main tracks origin/main. Only the 19 paths listed in the
+Prompt 12 handoff are modified or untracked; the four Prompt 11 acceptance
+reconciliation paths are included in that list. No unrelated path is present.
+
+FINAL REVIEW TIGHTENING AND RERUN
+Review added a fail-closed same-party check so unrelated evidence cannot reveal
+a red line. The new negative remains inside the six-test focused suite.
+Commands:
+  corepack pnpm exec vitest run tests/unit/actor-memory.test.ts
+  corepack pnpm run ci
+Exit: 0 for both commands
+Final output:
+  Test Files  1 passed (1)
+       Tests  6 passed (6)
+    Duration  973ms
+  Test Files  11 passed (11)
+       Tests  97 passed (97)
+  PASS: two fresh processes produced identical deterministic bytes.
+  PASS: two fresh fixture builds produced byte-identical artifacts.
+  PASS: both forbidden-boundary checks.
+  PASS: governance and toolchain artifacts match their public schemas.
