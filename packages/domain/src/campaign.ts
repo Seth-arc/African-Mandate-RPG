@@ -49,6 +49,7 @@ import {
   RelationshipStateSchema,
 } from "./actor-state.js";
 import { AssessmentStateSchema } from "./assessment-state.js";
+import { CommitmentRecordSchema } from "./commitment-state.js";
 
 export const CampaignMetaSchema = z
   .object({
@@ -148,7 +149,7 @@ export const CampaignStateSchema = z
     relationships: z.record(RelationshipIdSchema, RelationshipStateSchema),
     positions: z.record(PositionIdSchema, PositionStateSchema),
     memories: z.record(MemoryIdSchema, MemoryRecordSchema),
-    commitments: z.record(CommitmentIdSchema, JsonObjectSchema),
+    commitments: z.record(CommitmentIdSchema, CommitmentRecordSchema),
     redLines: z.record(RedLineIdSchema, RedLineStateSchema),
     disputes: z.record(DisputeIdSchema, JsonObjectSchema),
     knowledge: PlayerKnowledgeStateSchema,
@@ -207,6 +208,7 @@ export const CampaignStateSchema = z
     addKeyMismatch(state.relationships, "relationshipId", "relationships");
     addKeyMismatch(state.positions, "positionId", "positions");
     addKeyMismatch(state.memories, "memoryId", "memories");
+    addKeyMismatch(state.commitments, "commitmentId", "commitments");
     addKeyMismatch(state.redLines, "redLineId", "redLines");
     addKeyMismatch(state.assessments, "assessmentId", "assessments");
 
@@ -388,6 +390,36 @@ export const CampaignStateSchema = z
           code: "custom",
           message: "memory sourceDomainEventId must reference a domain event",
           path: ["memories", memoryId, "sourceDomainEventId"],
+        });
+      }
+    }
+    for (const [commitmentId, commitment] of Object.entries(
+      state.commitments,
+    )) {
+      if (!partyExists(commitment.issuer)) {
+        ctx.addIssue({
+          code: "custom",
+          message: "commitment issuer must reference a party",
+          path: ["commitments", commitmentId, "issuer"],
+        });
+      }
+      if (!partyExists(commitment.beneficiary)) {
+        ctx.addIssue({
+          code: "custom",
+          message: "commitment beneficiary must reference a party",
+          path: ["commitments", commitmentId, "beneficiary"],
+        });
+      }
+      if (
+        commitment.sourceDecisionId !== undefined &&
+        !state.decisions.some(
+          (decision) => decision.decisionId === commitment.sourceDecisionId,
+        )
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          message: "commitment sourceDecisionId must reference a decision",
+          path: ["commitments", commitmentId, "sourceDecisionId"],
         });
       }
     }

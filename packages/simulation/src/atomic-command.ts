@@ -2,6 +2,7 @@ import {
   ActionDefinitionSchema,
   ASSESSMENT_CONTRACT_VERSION,
   CampaignStateSchema,
+  CONSULTATION_CONTRACT_VERSION,
   DecisionIdSchema,
   KnownCostProfileSchema,
   ScoreSchema,
@@ -18,9 +19,13 @@ import {
   type KnownCostProfile,
   type KnowledgeEffectProfile,
   type CollectionTaskTemplate,
+  type ConsultationActionBinding,
+  type ConsultationPoliticalConflictRule,
   type PreviewCost,
   type StrategicCommandSimulationInput,
   type StrategicCommandSimulationResult,
+  type TestOnlyConsultationLegalProfile,
+  type TestOnlyConsultationResponseProfile,
   type TestOnlyMemoryTemplate,
 } from "@african-mandate/domain";
 
@@ -39,12 +44,20 @@ import {
 import { createCollectionTasksFromKnowledgeProfiles } from "./knowledge.js";
 import { createMemoriesFromActorProfiles } from "./actors.js";
 import { resolveAssessmentCommand } from "./assessments.js";
+import { resolveConsultationCommand } from "./consultations.js";
 
 export interface AssessmentCommandConfiguration {
   readonly actionBindings: readonly AssessmentActionBinding[];
   readonly hypotheses: readonly AuthoredAssessmentHypothesis[];
   readonly confidenceProfile: AssessmentConfidenceBandProfile;
   readonly metadataProfile: AssessmentMetadataProfile;
+}
+
+export interface ConsultationCommandConfiguration {
+  readonly actionBindings: readonly ConsultationActionBinding[];
+  readonly legalProfiles: readonly TestOnlyConsultationLegalProfile[];
+  readonly responseProfiles: readonly TestOnlyConsultationResponseProfile[];
+  readonly politicalConflictRules: readonly ConsultationPoliticalConflictRule[];
 }
 
 export interface InProcessStrategicCommandDispatcherOptions {
@@ -60,6 +73,7 @@ export interface InProcessStrategicCommandDispatcherOptions {
   readonly actorMemoryEffectProfiles?: readonly ActorMemoryEffectProfile[];
   readonly memoryTemplates?: readonly TestOnlyMemoryTemplate[];
   readonly assessments?: AssessmentCommandConfiguration;
+  readonly consultations?: ConsultationCommandConfiguration;
 }
 
 const reject = (
@@ -238,11 +252,17 @@ export const simulateStrategicCommand = (
       (binding) => binding.effectProfileId,
     ),
   );
+  const consultationProfileIds = new Set(
+    (options.consultations?.actionBindings ?? []).map(
+      (binding) => binding.effectProfileId,
+    ),
+  );
   for (const profileId of action.immediateEffectProfileIds) {
     const owners =
       Number(knowledgeProfileIds.has(profileId)) +
       Number(actorProfileIds.has(profileId)) +
-      Number(assessmentProfileIds.has(profileId));
+      Number(assessmentProfileIds.has(profileId)) +
+      Number(consultationProfileIds.has(profileId));
     if (owners === 0) {
       return reject("UNSUPPORTED_IMMEDIATE_EFFECT_PROFILE", command.commandId);
     }
@@ -261,6 +281,27 @@ export const simulateStrategicCommand = (
     options.collectionTaskTemplates === undefined
   ) {
     return reject("UNSUPPORTED_IMMEDIATE_EFFECT_PROFILE", command.commandId);
+  }
+  const consultationBinding = options.consultations?.actionBindings.find(
+    (binding) => binding.actionId === action.actionId,
+  );
+  const selectedConsultationProfileIds =
+    action.immediateEffectProfileIds.filter((profileId) =>
+      consultationProfileIds.has(profileId),
+    );
+  if (
+    (consultationBinding === undefined &&
+      selectedConsultationProfileIds.length > 0) ||
+    (consultationBinding !== undefined &&
+      (selectedConsultationProfileIds.length !== 1 ||
+        selectedConsultationProfileIds[0] !==
+          consultationBinding.effectProfileId))
+  ) {
+    return reject(
+      "CONFIGURATION_ERROR",
+      command.commandId,
+      "CONSULTATION_ACTION_BINDING_MISMATCH",
+    );
   }
   if (
     action.immediateEffectProfileIds.some((id) => actorProfileIds.has(id)) &&
@@ -352,6 +393,12 @@ export const simulateStrategicCommand = (
         { status: "resolved" }
       >["trace"]
     | undefined;
+  let consultationTrace:
+    | Extract<
+        ReturnType<typeof resolveConsultationCommand>,
+        { status: "resolved" }
+      >["trace"]
+    | undefined;
   try {
     const selectedKnowledgeProfileIds = action.immediateEffectProfileIds.filter(
       (profileId) => knowledgeProfileIds.has(profileId),
@@ -399,6 +446,41 @@ export const simulateStrategicCommand = (
       Object.assign(nextState, assessmentResult.nextState);
       assessmentTrace = assessmentResult.trace;
     }
+    if (consultationBinding !== undefined) {
+      if (command.payload.terms.length !== 1) {
+        throw new TypeError(
+          "Consultation command requires exactly one package",
+        );
+      }
+      const consultationResult = resolveConsultationCommand({
+        contractVersion: CONSULTATION_CONTRACT_VERSION,
+        classification: "TEST_ONLY_CONSULTATION_COMMAND",
+        currentState: nextState,
+        sourceDecisionId: decisionId,
+        actionId: action.actionId,
+        actionBindings: options.consultations!.actionBindings,
+        legalProfiles: options.consultations!.legalProfiles,
+        responseProfiles: options.consultations!.responseProfiles,
+        politicalConflictRules: options.consultations!.politicalConflictRules,
+        package: command.payload.terms[0],
+      });
+      if (consultationResult.status !== "resolved") {
+        throw new TypeError(
+          `Consultation command rejected: ${consultationResult.reasonCode}:${consultationResult.detailCode ?? ""}`,
+        );
+      }
+      Object.assign(nextState, consultationResult.nextState);
+      consultationTrace = consultationResult.trace;
+      const consultationDecision = nextState.decisions.find(
+        (candidate) => candidate.decisionId === decisionId,
+      );
+      if (consultationDecision === undefined) {
+        throw new TypeError("Consultation source decision disappeared");
+      }
+      consultationDecision.createdDomainEventIds.push(
+        consultationTrace.consultationDomainEventId,
+      );
+    }
   } catch {
     return reject(
       "CONFIGURATION_ERROR",
@@ -437,6 +519,25 @@ export const simulateStrategicCommand = (
                     declaredConfidenceBand:
                       assessmentTrace.declaredConfidenceBand,
                   }),
+            },
+          }),
+      ...(consultationTrace === undefined
+        ? {}
+        : {
+            consultationTrace: {
+              responseState: consultationTrace.responseState,
+              responsePositionId: consultationTrace.responsePositionId,
+              stanceAtCommit: consultationTrace.stanceAtCommit,
+              evidenceId: consultationTrace.evidenceId,
+              ...(consultationTrace.commitmentId === undefined
+                ? {}
+                : { commitmentId: consultationTrace.commitmentId }),
+              politicalConflictWarningCodes:
+                consultationTrace.knownRiskPreview.politicalConflictWarnings.map(
+                  (warning) => warning.warningCode,
+                ),
+              strategicRiskCodes:
+                consultationTrace.knownRiskPreview.strategicRiskCodes,
             },
           }),
     },

@@ -7,18 +7,21 @@ import {
   AssessmentMetadataProfileSchema,
   AuthoredAssessmentHypothesisSchema,
   CollectionResolutionPlanSchema,
+  CONSULTATION_CONTRACT_VERSION,
   KNOWLEDGE_CONTRACT_VERSION,
   EndTurnSimulationInputSchema,
   EndTurnSimulationResultSchema,
   TURN_RESOLVER_IDS,
   WORLD_RESOLVER_CONTRACT_VERSION,
   IsoDateSchema,
+  TestOnlyCommitmentResolutionProfileSchema,
   type CampaignState,
   type ActorAdaptationPlan,
   type ActorAdaptationProfile,
   type AssessmentMetadataProfile,
   type AuthoredAssessmentHypothesis,
   type CollectionResolutionPlan,
+  type TestOnlyCommitmentResolutionProfile,
   type EndTurnRejectionReason,
   type EndTurnSimulationInput,
   type EndTurnSimulationResult,
@@ -37,6 +40,7 @@ import { resolveWorldEffects } from "./world-resolvers.js";
 import { resolveIntelligenceCollection } from "./knowledge.js";
 import { resolveActorAdaptation } from "./actors.js";
 import { recalculateAssessmentMetadata } from "./assessments.js";
+import { resolveDueCommitments } from "./consultations.js";
 
 export interface TurnResolverContext {
   readonly currentTurn: number;
@@ -332,6 +336,50 @@ export const createTestOnlyAssessmentResolverRegistry = (
             if (result.status !== "resolved") {
               throw new TypeError(
                 `Assessment metadata rejected: ${result.reasonCode}:${result.detailCode ?? ""}`,
+              );
+            }
+            Object.assign(draft, result.nextState);
+          },
+        }
+      : resolver,
+  );
+};
+
+export interface TestOnlyCommitmentResolverRegistryInput {
+  readonly profiles: readonly TestOnlyCommitmentResolutionProfile[];
+  readonly baseRegistry?: readonly TurnResolverDefinition[];
+}
+
+export const createTestOnlyCommitmentResolverRegistry = (
+  input: TestOnlyCommitmentResolverRegistryInput,
+): readonly TurnResolverDefinition[] => {
+  const profiles = input.profiles.map((profile) =>
+    TestOnlyCommitmentResolutionProfileSchema.parse(profile),
+  );
+  if (
+    new Set(profiles.map((profile) => profile.commitmentType)).size !==
+    profiles.length
+  ) {
+    throw new TypeError("Duplicate commitment resolution profile type");
+  }
+  const base = input.baseRegistry ?? createInitialTurnResolverRegistry();
+  if (profiles.length === 0) return base;
+  return base.map((resolver) =>
+    resolver.resolverId === "commitments"
+      ? {
+          ...resolver,
+          adapterKind: "test_only_fixture" as const,
+          resolve: (draft: CampaignState, context: TurnResolverContext) => {
+            const result = resolveDueCommitments({
+              contractVersion: CONSULTATION_CONTRACT_VERSION,
+              classification: "TEST_ONLY_COMMITMENT_RESOLUTION",
+              currentState: draft,
+              turn: context.currentTurn,
+              profiles,
+            });
+            if (result.status !== "resolved") {
+              throw new TypeError(
+                `Commitment resolver rejected: ${result.reasonCode}:${result.detailCode ?? ""}`,
               );
             }
             Object.assign(draft, result.nextState);

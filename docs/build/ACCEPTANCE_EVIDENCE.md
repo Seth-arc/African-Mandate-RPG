@@ -610,3 +610,40 @@ PB2-12 was subsequently accepted under AM-GOV-001/034 by repository-owner commit
 | AC-012 / SIM-05 | Domain separation/no-auto-rewrite rule; GDS declared-confidence and contradiction rules | high-confidence separation, automatic contradiction, later-report, and exact-slot tests | PASS |
 
 Prompt 13 remains unapproved until independent owner review and an accepting commit. Passing synthetic tests does not approve production hypotheses, confidence thresholds, metadata formulas, or consequences.
+
+PB2-13 was subsequently accepted under AM-GOV-001/036 by repository-owner commit `6f7ffd2d36e6a09ffad7d80056ec9e22c596fd1a` after independent reproduction reported a frozen install, 4/4 focused tests, 101/101 full-CI tests, 7/7 governance tests, and a clean diff check. The TEST_ONLY classification and all documented production-hypothesis, threshold, formula, and consequence blockers remain unchanged.
+
+## AM-PB2-14 — consultations, terms and commitments
+
+**Status proposed:** READY_FOR_REVIEW
+
+**Acceptance IDs:** PB2-14; AC-010 / SIM-02 / SIM-09
+
+**Implementation base:** accepted PB2-13 commit `6f7ffd2d36e6a09ffad7d80056ec9e22c596fd1a`
+
+### Evidence produced
+
+- `CampaignState.commitments` now uses the exact canonical `CommitmentRecord` owner with strict issuer, beneficiary, due-turn, fulfillment-rule, status, source-decision, and resolution validation. No parallel commitment store was added.
+- Strict versioned TEST_ONLY N1–N3 consultation package unions permit several related terms in one coherent one-slot command and reject unknown/free-form authoritative fields.
+- Precommit validation uses an explicit TEST_ONLY legal profile. Structurally impossible packages are free rejections; political conflicts use player-known active commitments to warn while allowing the command; visible strategic risks derive only from selected known terms.
+- Actor response is resolved after the decision exists from the targeted typed issue position through an explicit TEST_ONLY response profile. Accepted, conditional, and rejected outcomes each consume the genuine attempt; each emits typed player evidence, while rejected responses create no commitment.
+- Accepted/conditional commitment offers derive the canonical issuer from the represented institution and the beneficiary from the single target. Due fulfillment/breach runs only in the opt-in source-step-3 adapter, transitions once, emits one domain event, and creates one source-linked memory callback.
+- `docs/build/CONSULTATION_COMMITMENT_CONTRACT.md`, AM-GOV-037, this evidence, the Prompt 14 handoff, and the raw test log publish ownership, version, proposal boundaries, and reproduction.
+
+### Tests and negative cases
+
+- Separate AU, AES, and ECOWAS test interactions resolve accepted, conditional, and rejected without inferring one regional body's consent from another; each committed attempt costs exactly one slot.
+- Known overlapping exclusive promises emit an explicit political-conflict warning and still commit.
+- A profile-declared incoherent N1 combination and an unknown authoritative free-text field both reject before mutation or slot/evidence creation.
+- Two due commitments transition to fulfilled/breached at source step 3. A second EndTurn emits no second resolution event or memory callback.
+- Production legal authority, real actor positions, response mappings, confidence values, fulfillment evaluators, free-form negotiation, and automatic partner agreement remain BLOCKED and unimplemented.
+
+### Source-to-test traceability
+
+| Acceptance ID | Source authority | Contract / evidence | Test state |
+|---|---|---|---|
+| PB2-14 | Domain v1.1 sections 27, 44, 46, 97-98 and Appendix B.5; GDS v2.1 sections 3-4, 13-15 and 40-45; Package 3 N1-N3 | canonical commitment state, structured atomic consultation, knowledge-only warnings, postcommit response/evidence, due resolver, contract doc, handoff, and log | READY_FOR_REVIEW |
+| AC-010 / SIM-02 | Domain actor/commitment callbacks; GDS consequential consultation and anti-spam rules | one-slot consultation, independent response, evidence, and once-only callback tests | PASS |
+| AC-010 / SIM-09 | Domain commitment registry/lifecycle and end-turn step 3; GDS feasibility/conflict rules | hard-invalid rejection, political-warning allowance, due fulfillment/breach, and no-double-callback tests | PASS |
+
+Prompt 14 remains unapproved until independent owner review and an accepting commit. Passing synthetic tests does not approve legal scope, real positions, response/fulfillment formulas, production content, or partner agreement.

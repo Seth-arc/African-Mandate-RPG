@@ -12,6 +12,7 @@ export * from "./atomic-command.js";
 export * from "./actors.js";
 export * from "./assessments.js";
 export * from "./command-rules.js";
+export * from "./consultations.js";
 export * from "./determinism/canonical-json.js";
 export * from "./determinism/primitives.js";
 export * from "./determinism/sha256.js";

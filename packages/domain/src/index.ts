@@ -13,6 +13,8 @@ export * from "./atomic-commit.js";
 export * from "./baseline.js";
 export * from "./campaign.js";
 export * from "./commands.js";
+export * from "./commitment-state.js";
+export * from "./consultation-operations.js";
 export * from "./determinism-vectors.js";
 export * from "./ids.js";
 export * from "./json.js";
