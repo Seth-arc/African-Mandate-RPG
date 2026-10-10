@@ -7,6 +7,8 @@ export type DomainPackageDescriptor = typeof domainPackage;
 
 export * from "./actor-operations.js";
 export * from "./actor-state.js";
+export * from "./assessment-operations.js";
+export * from "./assessment-state.js";
 export * from "./atomic-commit.js";
 export * from "./baseline.js";
 export * from "./campaign.js";

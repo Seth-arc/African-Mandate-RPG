@@ -6,6 +6,7 @@ import {
   ActorIdSchema,
   ActionDefinitionSchema,
   AssessmentIdSchema,
+  AssessmentStateSchema,
   AtomicStrategicCommandRequestSchema,
   CampaignStateSchema,
   CollectionTaskSchema,
@@ -715,7 +716,21 @@ describe("player knowledge and intelligence collection", () => {
       observedDate: "2025-10-01",
     });
     expect(CampaignStateSchema.safeParse(state).success).toBe(false);
-    state.assessments[assessmentId] = {};
+    state.assessments[assessmentId] = AssessmentStateSchema.parse({
+      assessmentId,
+      subject: { kind: "zone", zoneId },
+      hypothesisCode: "test.knowledge.assessment",
+      lifecycleStatus: "adopted",
+      analysisStatus: "current",
+      declaredConfidence: 50,
+      evidenceSupportScore: 50,
+      contradictionScore: 0,
+      supportingEvidenceIds: ["evidence_knowledge_missing"],
+      contradictoryEvidenceIds: [],
+      intelligenceGapIds: [],
+      institutionalImplicationCodes: [],
+      adoptedTurn: 1,
+    });
     expect(CampaignStateSchema.safeParse(state).success).toBe(true);
   });
 });

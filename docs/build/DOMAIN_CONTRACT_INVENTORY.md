@@ -1,15 +1,15 @@
 # Serialized domain contract inventory
 
-**Contract version:** 0.7.0
-**Task:** AM-PB2-03 / PB2-03 through AM-PB2-12 / PB2-12
+**Contract version:** 0.8.0
+**Task:** AM-PB2-03 / PB2-03 through AM-PB2-13 / PB2-13
 **Owner:** `@african-mandate/domain`  
-**Status:** PB2-03 and PB2-07 through PB2-11 ACCEPTED; Prompt 12 actor contract 1.0.0 is READY_FOR_REVIEW; no production scenario admission
+**Status:** PB2-03 and PB2-07 through PB2-12 ACCEPTED; Prompt 13 assessment contract 1.0.0 is READY_FOR_REVIEW; no production scenario admission
 
 ## Authority and boundary
 
 Zod schemas exported by `@african-mandate/domain` are the executable serialization authority. TypeScript types are inferred from those schemas; no parallel handwritten public interface is maintained. The source shapes come from Domain Model v1.1, with Zod/JSON mechanics from Technical Architecture v2 and validation requirements from the Executable Contract Inventory.
 
-This contract set does not claim a production-valid scenario. The upstream AM-BUILD-001 contract explicitly reserves that claim until all registries are complete and reviewed. Prompt 10 closes the world/institution runtime envelopes and its bounded world-effect union. Prompt 11 closes the canonical player-knowledge envelope and canonical `create_collection_task` effect subset. Prompt 12 closes the actor, directional-relationship, issue-position, memory, and red-line runtime envelopes plus the canonical `create_memory`, relationship-adjustment, and position-change effect subsets; unrelated later-prompt CampaignState registries and the remainder of `EffectProfile.effects` remain JSON-safe envelopes until their assigned milestones. No partial typed contract admits production content.
+This contract set does not claim a production-valid scenario. The upstream AM-BUILD-001 contract explicitly reserves that claim until all registries are complete and reviewed. Prompt 10 closes the world/institution runtime envelopes and its bounded world-effect union. Prompt 11 closes the canonical player-knowledge envelope and canonical `create_collection_task` effect subset. Prompt 12 closes the actor, directional-relationship, issue-position, memory, and red-line runtime envelopes plus the canonical `create_memory`, relationship-adjustment, and position-change effect subsets. Prompt 13 closes the canonical assessment runtime envelope while keeping authored hypothesis relevance, confidence-band mapping, metadata tables, and command bindings TEST_ONLY; unrelated later-prompt CampaignState registries and the remainder of `EffectProfile.effects` remain JSON-safe envelopes until their assigned milestones. No partial typed contract admits production content.
 
 ## Crosswalk
 
@@ -39,6 +39,8 @@ This contract set does not claim a production-valid scenario. The upstream AM-BU
 | Knowledge operations | `CreateCollectionTaskEffectSchema`, `EvidenceFreshnessProfileSchema`, `CollectionResolution*Schema`, `PlayerKnowledgeProjectionSchema` | Domain sections 35-36, 52-53 and Appendix F.7; Technical sections 45, 64-65; Prompt 11 | Canonical task effect inside AM-GOV-031 TEST_ONLY freshness/orchestration/projection wrappers; production coefficients and content remain BLOCKED |
 | Actor authority state | `ActorRuntimeStateSchema`, `RelationshipStateSchema`, `PositionStateSchema`, `MemoryRecordSchema`, `RedLineStateSchema` | Domain sections 20-29; Package 1 actor registry | Canonical single-owner registries, directional uniqueness, cross-references, bounds, and hidden-state separation |
 | Actor/memory operations | `CreateMemoryEffectSchema`, `AdjustRelationshipEffectSchema`, `ChangePositionEffectSchema`, `MemoryCreation*Schema`, `ActorAdaptation*Schema`, `RedLineDiscovery*Schema` | Domain sections 24-29, 100 and Appendix F.7; Package 1 sections 5-7; Prompt 12 | Canonical effects inside AM-GOV-033 TEST_ONLY template/adaptation/discovery wrappers; production intent, stance, and coefficients remain BLOCKED |
+| Assessment authority state | `AssessmentStateSchema`, lifecycle and analysis status schemas | Domain sections 41-42 | Exact canonical owner replaces the assessment JSON envelope; evidence/gap/lineage references validate against CampaignState |
+| Assessment operations | `AuthoredAssessmentHypothesisSchema`, `AssessmentCommandTermSchema`, `AssessmentWorkspace*Schema`, `AssessmentCommandResolution*Schema`, `AssessmentMetadataRecalculation*Schema` | Domain sections 41-42 and 97; GDS sections 32-35; Package 2 claims; Prompt 13 | Canonical state inside AM-GOV-035 TEST_ONLY relevance/profile/binding/orchestration wrappers; production hypotheses and balance remain BLOCKED |
 
 ## Referential validation
 
@@ -73,3 +75,5 @@ The following remain intentionally outside Prompt 03: production content admissi
 | AC-011 | Same-scope incompatible evidence remains contested while different scopes remain distinct | Prompt 11 SIM-14 contradiction test |
 | PB2-12 | Typed actor authority, directional relationships, issue positions, once-only memory, and evidence-gated red-line discovery | `tests/unit/actor-memory.test.ts`; `docs/build/ACTOR_MEMORY_CONTRACT.md` |
 | AC-010 | Consultation memory effects apply once and repeated diplomacy uses explicit non-farming TEST_ONLY policy | Prompt 12 SIM-02 atomic consultation/memory test |
+| PB2-13 | Typed structured assessment lifecycle, authored selection, automatic contradictions, and consequential commands | `tests/unit/assessment-lifecycle.test.ts`; `docs/build/ASSESSMENT_LIFECYCLE_CONTRACT.md` |
+| AC-012 | Declared confidence stays independent from evidence confidence and later reports do not rewrite adopted conclusions | Prompt 13 SIM-05 high-confidence and metadata-recalculation tests |

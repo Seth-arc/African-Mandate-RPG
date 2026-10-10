@@ -3,6 +3,9 @@ import {
   ACTOR_CONTRACT_VERSION,
   ActorAdaptationPlanSchema,
   ActorAdaptationProfileSchema,
+  ASSESSMENT_CONTRACT_VERSION,
+  AssessmentMetadataProfileSchema,
+  AuthoredAssessmentHypothesisSchema,
   CollectionResolutionPlanSchema,
   KNOWLEDGE_CONTRACT_VERSION,
   EndTurnSimulationInputSchema,
@@ -13,6 +16,8 @@ import {
   type CampaignState,
   type ActorAdaptationPlan,
   type ActorAdaptationProfile,
+  type AssessmentMetadataProfile,
+  type AuthoredAssessmentHypothesis,
   type CollectionResolutionPlan,
   type EndTurnRejectionReason,
   type EndTurnSimulationInput,
@@ -31,6 +36,7 @@ import { reservedMandatoryDecisionSlots } from "./mandatory-attention.js";
 import { resolveWorldEffects } from "./world-resolvers.js";
 import { resolveIntelligenceCollection } from "./knowledge.js";
 import { resolveActorAdaptation } from "./actors.js";
+import { recalculateAssessmentMetadata } from "./assessments.js";
 
 export interface TurnResolverContext {
   readonly currentTurn: number;
@@ -282,6 +288,53 @@ export const createTestOnlyActorResolverRegistry = (
               }
               Object.assign(draft, result.nextState);
             }
+          },
+        }
+      : resolver,
+  );
+};
+
+export interface TestOnlyAssessmentResolverRegistryInput {
+  readonly hypotheses: readonly AuthoredAssessmentHypothesis[];
+  readonly metadataProfile: AssessmentMetadataProfile;
+  readonly baseRegistry?: readonly TurnResolverDefinition[];
+}
+
+export const createTestOnlyAssessmentResolverRegistry = (
+  input: TestOnlyAssessmentResolverRegistryInput,
+): readonly TurnResolverDefinition[] => {
+  const hypotheses = input.hypotheses.map((hypothesis) =>
+    AuthoredAssessmentHypothesisSchema.parse(hypothesis),
+  );
+  const metadataProfile = AssessmentMetadataProfileSchema.parse(
+    input.metadataProfile,
+  );
+  const hypothesisCodes = hypotheses.map(
+    (hypothesis) => hypothesis.hypothesisCode,
+  );
+  if (new Set(hypothesisCodes).size !== hypothesisCodes.length) {
+    throw new TypeError("Duplicate assessment hypothesis code");
+  }
+  const base = input.baseRegistry ?? createInitialTurnResolverRegistry();
+  return base.map((resolver) =>
+    resolver.resolverId === "assessment_metadata"
+      ? {
+          ...resolver,
+          adapterKind: "test_only_fixture" as const,
+          resolve: (draft: CampaignState) => {
+            const result = recalculateAssessmentMetadata({
+              contractVersion: ASSESSMENT_CONTRACT_VERSION,
+              classification: "TEST_ONLY_ASSESSMENT_METADATA_RECALCULATION",
+              currentState: draft,
+              hypotheses,
+              metadataProfile,
+            });
+            if (result.status !== "resolved") {
+              throw new TypeError(
+                `Assessment metadata rejected: ${result.reasonCode}:${result.detailCode ?? ""}`,
+              );
+            }
+            Object.assign(draft, result.nextState);
           },
         }
       : resolver,

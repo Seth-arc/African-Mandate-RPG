@@ -1,0 +1,145 @@
+AM-PB2-13 verification log
+Date: 2026-10-10
+Base HEAD: b5870320d4cf15ee10498319549fa1f365dcba8b
+Base milestone: PB2-12 ACCEPTED under AM-GOV-034
+
+PREFLIGHT
+The repository began clean at owner commit b5870320d4cf15ee10498319549fa1f365dcba8b
+(`prompt 12`). The owner had independently reproduced frozen install, focused
+6/6, full CI 97/97, governance 7/7, and diff check before committing. Under
+AM-GOV-001 the commit is the PB2-12 acceptance event. Four acceptance
+reconciliation paths were then changed and preserved:
+  M docs/build/ACCEPTANCE_EVIDENCE.md
+  M docs/build/BUILD_STATE.json
+  M docs/build/DECISION_LEDGER.md
+  M tests/governance/test_build_state.py
+
+FIRST TYPECHECK
+Command: corepack pnpm run typecheck
+Exit: 1
+Result: the assessment trace contained optional undefined properties and was
+not assignable to JsonObject; the Prompt 11 report-reference fixture still
+used the former generic empty assessment object. The trace was serialized
+without undefined and the fixture was upgraded to AssessmentStateSchema.
+
+SECOND TYPECHECK
+Command: corepack pnpm run typecheck
+Exit: 0
+Output:
+  $ tsc --noEmit -p tsconfig.json
+
+FIRST FOCUSED PROMPT 13 SUITE
+Command: corepack pnpm exec vitest run tests/unit/assessment-lifecycle.test.ts
+Exit: 1
+Output:
+  Test Files  1 failed (1)
+       Tests  1 failed | 3 passed (4)
+Failure: withdrawing a revised assessment was rejected. The schema had
+incorrectly required revision lineage to disappear outside status `revised`.
+Correction: lineage is now required for `revised`, forbidden only for draft
+and initial adoption, and preserved after supersession or withdrawal.
+
+SECOND FOCUSED PROMPT 13 SUITE
+Command: corepack pnpm exec vitest run tests/unit/assessment-lifecycle.test.ts
+Exit: 0
+Output:
+  Test Files  1 passed (1)
+       Tests  4 passed (4)
+    Duration  1.01s
+
+FAIL-CLOSED BINDING REVIEW
+Assessment actions were given explicit TEST_ONLY effect-profile marker IDs so
+a missing binding registry rejects before mutation instead of consuming a slot
+without an assessment change.
+
+TYPECHECK AFTER BINDING NEGATIVE
+Command: corepack pnpm run typecheck
+Exit: 1
+Diagnostic: exact optional property rules rejected an explicit
+`assessments: undefined` test option. The fixture now omits the property.
+The focused suite in the same shell continued and passed 4/4; the shell's
+final exit was 0, but the failed typecheck remains recorded here.
+
+INITIAL LINT
+Command: corepack pnpm run lint
+Exit: 1
+Diagnostic: one unused schema import and one unused fixture evidence ID in
+`tests/unit/assessment-lifecycle.test.ts`. Both were removed.
+
+FINAL FROZEN INSTALL
+Command: corepack pnpm install --frozen-lockfile
+Exit: 0
+Output:
+  Scope: all 9 workspace projects
+  Already up to date
+  Done in 492ms using pnpm v11.23.0
+
+FINAL FOCUSED PROMPT 13 SUITE
+Command: corepack pnpm exec vitest run tests/unit/assessment-lifecycle.test.ts
+Exit: 0
+Output:
+  Test Files  1 passed (1)
+       Tests  4 passed (4)
+    Duration  1.06s
+
+FINAL STANDALONE LINT AND TYPECHECK
+Commands:
+  corepack pnpm run lint
+  corepack pnpm run typecheck
+Exit: 0 for both commands
+Output:
+  $ eslint apps packages scripts tests/unit
+  $ tsc --noEmit -p tsconfig.json
+
+FULL REPOSITORY CI
+Command: corepack pnpm run ci
+Exit: 0
+Output:
+  All matched files use Prettier code style!
+  No peer dependency issues found
+  Test Files  12 passed (12)
+       Tests  101 passed (101)
+  PASS: two fresh processes produced identical deterministic bytes.
+  PASS: two fresh fixture builds produced byte-identical artifacts.
+  PASS: web-to-simulation import was rejected by no-restricted-imports.
+  PASS: Math.random and randomUUID were rejected inside simulation scope.
+  PASS: governance and toolchain artifacts match their public schemas.
+
+GOVERNANCE SUITE
+Command: py -3 -m unittest discover -s tests/governance -p "test_*.py" -v
+Exit: 0
+Output:
+  Ran 7 tests in 0.002s
+  OK
+
+DIFF CHECK
+Command: git diff --check
+Exit: 0
+Result: no whitespace error. Git emitted only line-ending conversion warnings
+for existing tracked Windows working-copy paths.
+
+FINAL STATUS
+Command: git status --short --branch
+Exit: 0
+Result: branch main tracks origin/main. Only the 19 paths listed in the
+Prompt 13 handoff are modified or untracked; the four Prompt 12 acceptance
+reconciliation paths are included in that list. No unrelated path is present.
+
+FINAL REVIEW TIGHTENING AND RERUN
+Review constrained automatic contradiction disclosure by both the authored
+contradiction key and the hypothesis subject, preventing a reused key on a
+different subject from entering the assessment workspace. The focused fixture
+now includes a second formally contradictory pair under the same key but a
+different subject and proves it is excluded.
+Commands:
+  corepack pnpm exec vitest run tests/unit/assessment-lifecycle.test.ts
+  corepack pnpm run ci
+Exit: 0 for both commands
+Final output:
+  Test Files  1 passed (1)
+       Tests  4 passed (4)
+    Duration  1.50s
+  Test Files  12 passed (12)
+       Tests  101 passed (101)
+  PASS: deterministic vectors, fixture reproducibility, both forbidden
+  boundaries, and governance/toolchain artifact validation.

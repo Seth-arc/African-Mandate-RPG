@@ -572,3 +572,41 @@ PB2-11 was subsequently accepted under AM-GOV-001/032 by repository-owner commit
 | AC-010 / SIM-02 | Domain memory-effect rule and actor adaptation; Package 1 non-farming rule | once-only consultation effect, duplicate-command inertness, and explicit repeat policy | PASS |
 
 Prompt 12 remains unapproved until independent owner review and an accepting commit. Passing synthetic tests does not approve production profiles, factual intentions, or real institutional positions.
+
+PB2-12 was subsequently accepted under AM-GOV-001/034 by repository-owner commit `b5870320d4cf15ee10498319549fa1f365dcba8b` after independent reproduction reported a frozen install, 6/6 focused tests, 97/97 full-CI tests, 7/7 governance tests, and a clean diff check. The TEST_ONLY classification and all documented production-profile, factual-intent, and institutional-position blockers remain unchanged.
+
+## AM-PB2-13 — structured assessment lifecycle
+
+**Status proposed:** READY_FOR_REVIEW
+
+**Acceptance IDs:** PB2-13; AC-012 / SIM-05
+
+**Implementation base:** accepted PB2-12 commit `b5870320d4cf15ee10498319549fa1f365dcba8b`
+
+### Evidence produced
+
+- `CampaignState.assessments` now has the exact canonical `AssessmentState` shape with strict evidence, gap, report, decision, and revision-lineage references.
+- A pure structured workspace selects only an authored hypothesis, player-known relevant evidence, and LOW/MODERATE/HIGH declared confidence. Unknown fields and authoritative free text are rejected.
+- All known evidence in an authored relevant contradiction group is surfaced automatically, even when the player selects only one supporting record.
+- Declared confidence uses an explicit versioned TEST_ONLY band mapping and never reads evidence confidence or source reliability. HIGH remains legal and auditable through the assessment, decision, citations, and contradictions.
+- Adopt, revise, and withdraw execute through the accepted atomic strategic-command path, require an explicit fail-closed TEST_ONLY binding marker, record assessment IDs, and cost one slot each.
+- An opt-in source-step-13 resolver recalculates only bounded metadata. Later reporting can make an assessment contested but cannot rewrite its subject, hypothesis, declared confidence, lifecycle, or selected support.
+- `docs/build/ASSESSMENT_LIFECYCLE_CONTRACT.md`, AM-GOV-035, this evidence, the Prompt 13 handoff, and the raw log publish ownership, version, proposal boundaries, and reproduction.
+
+### Tests and negative cases
+
+- Known relevant contradiction records remain displayed and committed even when absent from the player's support selection.
+- HIGH declared confidence is accepted while two evidence records retain distinct low/high source confidence values; no value is conflated.
+- Adoption decrements exactly one of three slots and links exactly one assessment to its decision. A missing binding registry rejects without changing input.
+- A later report plus step-13 recalculation changes contradiction metadata to contested while the adopted conclusion and confidence remain identical.
+- Revision creates a linked successor and supersedes its predecessor. Withdrawal preserves revision lineage. Each costs one additional slot.
+- Production hypotheses, score mappings, metadata formulas, stale/undermined rules, implications, and gameplay balance remain BLOCKED and unimplemented.
+
+### Source-to-test traceability
+
+| Acceptance ID | Source authority | Contract / evidence | Test state |
+|---|---|---|---|
+| PB2-13 | Domain v1.1 sections 41-42 and 97; GDS v2.1 sections 32-35; Package 2 claims | strict state, pure workspace, atomic lifecycle commands, metadata adapter, contract doc, handoff, and log | READY_FOR_REVIEW |
+| AC-012 / SIM-05 | Domain separation/no-auto-rewrite rule; GDS declared-confidence and contradiction rules | high-confidence separation, automatic contradiction, later-report, and exact-slot tests | PASS |
+
+Prompt 13 remains unapproved until independent owner review and an accepting commit. Passing synthetic tests does not approve production hypotheses, confidence thresholds, metadata formulas, or consequences.

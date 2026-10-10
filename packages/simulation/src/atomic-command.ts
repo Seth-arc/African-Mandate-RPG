@@ -1,5 +1,6 @@
 import {
   ActionDefinitionSchema,
+  ASSESSMENT_CONTRACT_VERSION,
   CampaignStateSchema,
   DecisionIdSchema,
   KnownCostProfileSchema,
@@ -8,6 +9,10 @@ import {
   StrategicCommandSimulationResultSchema,
   type ActionDefinition,
   type ActorMemoryEffectProfile,
+  type AssessmentActionBinding,
+  type AssessmentConfidenceBandProfile,
+  type AssessmentMetadataProfile,
+  type AuthoredAssessmentHypothesis,
   type AtomicCommandRejectionReason,
   type CampaignState,
   type KnownCostProfile,
@@ -33,6 +38,14 @@ import {
 } from "./mandatory-attention.js";
 import { createCollectionTasksFromKnowledgeProfiles } from "./knowledge.js";
 import { createMemoriesFromActorProfiles } from "./actors.js";
+import { resolveAssessmentCommand } from "./assessments.js";
+
+export interface AssessmentCommandConfiguration {
+  readonly actionBindings: readonly AssessmentActionBinding[];
+  readonly hypotheses: readonly AuthoredAssessmentHypothesis[];
+  readonly confidenceProfile: AssessmentConfidenceBandProfile;
+  readonly metadataProfile: AssessmentMetadataProfile;
+}
 
 export interface InProcessStrategicCommandDispatcherOptions {
   readonly actions: readonly ActionDefinition[];
@@ -46,6 +59,7 @@ export interface InProcessStrategicCommandDispatcherOptions {
   readonly collectionTaskTemplates?: readonly CollectionTaskTemplate[];
   readonly actorMemoryEffectProfiles?: readonly ActorMemoryEffectProfile[];
   readonly memoryTemplates?: readonly TestOnlyMemoryTemplate[];
+  readonly assessments?: AssessmentCommandConfiguration;
 }
 
 const reject = (
@@ -219,10 +233,16 @@ export const simulateStrategicCommand = (
       (profile) => profile.effectProfileId,
     ),
   );
+  const assessmentProfileIds = new Set(
+    (options.assessments?.actionBindings ?? []).map(
+      (binding) => binding.effectProfileId,
+    ),
+  );
   for (const profileId of action.immediateEffectProfileIds) {
     const owners =
       Number(knowledgeProfileIds.has(profileId)) +
-      Number(actorProfileIds.has(profileId));
+      Number(actorProfileIds.has(profileId)) +
+      Number(assessmentProfileIds.has(profileId));
     if (owners === 0) {
       return reject("UNSUPPORTED_IMMEDIATE_EFFECT_PROFILE", command.commandId);
     }
@@ -247,6 +267,25 @@ export const simulateStrategicCommand = (
     options.memoryTemplates === undefined
   ) {
     return reject("UNSUPPORTED_IMMEDIATE_EFFECT_PROFILE", command.commandId);
+  }
+  const assessmentBinding = options.assessments?.actionBindings.find(
+    (binding) => binding.actionId === action.actionId,
+  );
+  const selectedAssessmentProfileIds = action.immediateEffectProfileIds.filter(
+    (profileId) => assessmentProfileIds.has(profileId),
+  );
+  if (
+    (assessmentBinding === undefined &&
+      selectedAssessmentProfileIds.length > 0) ||
+    (assessmentBinding !== undefined &&
+      (selectedAssessmentProfileIds.length !== 1 ||
+        selectedAssessmentProfileIds[0] !== assessmentBinding.effectProfileId))
+  ) {
+    return reject(
+      "CONFIGURATION_ERROR",
+      command.commandId,
+      "ASSESSMENT_ACTION_BINDING_MISMATCH",
+    );
   }
   if (action.consequenceProfileIds.length > 0) {
     return reject("UNSUPPORTED_CONSEQUENCE_PROFILE", command.commandId);
@@ -307,6 +346,12 @@ export const simulateStrategicCommand = (
   nextState.decisions.push(decisionRecord);
   let createdCollectionTaskIds: string[];
   let createdMemoryIds: string[];
+  let assessmentTrace:
+    | Extract<
+        ReturnType<typeof resolveAssessmentCommand>,
+        { status: "resolved" }
+      >["trace"]
+    | undefined;
   try {
     const selectedKnowledgeProfileIds = action.immediateEffectProfileIds.filter(
       (profileId) => knowledgeProfileIds.has(profileId),
@@ -330,6 +375,30 @@ export const simulateStrategicCommand = (
       selectedActorProfileIds,
       decisionId,
     ).map((trace) => trace.memoryId);
+    if (assessmentBinding !== undefined) {
+      if (command.payload.terms.length !== 1) {
+        throw new TypeError("Assessment command requires exactly one term");
+      }
+      const assessmentResult = resolveAssessmentCommand({
+        contractVersion: ASSESSMENT_CONTRACT_VERSION,
+        classification: "TEST_ONLY_ASSESSMENT_COMMAND",
+        currentState: nextState,
+        sourceDecisionId: decisionId,
+        actionId: action.actionId,
+        actionBindings: options.assessments!.actionBindings,
+        hypotheses: options.assessments!.hypotheses,
+        confidenceProfile: options.assessments!.confidenceProfile,
+        metadataProfile: options.assessments!.metadataProfile,
+        term: command.payload.terms[0],
+      });
+      if (assessmentResult.status !== "resolved") {
+        throw new TypeError(
+          `Assessment command rejected: ${assessmentResult.reasonCode}:${assessmentResult.detailCode ?? ""}`,
+        );
+      }
+      Object.assign(nextState, assessmentResult.nextState);
+      assessmentTrace = assessmentResult.trace;
+    }
   } catch {
     return reject(
       "CONFIGURATION_ERROR",
@@ -349,6 +418,27 @@ export const simulateStrategicCommand = (
       actionId: action.actionId,
       createdCollectionTaskIds,
       createdMemoryIds,
+      ...(assessmentTrace === undefined
+        ? {}
+        : {
+            assessmentTrace: {
+              operation: assessmentTrace.operation,
+              assessmentId: assessmentTrace.assessmentId,
+              automaticallyDisplayedContradictoryEvidenceIds:
+                assessmentTrace.automaticallyDisplayedContradictoryEvidenceIds,
+              ...(assessmentTrace.previousAssessmentId === undefined
+                ? {}
+                : {
+                    previousAssessmentId: assessmentTrace.previousAssessmentId,
+                  }),
+              ...(assessmentTrace.declaredConfidenceBand === undefined
+                ? {}
+                : {
+                    declaredConfidenceBand:
+                      assessmentTrace.declaredConfidenceBand,
+                  }),
+            },
+          }),
     },
   });
   nextState.processedCommandIds[command.commandId] = true;
@@ -373,10 +463,20 @@ export const simulateStrategicCommand = (
     );
   }
 
+  const committedDecisionRecord = validatedState.data.decisions.find(
+    (decision) => decision.decisionId === decisionId,
+  );
+  if (committedDecisionRecord === undefined) {
+    return reject(
+      "INVALID_SIMULATION_RESULT",
+      command.commandId,
+      "COMMITTED_DECISION_NOT_FOUND",
+    );
+  }
   return StrategicCommandSimulationResultSchema.parse({
     status: "committed",
     commandId: command.commandId,
-    decisionRecord,
+    decisionRecord: committedDecisionRecord,
     nextState: validatedState.data,
   });
 };

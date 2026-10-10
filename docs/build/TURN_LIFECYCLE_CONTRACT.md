@@ -3,7 +3,7 @@
 **Contract version:** 1.1.0
 **Task:** AM-PB2-09 / PB2-09
 **Owners:** serialized state and operation schemas in `@african-mandate/domain`; deterministic resolver/calendar execution in `@african-mandate/simulation`; serialized durable commit in `@african-mandate/application`
-**Classification:** TEST_ONLY lifecycle kernel; Prompt 10 adds opt-in fixture-only world adapters, Prompt 11 adds an opt-in fixture-only intelligence-collection adapter, and Prompt 12 adds an opt-in fixture-only actor-adaptation adapter while all unimplemented defaults remain initial no-ops
+**Classification:** TEST_ONLY lifecycle kernel; Prompts 10–13 add separate opt-in fixture-only world, intelligence, actor, and assessment-metadata adapters while all unimplemented defaults remain initial no-ops
 
 ## Canonical state
 
@@ -35,7 +35,7 @@ Only two initial adapters implement state behavior:
 - `scheduled_consequences`: expires an unresolved consequence only after an explicit `latestTurn`;
 - `attention`: preserves authoritative attention across the rollover.
 
-The other 20 default adapters are labeled `initial_no_op` in every trace. They neither fabricate a crisis/event nor falsely mark subsystem resolution. Prompt 10 adds the `test_only_fixture` trace label and an opt-in registry factory that replaces only world phases 8a through 8d with declared canonical effects. Prompt 11 uses the same accepted adapter label in a separate opt-in registry factory that replaces only source step 12, `intelligence_collection`, with declared resolution plans; tasks before their explicit due turn are unchanged. Prompt 12 uses it in a separate opt-in registry factory that replaces only source step 7, `actors_and_positions`, with explicit versioned TEST_ONLY adaptation profiles and turn plans. Phase 8e and every other unimplemented default remain no-ops. Changing order requires the source-mandated simulation-model version bump.
+The other 20 default adapters are labeled `initial_no_op` in every trace. They neither fabricate a crisis/event nor falsely mark subsystem resolution. Prompt 10 adds the `test_only_fixture` trace label and an opt-in registry factory that replaces only world phases 8a through 8d with declared canonical effects. Prompt 11 uses the same accepted adapter label in a separate opt-in registry factory that replaces only source step 12, `intelligence_collection`, with declared resolution plans; tasks before their explicit due turn are unchanged. Prompt 12 uses it in a separate opt-in registry factory that replaces only source step 7, `actors_and_positions`, with explicit versioned TEST_ONLY adaptation profiles and turn plans. Prompt 13 uses it in another opt-in registry factory that replaces only source step 13, `assessment_metadata`, and is prohibited from rewriting the player's hypothesis or declared confidence. Phase 8e and every other unimplemented default remain no-ops. Changing order requires the source-mandated simulation-model version bump.
 
 ## Mandatory attention capacity
 

@@ -48,6 +48,7 @@ import {
   RedLineStateSchema,
   RelationshipStateSchema,
 } from "./actor-state.js";
+import { AssessmentStateSchema } from "./assessment-state.js";
 
 export const CampaignMetaSchema = z
   .object({
@@ -151,7 +152,7 @@ export const CampaignStateSchema = z
     redLines: z.record(RedLineIdSchema, RedLineStateSchema),
     disputes: z.record(DisputeIdSchema, JsonObjectSchema),
     knowledge: PlayerKnowledgeStateSchema,
-    assessments: z.record(AssessmentIdSchema, JsonObjectSchema),
+    assessments: z.record(AssessmentIdSchema, AssessmentStateSchema),
     mandateCases: z.record(MandateCaseIdSchema, JsonObjectSchema),
     implementations: z.record(ProjectIdSchema, JsonObjectSchema),
     worldEvents: z.record(WorldEventIdSchema, JsonObjectSchema),
@@ -207,6 +208,7 @@ export const CampaignStateSchema = z
     addKeyMismatch(state.positions, "positionId", "positions");
     addKeyMismatch(state.memories, "memoryId", "memories");
     addKeyMismatch(state.redLines, "redLineId", "redLines");
+    addKeyMismatch(state.assessments, "assessmentId", "assessments");
 
     for (const [key, institution] of Object.entries(state.institutions)) {
       if (institution.institutionId !== key) {
@@ -395,6 +397,52 @@ export const CampaignStateSchema = z
           code: "custom",
           message: "red-line holder must reference a party",
           path: ["redLines", redLineId, "holder"],
+        });
+      }
+    }
+    for (const [assessmentId, assessment] of Object.entries(
+      state.assessments,
+    )) {
+      assessment.supportingEvidenceIds.forEach((evidenceId, index) => {
+        if (state.knowledge.evidence[evidenceId] === undefined) {
+          ctx.addIssue({
+            code: "custom",
+            message: "assessment support must reference player evidence",
+            path: ["assessments", assessmentId, "supportingEvidenceIds", index],
+          });
+        }
+      });
+      assessment.contradictoryEvidenceIds.forEach((evidenceId, index) => {
+        if (state.knowledge.evidence[evidenceId] === undefined) {
+          ctx.addIssue({
+            code: "custom",
+            message: "assessment contradiction must reference player evidence",
+            path: [
+              "assessments",
+              assessmentId,
+              "contradictoryEvidenceIds",
+              index,
+            ],
+          });
+        }
+      });
+      assessment.intelligenceGapIds.forEach((gapId, index) => {
+        if (state.knowledge.intelligenceGaps[gapId] === undefined) {
+          ctx.addIssue({
+            code: "custom",
+            message: "assessment gap must reference player knowledge",
+            path: ["assessments", assessmentId, "intelligenceGapIds", index],
+          });
+        }
+      });
+      if (
+        assessment.revisedFromAssessmentId !== undefined &&
+        state.assessments[assessment.revisedFromAssessmentId] === undefined
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          message: "revised assessment must reference its predecessor",
+          path: ["assessments", assessmentId, "revisedFromAssessmentId"],
         });
       }
     }
