@@ -1,0 +1,74 @@
+AM-PB2-18 verification log
+Date: 2026-10-10 America/Indianapolis
+Base HEAD: 3ff8807a3061f79ef931645f5f83f46d01f90f19 (owner-confirmed PB2-17 acceptance)
+
+Dependency refresh
+Command: corepack pnpm install
+Exit: 0
+Result: all 10 workspace projects resolved; lockfile policies passed; already up to date.
+
+Pre-format diagnostic attempts
+Commands: focused Vitest and typecheck before dependency refresh
+Exit: non-zero
+Result: Corepack's dependency-state check attempted an unavailable bare pnpm command. These were environment failures, not test passes.
+
+First focused implementation run
+Command: corepack pnpm exec vitest run tests/unit/four-month-content.test.ts
+Exit: 1
+Result: 7 passed, 1 expected-hash placeholder failed and revealed canonical SHA-256 c9a12875cf70933777ef3d4d45a7a4f6bb0d332524364afc10561bc62751d8ac.
+
+First typecheck
+Command: corepack pnpm run typecheck
+Exit: 2
+Result: branded-ID and discriminated-union narrowing errors in the new fixture/compiler. Types were corrected before the passing runs.
+
+Formatting
+Command: corepack pnpm exec prettier --write packages/content/package.json packages/content/src/index.ts packages/content/src/four-month-content.ts packages/content/src/four-month-fixture.ts packages/data-pipeline/src/schemas/fixture-artifacts.ts tests/unit/four-month-content.test.ts pnpm-lock.yaml
+Exit: 0
+Result: target files formatted with the repository-pinned Prettier.
+
+Full project gate
+Command: corepack pnpm run ci
+Exit: 0
+Result:
+- Prettier check passed.
+- Peer dependency check passed.
+- ESLint passed.
+- TypeScript no-emit check passed.
+- Vitest: 17 files passed, 133 tests passed.
+- Determinism verifier: two fresh processes byte-identical.
+- Fixture verifier: two fresh builds byte-identical.
+- Forbidden web-to-simulation import and random-source checks passed.
+- Governance/toolchain artifact schema check passed.
+
+Focused Prompt 18 gate
+Command: corepack pnpm exec vitest run tests/unit/four-month-content.test.ts
+Exit: 0
+Result: 1 file passed, 8 tests passed.
+
+Canonical authoring validator
+Command: py -3 -B docs/validate_authoring.py docs/AFRICAN_MANDATE_STAGE2_PACKAGE3_FOUR_MONTH_GAMEPLAY_SPEC_v0_1.md
+Exit: 0
+Result: STATIC_AUTHORING_CHECK PASS; catalogue_actions=18; script_templates=7; decisions_per_month=3; simulation tests not supplied to this standalone validator; production RELEASE_GATE remains BLOCKED as required.
+
+Governance diagnostic after recording PB2-17 acceptance
+Command: py -3 -B -m unittest discover -s tests/governance -p "test_*.py" -v
+Exit: 1
+Result: 5 passed, 2 failed because both negative mutation fixtures were hard-coded to now-accepted Prompt 17, so their mutations no longer created invalid states. The fixtures were moved to current unapproved Prompt 18.
+
+Governance rerun
+Command: py -3 -B -m unittest discover -s tests/governance -p "test_*.py" -v
+Exit: 0
+Result: 7 tests passed.
+
+Diff validation
+Command: git diff --check
+Exit: 0
+Result: no whitespace errors. Git emitted only expected LF-to-CRLF working-copy notices and a sandboxed global-ignore warning.
+
+Final frozen dependency verification
+Command: corepack pnpm install --frozen-lockfile
+Exit: 0
+Result: all 10 workspace projects already up to date. The lockfile retains repository-native formatting and adds only the content package's existing pinned Zod dependency reference.
+
+No failed, skipped or blocked test is hidden. Earlier failures and the initial preflight misunderstanding remain visible. Production release stays blocked by the artifact's unimplemented-system manifest and dual publication gates.

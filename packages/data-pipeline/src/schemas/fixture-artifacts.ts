@@ -339,8 +339,51 @@ export const assertFixturePublishable = (
   throw new FixturePublicationError(fixture.fixturePackage.fixtureId);
 };
 
-export const serializeProductionScenarioBundle = (input: unknown): string =>
-  fixtureCanonicalJson(ScenarioBundleSchema.parse(input));
+const FORBIDDEN_PRODUCTION_MARKER =
+  /(?:TEST_ONLY|test_only|synthetic|zone_pending_|PENDING_|\[P\]|\[X\])/u;
+
+const findForbiddenProductionMarker = (
+  value: unknown,
+  path = "$",
+): { readonly path: string; readonly value: string } | undefined => {
+  if (typeof value === "string") {
+    return FORBIDDEN_PRODUCTION_MARKER.test(value)
+      ? { path, value }
+      : undefined;
+  }
+  if (Array.isArray(value)) {
+    for (const [index, item] of value.entries()) {
+      const found = findForbiddenProductionMarker(item, `${path}[${index}]`);
+      if (found !== undefined) return found;
+    }
+    return undefined;
+  }
+  if (value !== null && typeof value === "object") {
+    for (const [key, item] of Object.entries(value)) {
+      const found = findForbiddenProductionMarker(item, `${path}.${key}`);
+      if (found !== undefined) return found;
+    }
+  }
+  return undefined;
+};
+
+export class ProductionScenarioAdmissionError extends Error {
+  public constructor(path: string, value: string) {
+    super(
+      `Production scenario contains a forbidden marker at ${path}: ${value}`,
+    );
+    this.name = "ProductionScenarioAdmissionError";
+  }
+}
+
+export const serializeProductionScenarioBundle = (input: unknown): string => {
+  const bundle = ScenarioBundleSchema.parse(input);
+  const forbidden = findForbiddenProductionMarker(bundle);
+  if (forbidden !== undefined) {
+    throw new ProductionScenarioAdmissionError(forbidden.path, forbidden.value);
+  }
+  return fixtureCanonicalJson(bundle);
+};
 
 export type SyntheticCoordinate = z.infer<typeof SyntheticCoordinateSchema>;
 export type SyntheticPolygon = z.infer<typeof SyntheticPolygonSchema>;

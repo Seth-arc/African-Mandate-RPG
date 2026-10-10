@@ -46,7 +46,7 @@ The public package exports strict schemas for the Appendix C names:
 
 ## Fail-closed publication boundary
 
-`assertFixturePublishable` always rejects a parsed TEST_ONLY fixture. `serializeProductionScenarioBundle` first requires `ScenarioBundleSchema`; the fixture package and test initialization therefore fail production serialization. No conversion function promotes them.
+`assertFixturePublishable` always rejects a parsed TEST_ONLY fixture. `serializeProductionScenarioBundle` requires `ScenarioBundleSchema` and recursively rejects TEST_ONLY, synthetic, placeholder, and pending marker strings. The partial fixture fails structurally, while Prompt 18's structurally complete synthetic bundle fails the marker scan. No conversion function promotes either artifact.
 
 ## Source-to-test traceability
 

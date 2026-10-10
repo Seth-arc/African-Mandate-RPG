@@ -7,3 +7,6 @@ export const contentPackage = {
 } as const;
 
 export type ContentPackageDescriptor = typeof contentPackage;
+
+export * from "./four-month-content.js";
+export * from "./four-month-fixture.js";

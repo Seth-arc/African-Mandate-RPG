@@ -1,0 +1,83 @@
+AM-PB2-18 preflight and blocker evidence
+Date: 2026-10-10 America/Indianapolis
+
+PRE-EDIT COMMAND: git rev-parse HEAD
+EXIT: 0
+OUTPUT:
+3ff8807a3061f79ef931645f5f83f46d01f90f19
+
+PRE-EDIT COMMAND: git status --porcelain=v1
+EXIT: 0
+OUTPUT:
+(empty; working tree clean)
+
+PRE-EDIT COMMAND: git log -2 --format="%H%x09%ad%x09%s" --date=iso-strict
+EXIT: 0
+OUTPUT:
+3ff8807a3061f79ef931645f5f83f46d01f90f19  2026-10-10T15:38:50-04:00  promp 17
+8810730873ae2dfbceedc3d874643c50331635cf  2026-10-10T15:04:21-04:00  prompt 16
+
+PRE-EDIT BUILD STATE EVIDENCE:
+PB2-06 through PB2-16: ACCEPTED
+PB2-17: READY_FOR_REVIEW; approvedCommit null; approver null
+PB2-18: NOT_STARTED
+
+PRE-EDIT SOURCE HASH EVIDENCE:
+docs/build/SOURCE_MANIFEST.md  4ce13c6d0fa6eb7d99f4e7023a7c48669bb57407827dc83f661f8ab6eccbb436
+docs/AFRICAN_MANDATE_SAHEL_ACTOR_INSTITUTION_REGISTRY_v0_1.md  9603b1d6af04c8716b65b4cf0937f179f3bd5061a44f23f35face6c7f7b67edf
+docs/AFRICAN_MANDATE_STAGE2_PACKAGE2_CONTENT_CONTRACTS_v0_1.md  5506fa98613d7a460c5056b6ee7782ee3b16718c71080f04e3dca499d4a5943b
+docs/AFRICAN_MANDATE_STAGE2_PACKAGE2_OPENING_DOCUMENTS_v0_1.md  32e091c3727ace217332f93ba32c98a15a5ec688d3ac8a69c431ed399bf33855
+docs/AFRICAN_MANDATE_STAGE2_PACKAGE2_OPENING_INTELLIGENCE_SPEC_v0_1.md  f2cf00126ea8caadcc2afca0d96521a381f0f704b40c697ef45fdcdbb61fe8d1
+docs/AFRICAN_MANDATE_STAGE2_PACKAGE3_BRIEFINGS_DECISION_AND_REACTION_DECK_v0_1.md  44130a5e8282163e4763f7bac2ca20724aab0599b4beecd66631d51b030674c4
+docs/AFRICAN_MANDATE_STAGE2_PACKAGE3_FOUR_MONTH_GAMEPLAY_SPEC_v0_1.md  f1d75b55815e82914c4d9318a2aa56fe2bfd7f785851f93624cbc93ce8b77742
+docs/AFRICAN_MANDATE_STAGE2_PACKAGE3_IMPLEMENTATION_AND_QA_CONTRACT_v0_1.md  e7ed55efd11262257d30a6a377a0387421e94dd9c3162bdca1850f83214b4fdb
+docs/AFRICAN_MANDATE_STAGE2_PACKAGE4_READINESS_REGISTER_v0_1.md  0ecdab17be272d3e9c04b7065c7ec72f5049ecee898194161de5523a25cc3ab3
+docs/AFRICAN_MANDATE_STAGE2_PACKAGE4_VALIDATION_SPEC_v0_1.md  41c97fac25ee55fa51092fe48a0532d175e0e0c864888287cbd654809bbdade8
+build/AFRICAN_MANDATE_PROMPTBOOK_v2/prompts/18_FOUR_MONTH_CONTENT.md  5faecabc8b52558a357469cfc60d8c066dea4dc99bd3b5f15b576b6d0cc5d2fa
+
+GATE RESULT:
+BLOCKED. PB2-18 requires PB2-06 through PB2-17 ACCEPTED. PB2-17 is not ACCEPTED.
+
+POST-EDIT VERIFICATION OUTPUT IS APPENDED BELOW AFTER EXECUTION.
+
+COMMAND: py -3 -B -m unittest discover -s tests/governance -p "test_*.py" -v
+FIRST ATTEMPT EXIT: 1
+FIRST ATTEMPT OUTPUT:
+Unable to create process using the installed Python 3.11 executable: Access is denied.
+
+RERUN CONTEXT: same command with the required local executable access
+RERUN EXIT: 0
+RERUN OUTPUT:
+test_accepted_without_independent_record_is_rejected ... ok
+test_current_state_matches_public_contract ... ok
+test_direct_self_approval_is_rejected ... ok
+test_only_accepted_satisfies_hard_prerequisite ... ok
+test_required_transition_paths ... ok
+test_source_manifest_hash_is_current ... ok
+test_unapproved_state_cannot_carry_approval ... ok
+
+Ran 7 tests in 0.003s
+OK
+
+COMMAND: corepack pnpm run schema:check
+FIRST ATTEMPT EXIT: 1
+FIRST ATTEMPT OUTPUT:
+Node.js v22.16.0 failed with EPERM while resolving C:\Users\ssnguna in the sandbox.
+
+RERUN CONTEXT: same command with the required workspace path access
+RERUN EXIT: 0
+RERUN OUTPUT:
+$ node scripts/verify-governance-artifacts.mjs
+PASS: governance and toolchain artifacts match their public schemas.
+
+COMMAND: git diff --check
+EXIT: 0
+OUTPUT:
+(empty; no whitespace errors)
+
+NOT RUN:
+- Prompt 18 compiler/cross-reference/fixture-hash/branch tests: dependent implementation prohibited because PB2-17 is not ACCEPTED.
+- Full project CI: no runtime, package, schema or test implementation changed; the hard prerequisite stopped Prompt 18 before implementation.
+
+SUBSEQUENT RECONCILIATION (2026-10-10):
+The repository owner confirmed that reviewed commit 3ff8807a3061f79ef931645f5f83f46d01f90f19 is the PB2-17 acceptance event under the established AM-GOV-001 workflow. AM-GOV-044 and BUILD_STATE now record that fact. Prompt 18 therefore resumed from that accepted base. The statements above are retained only as the contemporaneous failed-preflight transcript; current implementation and passing evidence are in docs/build/logs/18-test.log and docs/build/handoffs/18.md.

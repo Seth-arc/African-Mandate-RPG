@@ -770,4 +770,51 @@ PB2-16 was subsequently accepted under AM-GOV-001/042 by repository-owner commit
 | AC-020 / SIM-16 | Technical stale-response/plain-text/failure invariants; Writing WH4/W12 | six outcomes, no-network fallback, stale identity, claim allowlist, hidden-field, markup, unit/date, and stability tests | PASS |
 | AC-022 automated subset | VOICE/Writing simulated marker, source/date/unit, no invented quote, plain text | fixed marker and renderer assertions | PASS automated subset; regional review BLOCKED |
 
-Prompt 17 remains unapproved until independent owner review and an accepting commit. Passing synthetic tests does not approve a production AI provider, model policy, cache, translation, production copy metric, opening-document content, or regional/editorial conformance.
+PB2-17 was subsequently accepted under AM-GOV-001/044 by repository-owner confirmation of reviewed commit `3ff8807a3061f79ef931645f5f83f46d01f90f19`. That acceptance does not approve a production AI provider, model policy, cache, translation, production copy metric, opening-document content, or regional/editorial conformance.
+
+## AM-PB2-18 — four-month TEST_ONLY compiled content
+
+**Status proposed:** READY_FOR_REVIEW
+
+**Acceptance IDs:** PB2-18; AC-007; AC-009; AC-010; AC-013; AC-016–AC-019; AC-022; AC-023; AC-025
+
+**Implementation base:** accepted PB2-17 commit `3ff8807a3061f79ef931645f5f83f46d01f90f19`
+
+### Preflight reconciliation
+
+- The initial preflight treated Prompt 17's checked-in `READY_FOR_REVIEW` record as unresolved and stopped. The repository owner then confirmed that commit `3ff8807a3061f79ef931645f5f83f46d01f90f19` was the reviewed PB2-17 acceptance event under the established AM-GOV-001 workflow.
+- AM-GOV-044 and `docs/build/BUILD_STATE.json` now preserve that acceptance. The earlier blocker transcript remains visible at `docs/build/logs/18-preflight-blocked.txt` as audit history and is not counted as implementation evidence.
+- The source manifest and all pinned Package 1–4 hashes named by the milestone were verified before implementation.
+
+### Evidence produced
+
+- `@african-mandate/content` publishes strict contract `1.0.0` and content `0.1.0-test.1` schemas plus one deterministic compiler. The artifact embeds the accepted full structural test schema without introducing a second mutable source of truth.
+- All 18 Package 3 authoring action IDs are unique and audited in source order. Fifteen are backed by TEST_ONLY executable definitions and accepted predecessor operation bindings; three remain explicit blocked audit records rather than invented behavior.
+- Versioned actor runtime, position state, rules, actions, effects, source streams, `SIMULATED` messages, monthly availability, and branches A/B/C cross-reference through one schema. Every branch has exactly three slot positions per month across four months.
+- Branch A exercises collection, branch B consultation, and branch C defer/redirect. Unused defer slots carry no fabricated command or effect.
+- Draft gap ID `gap_m01_civilian_route` explicitly aliases canonical fixture ID `gap_m01_civilian_access`; no duplicate mutable gap is created.
+- Nine unimplemented canonical systems remain visible. The direct content publication gate and generic production ScenarioBundle serializer both reject the artifact.
+- Canonical serialization produces fixed fixture hash `c9a12875cf70933777ef3d4d45a7a4f6bb0d332524364afc10561bc62751d8ac` with no clock, randomness, network, historical observation, or real-person claim.
+- `docs/build/FOUR_MONTH_TEST_CONTENT_CONTRACT.md`, AM-GOV-045, this evidence, the Prompt 18 handoff, and the test log publish schema/version ownership, proposal boundaries, downstream compatibility, and independent reproduction.
+
+### Tests and negative cases
+
+- The focused suite asserts the exact 18-ID inventory, 15/3 executable/blocked split, four monthly inventories, three slot positions per branch-month, and distinct collect/consult/defer paths.
+- Duplicate action IDs, a dangling branch action, and a dangling gap alias are independently rejected.
+- Fixture source streams reject historical observation claims and messages remain explicitly simulated.
+- Both `assertFourMonthContentPublishable` and `serializeProductionScenarioBundle` reject the fixture; extracting the nested complete bundle cannot bypass the gate.
+- The pinned canonical fixture hash is regression checked.
+
+### Source-to-test traceability
+
+| Acceptance ID | Source authority | Contract / evidence | Test state |
+|---|---|---|---|
+| PB2-18 | Prompt 18; Package 1 actor registry; Package 2 content/opening/intelligence; Package 3 gameplay/briefing/implementation; Package 4 readiness/validation | full typed artifact, 18-ID audit, cross-reference schema, branch inventory, fixture hash, hard production gate, contract doc, handoff and log | READY_FOR_REVIEW |
+| AC-007 / AC-025 | Domain/GDS three-slot economy and four-month lifecycle | exactly three ordered slot positions for each branch/month; explicit unused defer slots | PASS |
+| AC-009 | Collection path and evidence lifecycle | branch A, collection bindings/templates/profiles and initial knowledge references | PASS TEST_ONLY |
+| AC-010 | Consultation path and actor response lifecycle | branch B, consultation bindings/packages/profiles and actor references | PASS TEST_ONLY |
+| AC-013 / AC-023 | Mandate and authorization boundary | accepted mandate fixture bindings plus known-missing production authorization action | PASS TEST_ONLY; production legal procedure BLOCKED |
+| AC-016–AC-019 | Source, geography, data and publication integrity | no historical observation or real-person claims; dual publication rejection | PASS isolation; production data/GIS/licensing BLOCKED |
+| AC-022 | Simulated copy marker | all fixture messages are `SIMULATED` and TEST_ONLY | PASS automated subset; editorial review BLOCKED |
+
+Prompt 18 remains unapproved until independent owner review and an accepting commit. Passing synthetic tests does not approve production content, geography, historical data, actor positions, legal procedures, finance terms, balance, event/doctrine dynamics, evaluation formulas, or editorial conformance.
