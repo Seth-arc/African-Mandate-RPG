@@ -262,27 +262,33 @@ export const EffectProfileSchema = z
   })
   .strict();
 
-const AuthorizationRequirementDefinitionSchema = z.discriminatedUnion("kind", [
-  z
-    .object({
-      kind: z.literal("institution_approval"),
-      institutionId: InstitutionIdSchema,
-    })
-    .strict(),
-  z
-    .object({
-      kind: z.literal("host_consent"),
-      institutionId: InstitutionIdSchema,
-    })
-    .strict(),
-  z
-    .object({ kind: z.literal("coalition_support"), minimum: ScoreSchema })
-    .strict(),
-  z
-    .object({ kind: z.literal("assessment_confidence"), minimum: ScoreSchema })
-    .strict(),
-  z.object({ kind: z.literal("rule"), rule: RuleExpressionSchema }).strict(),
-]);
+export const AuthorizationRequirementDefinitionSchema = z.discriminatedUnion(
+  "kind",
+  [
+    z
+      .object({
+        kind: z.literal("institution_approval"),
+        institutionId: InstitutionIdSchema,
+      })
+      .strict(),
+    z
+      .object({
+        kind: z.literal("host_consent"),
+        institutionId: InstitutionIdSchema,
+      })
+      .strict(),
+    z
+      .object({ kind: z.literal("coalition_support"), minimum: ScoreSchema })
+      .strict(),
+    z
+      .object({
+        kind: z.literal("assessment_confidence"),
+        minimum: ScoreSchema,
+      })
+      .strict(),
+    z.object({ kind: z.literal("rule"), rule: RuleExpressionSchema }).strict(),
+  ],
+);
 
 export const AuthorizationProcedureDefinitionSchema = z
   .object({

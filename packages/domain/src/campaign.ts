@@ -50,6 +50,10 @@ import {
 } from "./actor-state.js";
 import { AssessmentStateSchema } from "./assessment-state.js";
 import { CommitmentRecordSchema } from "./commitment-state.js";
+import {
+  ImplementationStateSchema,
+  MandateCaseStateSchema,
+} from "./mandate-state.js";
 
 export const CampaignMetaSchema = z
   .object({
@@ -154,8 +158,8 @@ export const CampaignStateSchema = z
     disputes: z.record(DisputeIdSchema, JsonObjectSchema),
     knowledge: PlayerKnowledgeStateSchema,
     assessments: z.record(AssessmentIdSchema, AssessmentStateSchema),
-    mandateCases: z.record(MandateCaseIdSchema, JsonObjectSchema),
-    implementations: z.record(ProjectIdSchema, JsonObjectSchema),
+    mandateCases: z.record(MandateCaseIdSchema, MandateCaseStateSchema),
+    implementations: z.record(ProjectIdSchema, ImplementationStateSchema),
     worldEvents: z.record(WorldEventIdSchema, JsonObjectSchema),
     situations: z.record(SituationIdSchema, SituationStateSchema),
     attention: AttentionStateSchema,
@@ -211,6 +215,8 @@ export const CampaignStateSchema = z
     addKeyMismatch(state.commitments, "commitmentId", "commitments");
     addKeyMismatch(state.redLines, "redLineId", "redLines");
     addKeyMismatch(state.assessments, "assessmentId", "assessments");
+    addKeyMismatch(state.mandateCases, "mandateCaseId", "mandateCases");
+    addKeyMismatch(state.implementations, "projectId", "implementations");
 
     for (const [key, institution] of Object.entries(state.institutions)) {
       if (institution.institutionId !== key) {
@@ -475,6 +481,69 @@ export const CampaignStateSchema = z
           code: "custom",
           message: "revised assessment must reference its predecessor",
           path: ["assessments", assessmentId, "revisedFromAssessmentId"],
+        });
+      }
+    }
+    for (const [mandateCaseId, mandateCase] of Object.entries(
+      state.mandateCases,
+    )) {
+      mandateCase.assessmentIds.forEach((assessmentId, index) => {
+        if (state.assessments[assessmentId] === undefined) {
+          ctx.addIssue({
+            code: "custom",
+            message: "mandate case assessment must reference an assessment",
+            path: ["mandateCases", mandateCaseId, "assessmentIds", index],
+          });
+        }
+      });
+      mandateCase.coalition.members.forEach((member, index) => {
+        if (!partyExists(member.party)) {
+          ctx.addIssue({
+            code: "custom",
+            message: "coalition member must reference a party",
+            path: [
+              "mandateCases",
+              mandateCaseId,
+              "coalition",
+              "members",
+              index,
+            ],
+          });
+        }
+      });
+      mandateCase.commitmentIds.forEach((commitmentId, index) => {
+        if (state.commitments[commitmentId] === undefined) {
+          ctx.addIssue({
+            code: "custom",
+            message: "mandate case commitment must reference a commitment",
+            path: ["mandateCases", mandateCaseId, "commitmentIds", index],
+          });
+        }
+      });
+      if (
+        mandateCase.implementationId !== undefined &&
+        state.implementations[mandateCase.implementationId]?.mandateCaseId !==
+          mandateCase.mandateCaseId
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          message: "mandate case implementation must reference its case",
+          path: ["mandateCases", mandateCaseId, "implementationId"],
+        });
+      }
+    }
+    for (const [projectId, implementation] of Object.entries(
+      state.implementations,
+    )) {
+      const mandateCase = state.mandateCases[implementation.mandateCaseId];
+      if (
+        mandateCase === undefined ||
+        mandateCase.implementationId !== implementation.projectId
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          message: "implementation must be owned by its mandate case",
+          path: ["implementations", projectId, "mandateCaseId"],
         });
       }
     }

@@ -3,7 +3,7 @@
 **Contract version:** 1.1.0
 **Task:** AM-PB2-09 / PB2-09
 **Owners:** serialized state and operation schemas in `@african-mandate/domain`; deterministic resolver/calendar execution in `@african-mandate/simulation`; serialized durable commit in `@african-mandate/application`
-**Classification:** TEST_ONLY lifecycle kernel; Prompts 10–14 add separate opt-in fixture-only world, intelligence, actor, assessment-metadata, and commitment adapters while all unimplemented defaults remain initial no-ops
+**Classification:** TEST_ONLY lifecycle kernel; Prompts 10–15 add separate opt-in fixture-only world, intelligence, actor, assessment-metadata, commitment, and authorization adapters while all unimplemented defaults remain initial no-ops
 
 ## Canonical state
 
@@ -30,12 +30,12 @@ At `maxTurns`, every resolver and the final-evaluation adapter still run. The ca
 
 The registry is not caller-ordered. It must contain every Domain v1.1 section 97 resolver in the published order, with world step 8 expanded as 8a through 8e. Validation and calendar/final completion remain core lifecycle operations. The `final_evaluation` adapter is conditional on the final turn.
 
-Only two initial adapters implement state behavior:
+Only two default adapters implement state behavior:
 
 - `scheduled_consequences`: expires an unresolved consequence only after an explicit `latestTurn`;
 - `attention`: preserves authoritative attention across the rollover.
 
-The other 20 default adapters are labeled `initial_no_op` in every trace. They neither fabricate a crisis/event nor falsely mark subsystem resolution. Prompt 10 adds the `test_only_fixture` trace label and an opt-in registry factory that replaces only world phases 8a through 8d with declared canonical effects. Prompt 11 uses the same accepted adapter label in a separate opt-in registry factory that replaces only source step 12, `intelligence_collection`, with declared resolution plans; tasks before their explicit due turn are unchanged. Prompt 12 uses it in a separate opt-in registry factory that replaces only source step 7, `actors_and_positions`, with explicit versioned TEST_ONLY adaptation profiles and turn plans. Prompt 13 uses it in another opt-in registry factory that replaces only source step 13, `assessment_metadata`, and is prohibited from rewriting the player's hypothesis or declared confidence. Prompt 14 adds a separate opt-in source-step-3 `commitments` adapter: it evaluates only explicitly due active commitments through versioned TEST_ONLY outcome profiles, transitions each once, and emits one domain event and one source-linked memory callback. Default commitment resolution remains an `initial_no_op`; production fulfillment evaluation is still blocked. Phase 8e and every other unimplemented default remain no-ops. Changing order requires the source-mandated simulation-model version bump.
+The other 20 default adapters are labeled `initial_no_op` in every trace. They neither fabricate a crisis/event nor falsely mark subsystem resolution. Prompt 10 adds the `test_only_fixture` trace label and an opt-in registry factory that replaces only world phases 8a through 8d with declared canonical effects. Prompt 11 uses the same accepted adapter label in a separate opt-in registry factory that replaces only source step 12, `intelligence_collection`, with declared resolution plans; tasks before their explicit due turn are unchanged. Prompt 12 uses it in a separate opt-in registry factory that replaces only source step 7, `actors_and_positions`, with explicit versioned TEST_ONLY adaptation profiles and turn plans. Prompt 13 uses it in another opt-in registry factory that replaces only source step 13, `assessment_metadata`, and is prohibited from rewriting the player's hypothesis or declared confidence. Prompt 14 adds a separate opt-in source-step-3 `commitments` adapter: it evaluates only explicitly due active commitments through versioned TEST_ONLY outcome profiles, transitions each once, and emits one domain event and one source-linked memory callback. Prompt 15 adds a separate opt-in source-step-5 `authorization` adapter: it resolves only explicit plans at their declared turn, only against an `approved_fixture` procedure, and rejects grantors absent from the fixture authority list. Default commitment and authorization resolution remain `initial_no_op`; production fulfillment and legal-procedure evaluation are still blocked. Phase 8e and every other unimplemented default remain no-ops. Changing order requires the source-mandated simulation-model version bump.
 
 ## Mandatory attention capacity
 

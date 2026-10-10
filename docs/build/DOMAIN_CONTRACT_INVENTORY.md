@@ -1,15 +1,15 @@
 # Serialized domain contract inventory
 
-**Contract version:** 0.9.0
-**Task:** AM-PB2-03 / PB2-03 through AM-PB2-14 / PB2-14
+**Contract version:** 1.0.0
+**Task:** AM-PB2-03 / PB2-03 through AM-PB2-15 / PB2-15
 **Owner:** `@african-mandate/domain`  
-**Status:** PB2-03 and PB2-07 through PB2-13 ACCEPTED; Prompt 14 consultation/commitment contract 1.0.0 is READY_FOR_REVIEW; no production scenario admission
+**Status:** PB2-03 and PB2-07 through PB2-14 ACCEPTED; Prompt 15 mandate/authorization contract 1.0.0 is READY_FOR_REVIEW; no production scenario admission
 
 ## Authority and boundary
 
 Zod schemas exported by `@african-mandate/domain` are the executable serialization authority. TypeScript types are inferred from those schemas; no parallel handwritten public interface is maintained. The source shapes come from Domain Model v1.1, with Zod/JSON mechanics from Technical Architecture v2 and validation requirements from the Executable Contract Inventory.
 
-This contract set does not claim a production-valid scenario. The upstream AM-BUILD-001 contract explicitly reserves that claim until all registries are complete and reviewed. Prompt 10 closes the world/institution runtime envelopes and its bounded world-effect union. Prompt 11 closes the canonical player-knowledge envelope and canonical `create_collection_task` effect subset. Prompt 12 closes the actor, directional-relationship, issue-position, memory, and red-line runtime envelopes plus the canonical `create_memory`, relationship-adjustment, and position-change effect subsets. Prompt 13 closes the canonical assessment runtime envelope while keeping authored hypothesis relevance, confidence-band mapping, metadata tables, and command bindings TEST_ONLY. Prompt 14 closes the canonical commitment registry while keeping consultation packages, legal/response/conflict profiles, fulfillment resolution, and callbacks TEST_ONLY; unrelated later-prompt CampaignState registries and the remainder of `EffectProfile.effects` remain JSON-safe envelopes until their assigned milestones. No partial typed contract admits production content.
+This contract set does not claim a production-valid scenario. The upstream AM-BUILD-001 contract explicitly reserves that claim until all registries are complete and reviewed. Prompt 10 closes the world/institution runtime envelopes and its bounded world-effect union. Prompt 11 closes the canonical player-knowledge envelope and canonical `create_collection_task` effect subset. Prompt 12 closes the actor, directional-relationship, issue-position, memory, and red-line runtime envelopes plus the canonical `create_memory`, relationship-adjustment, and position-change effect subsets. Prompt 13 closes the canonical assessment runtime envelope while keeping authored hypothesis relevance, confidence-band mapping, metadata tables, and command bindings TEST_ONLY. Prompt 14 closes the canonical commitment registry while keeping consultation packages, legal/response/conflict profiles, fulfillment resolution, and callbacks TEST_ONLY. Prompt 15 closes the canonical mandate-case and implementation registries while every procedure, case/scope/implementation template, authorization outcome plan, and status wrapper remains conspicuously TEST_ONLY; unrelated later-prompt CampaignState registries and the remainder of `EffectProfile.effects` remain JSON-safe envelopes until their assigned milestones. No partial typed contract admits production content.
 
 ## Crosswalk
 
@@ -43,6 +43,8 @@ This contract set does not claim a production-valid scenario. The upstream AM-BU
 | Assessment operations | `AuthoredAssessmentHypothesisSchema`, `AssessmentCommandTermSchema`, `AssessmentWorkspace*Schema`, `AssessmentCommandResolution*Schema`, `AssessmentMetadataRecalculation*Schema` | Domain sections 41-42 and 97; GDS sections 32-35; Package 2 claims; Prompt 13 | Canonical state inside AM-GOV-035 TEST_ONLY relevance/profile/binding/orchestration wrappers; production hypotheses and balance remain BLOCKED |
 | Commitment authority state | `CommitmentRecordSchema`, `CommitmentStatusSchema` | Domain section 27 and Appendix B.5 | Exact canonical owner replaces the commitment JSON envelope; party, decision, key, due/resolution, and active-state references validate in CampaignState |
 | Consultation and commitment operations | `ConsultationPackageSchema`, consultation profile/command schemas, `CommitmentResolution*Schema` | Domain sections 27, 44, 46, 97-98; GDS sections 3-4, 13-15 and 40-45; Package 3 N1-N3; Prompt 14 | Canonical commitment state inside AM-GOV-037 TEST_ONLY legal/response/conflict/resolution wrappers; production legal scope, positions, mappings, and formulas remain BLOCKED |
+| Mandate case and implementation authority state | `MandateCaseStateSchema`, coalition/authorization/scope/outcome schemas, `ImplementationStateSchema` | Domain sections 55-66 and Appendices B.2-B.4/F.8-F.10 | Exact canonical owners replace both generic JSON envelopes; case/assessment/commitment/implementation/party references validate in CampaignState |
+| Mandate and authorization operations | mandate template/binding/command/prevalidation/status schemas, `AuthorizationResolution*Schema`, TEST_ONLY implementation profile | Domain sections 55-66 and 97; GDS sections 37-55; Package 3 sections 4-7; Prompt 15 | Canonical state inside AM-GOV-039 TEST_ONLY template/procedure/resolution wrappers; production procedure, real positions, formulas and dynamics remain BLOCKED |
 
 ## Referential validation
 
@@ -82,3 +84,6 @@ The following remain intentionally outside Prompt 03: production content admissi
 | PB2-14 | Typed consultation packages, canonical commitment lifecycle, knowledge-only warnings, and postcommit response evidence | `tests/unit/consultation-commitment.test.ts`; `docs/build/CONSULTATION_COMMITMENT_CONTRACT.md` |
 | AC-010 | Independent accepted/conditional/rejected consultations consume one slot and emit scoped evidence | Prompt 14 SIM-02 regional-response test |
 | AC-010 / SIM-09 | Structurally impossible terms reject; political conflicts warn; due fulfillment/breach and callbacks run once | Prompt 14 commitment lifecycle tests |
+| PB2-15 | Typed mandate case, coalition, authorization, scope, outcome and implementation owners plus gated operations | `tests/unit/mandate-authorization.test.ts`; `docs/build/MANDATE_AUTHORIZATION_CONTRACT.md` |
+| AC-013 / SIM-07 | Assessment escalation costs one slot; negotiated case scope and issue-specific coalition state persist without authorization | Prompt 15 case/scope/state-separation test |
+| AC-013 / SIM-10 | Missing procedure and unauthorized grantors reject without mutation; launch requires a distinct authorized command | Prompt 15 authorization-gate negative tests |

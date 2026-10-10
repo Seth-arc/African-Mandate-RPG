@@ -4,7 +4,9 @@ import {
   CampaignStateSchema,
   CONSULTATION_CONTRACT_VERSION,
   DecisionIdSchema,
+  JsonObjectSchema,
   KnownCostProfileSchema,
+  MANDATE_CONTRACT_VERSION,
   ScoreSchema,
   StrategicCommandSimulationInputSchema,
   StrategicCommandSimulationResultSchema,
@@ -17,6 +19,11 @@ import {
   type AtomicCommandRejectionReason,
   type CampaignState,
   type KnownCostProfile,
+  type MandateActionBinding,
+  type TestOnlyAuthorizationProcedureEntry,
+  type TestOnlyImplementationProfile,
+  type TestOnlyMandateCaseTemplate,
+  type TestOnlyScopeNegotiationTemplate,
   type KnowledgeEffectProfile,
   type CollectionTaskTemplate,
   type ConsultationActionBinding,
@@ -45,6 +52,10 @@ import { createCollectionTasksFromKnowledgeProfiles } from "./knowledge.js";
 import { createMemoriesFromActorProfiles } from "./actors.js";
 import { resolveAssessmentCommand } from "./assessments.js";
 import { resolveConsultationCommand } from "./consultations.js";
+import {
+  prevalidateMandateCommand,
+  resolveMandateCommand,
+} from "./mandates.js";
 
 export interface AssessmentCommandConfiguration {
   readonly actionBindings: readonly AssessmentActionBinding[];
@@ -58,6 +69,14 @@ export interface ConsultationCommandConfiguration {
   readonly legalProfiles: readonly TestOnlyConsultationLegalProfile[];
   readonly responseProfiles: readonly TestOnlyConsultationResponseProfile[];
   readonly politicalConflictRules: readonly ConsultationPoliticalConflictRule[];
+}
+
+export interface MandateCommandConfiguration {
+  readonly actionBindings: readonly MandateActionBinding[];
+  readonly caseTemplates: readonly TestOnlyMandateCaseTemplate[];
+  readonly scopeNegotiations: readonly TestOnlyScopeNegotiationTemplate[];
+  readonly authorizationProcedures: readonly TestOnlyAuthorizationProcedureEntry[];
+  readonly implementationProfiles: readonly TestOnlyImplementationProfile[];
 }
 
 export interface InProcessStrategicCommandDispatcherOptions {
@@ -74,6 +93,7 @@ export interface InProcessStrategicCommandDispatcherOptions {
   readonly memoryTemplates?: readonly TestOnlyMemoryTemplate[];
   readonly assessments?: AssessmentCommandConfiguration;
   readonly consultations?: ConsultationCommandConfiguration;
+  readonly mandates?: MandateCommandConfiguration;
 }
 
 const reject = (
@@ -257,12 +277,18 @@ export const simulateStrategicCommand = (
       (binding) => binding.effectProfileId,
     ),
   );
+  const mandateProfileIds = new Set(
+    (options.mandates?.actionBindings ?? []).map(
+      (binding) => binding.effectProfileId,
+    ),
+  );
   for (const profileId of action.immediateEffectProfileIds) {
     const owners =
       Number(knowledgeProfileIds.has(profileId)) +
       Number(actorProfileIds.has(profileId)) +
       Number(assessmentProfileIds.has(profileId)) +
-      Number(consultationProfileIds.has(profileId));
+      Number(consultationProfileIds.has(profileId)) +
+      Number(mandateProfileIds.has(profileId));
     if (owners === 0) {
       return reject("UNSUPPORTED_IMMEDIATE_EFFECT_PROFILE", command.commandId);
     }
@@ -281,6 +307,52 @@ export const simulateStrategicCommand = (
     options.collectionTaskTemplates === undefined
   ) {
     return reject("UNSUPPORTED_IMMEDIATE_EFFECT_PROFILE", command.commandId);
+  }
+  const mandateBinding = options.mandates?.actionBindings.find(
+    (binding) => binding.actionId === action.actionId,
+  );
+  const selectedMandateProfileIds = action.immediateEffectProfileIds.filter(
+    (profileId) => mandateProfileIds.has(profileId),
+  );
+  if (
+    (mandateBinding === undefined && selectedMandateProfileIds.length > 0) ||
+    (mandateBinding !== undefined &&
+      (selectedMandateProfileIds.length !== 1 ||
+        selectedMandateProfileIds[0] !== mandateBinding.effectProfileId))
+  ) {
+    return reject(
+      "CONFIGURATION_ERROR",
+      command.commandId,
+      "MANDATE_ACTION_BINDING_MISMATCH",
+    );
+  }
+  if (mandateBinding !== undefined) {
+    if (command.payload.terms.length !== 1) {
+      return reject(
+        "STRUCTURALLY_IMPOSSIBLE_TERM",
+        command.commandId,
+        "MANDATE_COMMAND_REQUIRES_ONE_TERM",
+      );
+    }
+    const mandateValidation = prevalidateMandateCommand({
+      contractVersion: MANDATE_CONTRACT_VERSION,
+      classification: "TEST_ONLY_MANDATE_COMMAND",
+      currentState,
+      actionId: action.actionId,
+      actionBindings: options.mandates!.actionBindings,
+      caseTemplates: options.mandates!.caseTemplates,
+      scopeNegotiations: options.mandates!.scopeNegotiations,
+      authorizationProcedures: options.mandates!.authorizationProcedures,
+      implementationProfiles: options.mandates!.implementationProfiles,
+      term: command.payload.terms[0],
+    });
+    if (mandateValidation.status === "rejected") {
+      return reject(
+        "STRUCTURALLY_IMPOSSIBLE_TERM",
+        command.commandId,
+        mandateValidation.reasonCode,
+      );
+    }
   }
   const consultationBinding = options.consultations?.actionBindings.find(
     (binding) => binding.actionId === action.actionId,
@@ -399,6 +471,12 @@ export const simulateStrategicCommand = (
         { status: "resolved" }
       >["trace"]
     | undefined;
+  let mandateTrace:
+    | Extract<
+        ReturnType<typeof resolveMandateCommand>,
+        { status: "resolved" }
+      >["trace"]
+    | undefined;
   try {
     const selectedKnowledgeProfileIds = action.immediateEffectProfileIds.filter(
       (profileId) => knowledgeProfileIds.has(profileId),
@@ -481,6 +559,28 @@ export const simulateStrategicCommand = (
         consultationTrace.consultationDomainEventId,
       );
     }
+    if (mandateBinding !== undefined) {
+      const mandateResult = resolveMandateCommand({
+        contractVersion: MANDATE_CONTRACT_VERSION,
+        classification: "TEST_ONLY_MANDATE_COMMAND",
+        currentState: nextState,
+        sourceDecisionId: decisionId,
+        actionId: action.actionId,
+        actionBindings: options.mandates!.actionBindings,
+        caseTemplates: options.mandates!.caseTemplates,
+        scopeNegotiations: options.mandates!.scopeNegotiations,
+        authorizationProcedures: options.mandates!.authorizationProcedures,
+        implementationProfiles: options.mandates!.implementationProfiles,
+        term: command.payload.terms[0],
+      });
+      if (mandateResult.status !== "resolved") {
+        throw new TypeError(
+          `Mandate command rejected: ${mandateResult.reasonCode}:${mandateResult.detailCode ?? ""}`,
+        );
+      }
+      Object.assign(nextState, mandateResult.nextState);
+      mandateTrace = mandateResult.trace;
+    }
   } catch {
     return reject(
       "CONFIGURATION_ERROR",
@@ -539,6 +639,11 @@ export const simulateStrategicCommand = (
               strategicRiskCodes:
                 consultationTrace.knownRiskPreview.strategicRiskCodes,
             },
+          }),
+      ...(mandateTrace === undefined
+        ? {}
+        : {
+            mandateTrace: JsonObjectSchema.parse(mandateTrace),
           }),
     },
   });

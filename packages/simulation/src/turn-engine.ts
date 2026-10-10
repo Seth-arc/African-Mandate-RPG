@@ -9,12 +9,15 @@ import {
   CollectionResolutionPlanSchema,
   CONSULTATION_CONTRACT_VERSION,
   KNOWLEDGE_CONTRACT_VERSION,
+  MANDATE_CONTRACT_VERSION,
   EndTurnSimulationInputSchema,
   EndTurnSimulationResultSchema,
   TURN_RESOLVER_IDS,
   WORLD_RESOLVER_CONTRACT_VERSION,
   IsoDateSchema,
   TestOnlyCommitmentResolutionProfileSchema,
+  TestOnlyAuthorizationProcedureEntrySchema,
+  TestOnlyAuthorizationResolutionPlanSchema,
   type CampaignState,
   type ActorAdaptationPlan,
   type ActorAdaptationProfile,
@@ -22,6 +25,8 @@ import {
   type AuthoredAssessmentHypothesis,
   type CollectionResolutionPlan,
   type TestOnlyCommitmentResolutionProfile,
+  type TestOnlyAuthorizationProcedureEntry,
+  type TestOnlyAuthorizationResolutionPlan,
   type EndTurnRejectionReason,
   type EndTurnSimulationInput,
   type EndTurnSimulationResult,
@@ -41,6 +46,7 @@ import { resolveIntelligenceCollection } from "./knowledge.js";
 import { resolveActorAdaptation } from "./actors.js";
 import { recalculateAssessmentMetadata } from "./assessments.js";
 import { resolveDueCommitments } from "./consultations.js";
+import { resolveAuthorizationPlan } from "./mandates.js";
 
 export interface TurnResolverContext {
   readonly currentTurn: number;
@@ -383,6 +389,63 @@ export const createTestOnlyCommitmentResolverRegistry = (
               );
             }
             Object.assign(draft, result.nextState);
+          },
+        }
+      : resolver,
+  );
+};
+
+export interface TestOnlyAuthorizationResolverRegistryInput {
+  readonly procedures: readonly TestOnlyAuthorizationProcedureEntry[];
+  readonly plans: readonly TestOnlyAuthorizationResolutionPlan[];
+  readonly baseRegistry?: readonly TurnResolverDefinition[];
+}
+
+export const createTestOnlyAuthorizationResolverRegistry = (
+  input: TestOnlyAuthorizationResolverRegistryInput,
+): readonly TurnResolverDefinition[] => {
+  const procedures = input.procedures.map((procedure) =>
+    TestOnlyAuthorizationProcedureEntrySchema.parse(procedure),
+  );
+  const plans = input.plans.map((plan) =>
+    TestOnlyAuthorizationResolutionPlanSchema.parse(plan),
+  );
+  if (
+    new Set(procedures.map((procedure) => procedure.authorizationProcedureId))
+      .size !== procedures.length
+  ) {
+    throw new TypeError("Duplicate authorization procedure entry");
+  }
+  const planKeys = plans.map(
+    (plan) => `${plan.resolutionTurn}:${plan.mandateCaseId}`,
+  );
+  if (new Set(planKeys).size !== planKeys.length) {
+    throw new TypeError("Duplicate authorization resolution plan");
+  }
+  const base = input.baseRegistry ?? createInitialTurnResolverRegistry();
+  if (plans.length === 0) return base;
+  return base.map((resolver) =>
+    resolver.resolverId === "authorization"
+      ? {
+          ...resolver,
+          adapterKind: "test_only_fixture" as const,
+          resolve: (draft: CampaignState, context: TurnResolverContext) => {
+            for (const plan of plans) {
+              if (plan.resolutionTurn !== context.currentTurn) continue;
+              const result = resolveAuthorizationPlan({
+                contractVersion: MANDATE_CONTRACT_VERSION,
+                classification: "TEST_ONLY_AUTHORIZATION_RESOLUTION",
+                currentState: draft,
+                authorizationProcedures: procedures,
+                plan,
+              });
+              if (result.status !== "resolved") {
+                throw new TypeError(
+                  `Authorization resolver rejected: ${result.reasonCode}:${result.detailCode ?? ""}`,
+                );
+              }
+              Object.assign(draft, result.nextState);
+            }
           },
         }
       : resolver,

@@ -1,0 +1,96 @@
+AM-PB2-15 mandate/authorization implementation log
+Base/HEAD at preflight: 61f50d0492131ca5823e1c2a47f667c650c66d4f
+Working tree at preflight: clean
+
+Preflight commit:
+61f50d0492131ca5823e1c2a47f667c650c66d4f Seth-arc 2026-10-10T13:59:37-04:00 prompt 14
+
+Pinned source SHA-256 values verified:
+aa8a03380e93bb4adee9ef6115d59f64a98409f988eeaf132fa70460dec3c75c docs/African_Mandate_Domain_Model_Simulation_Spec_v1_1.md
+982be4ecd82b996e14be83b6fd89a60a2876bb4e2505ed195889ad4f81dcee30 docs/AFRICAN_MANDATE_TECHNICAL_ARCHITECTURE_v2.md
+89f7387d041e006e3cc1e21d52fdc07e2234227600321eea5601a35415341f04 docs/AFRICAN_MANDATE_GAME_DESIGN_SPEC_v2_1.md
+f1d75b55815e82914c4d9318a2aa56fe2bfd7f785851f93624cbc93ce8b77742 docs/AFRICAN_MANDATE_STAGE2_PACKAGE3_FOUR_MONTH_GAMEPLAY_SPEC_v0_1.md
+e731b16f11a26b66baba9f9e051832c16cc1c68f643bcc25af6b8cd597ca3e91 build/AFRICAN_MANDATE_PROMPTBOOK_v2/prompts/15_MANDATE_CASES.md
+
+Initial sandboxed formatter/typecheck attempt:
+> corepack pnpm exec prettier --write <Prompt 15 TypeScript paths>; corepack pnpm exec tsc --noEmit -p tsconfig.json
+Error: EPERM: operation not permitted, lstat 'C:\Users\ssnguna'
+Node.js v22.16.0
+Result: environment-blocked before project execution; rerun outside managed filesystem sandbox.
+
+Initial executable typecheck:
+> corepack pnpm exec tsc --noEmit -p tsconfig.json
+packages/simulation/src/atomic-command.ts: mandate trace with an optional scope property was not assignable directly to JsonObject.
+packages/simulation/src/mandates.ts: scope values with an optional resourceCeilings property were not assignable directly to event JsonValue.
+tests/unit/mandate-authorization.test.ts: branded ID and Score values required parsed/narrowed fixture types.
+Exit: 2
+Resolution: parsed trace/event payloads through JsonObjectSchema and parsed/narrowed fixture identifiers without weakening any runtime schema.
+
+Corrected typecheck:
+> corepack pnpm exec tsc --noEmit -p tsconfig.json
+Exit: 0
+
+Focused test:
+> corepack pnpm exec vitest run tests/unit/mandate-authorization.test.ts
+Test Files  1 passed (1)
+Tests       6 passed (6)
+Duration    1.66s
+Exit: 0
+
+Final complete gate:
+> corepack pnpm install --frozen-lockfile
+Scope: all 9 workspace projects
+Already up to date
+Done in 577ms using pnpm v11.23.0
+Exit: 0
+
+> corepack pnpm exec vitest run tests/unit/mandate-authorization.test.ts
+Test Files  1 passed (1)
+Tests       6 passed (6)
+Duration    1.61s
+Exit: 0
+
+The first combined CI invocation emitted successful formatting, dependency, lint and typecheck stages but returned without the remaining stage output. CI was rerun alone to obtain an unambiguous complete result.
+
+> corepack pnpm run ci
+Formatting: All matched files use Prettier code style.
+Dependencies: No peer dependency issues found.
+Lint: pass.
+Typecheck: pass.
+Test Files  14 passed (14)
+Tests       111 passed (111)
+Duration    3.95s
+Determinism: PASS: two fresh processes produced identical deterministic bytes.
+Fixture: PASS: two fresh fixture builds produced byte-identical artifacts.
+Boundaries: PASS: web-to-simulation import rejected; Math.random and randomUUID rejected inside simulation scope.
+Schema: PASS: governance and toolchain artifacts match their public schemas.
+Exit: 0
+
+Initial sandboxed governance attempt:
+> py -3 -m unittest discover -s tests/governance -p "test_*.py" -v
+Unable to create Windows Store Python process: Access is denied.
+Result: environment-blocked before project execution; rerun outside managed filesystem sandbox.
+
+> py -3 -m unittest discover -s tests/governance -p "test_*.py" -v
+Ran 7 tests in 0.026s
+OK
+
+> git diff --check
+Exit: 0. Git printed only LF-to-CRLF working-copy conversion warnings; no whitespace error was reported.
+
+> git status --short --branch
+19 documented paths changed: 12 modified and 7 untracked. No path outside Prompt 15 implementation/evidence or Prompt 14 acceptance reconciliation is present.
+
+Status recommendation: READY_FOR_REVIEW only. No self-approval or accepting commit was created.
+
+Final regression after tightening per-registry duplicate checks, resolution-turn matching and expiry ordering:
+> corepack pnpm exec vitest run tests/unit/mandate-authorization.test.ts
+Test Files  1 passed (1)
+Tests       6 passed (6)
+Duration    1.17s
+
+> corepack pnpm run ci
+Test Files  14 passed (14)
+Tests       111 passed (111)
+Duration    3.86s
+All formatting, dependency, lint, type, determinism, fixture, boundary and schema checks passed.

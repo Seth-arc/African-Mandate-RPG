@@ -647,3 +647,42 @@ PB2-13 was subsequently accepted under AM-GOV-001/036 by repository-owner commit
 | AC-010 / SIM-09 | Domain commitment registry/lifecycle and end-turn step 3; GDS feasibility/conflict rules | hard-invalid rejection, political-warning allowance, due fulfillment/breach, and no-double-callback tests | PASS |
 
 Prompt 14 remains unapproved until independent owner review and an accepting commit. Passing synthetic tests does not approve legal scope, real positions, response/fulfillment formulas, production content, or partner agreement.
+
+PB2-14 was subsequently accepted under AM-GOV-001/038 by repository-owner commit `61f50d0492131ca5823e1c2a47f667c650c66d4f` after independent reproduction reported a frozen install, 4/4 focused tests, 105/105 full-CI tests, 7/7 governance tests, and a clean diff check. The TEST_ONLY classification and all documented production legal, actor-position, response, fulfillment, and content blockers remain unchanged.
+
+## AM-PB2-15 — coalitions, mandate cases and authorization gate
+
+**Status proposed:** READY_FOR_REVIEW
+
+**Acceptance IDs:** PB2-15; AC-013 / SIM-07 / SIM-10
+
+**Implementation base:** accepted PB2-14 commit `61f50d0492131ca5823e1c2a47f667c650c66d4f`
+
+### Evidence produced
+
+- `CampaignState.mandateCases` and `CampaignState.implementations` now use the exact canonical typed owners for case, coalition, authorization, scope, outcome and implementation state. Generic JSON envelopes are removed without adding another mutable store.
+- Assessment escalation opens an assessment-basis case through the accepted atomic command path and costs exactly one slot. Coalition members are stored per case with independent issue-specific stances; membership and general affiliation infer nothing.
+- Structured scope negotiation records the complete previous and negotiated scopes, coalition conditions, and the canonical political-strength, readiness and distortion-risk dimensions in state/events before moving the case to coalition stage.
+- An authorization request can move coalition → authorization/pending only through a conspicuous `approved_fixture` procedure entry. A `known_missing` procedure rejects before mutation or slot use. Requesting never grants authorization.
+- The opt-in source-step-5 fixture adapter resolves only explicit due plans. It rejects every grantor absent from the approved fixture authority list and every missing required grantor; AU liaison, AES, ECOWAS and OCHA fixtures cannot authorize the test case.
+- Implementation launch remains a later, separate one-slot command gated by an authorized or conditionally-authorized case and explicit TEST_ONLY profile/capacity. It creates a canonical `preparing` implementation; it does not auto-progress.
+- `docs/build/MANDATE_AUTHORIZATION_CONTRACT.md`, AM-GOV-039, this evidence, the Prompt 15 handoff and raw log publish ownership, version, proposal boundaries and reproduction.
+
+### Tests and negative cases
+
+- Case opening changes three slots to two while authorization remains `not_requested` and no implementation exists.
+- Negotiated monitoring scope and distortion-risk change are retained in canonical case state and the immutable source-linked event.
+- Authorization request remains pending; end-turn resolution can authorize only through the approved synthetic authority; implementation remains absent until a distinct next-turn launch command.
+- Known-missing procedure rejection preserves the state byte-for-byte, consumes no slot and creates no decision/event.
+- Separate AU-liaison, AES, ECOWAS and OCHA grant attempts each reject `UNAUTHORIZED_GRANTOR` without changing pending state.
+- Production procedures, real authority claims, actual coalition positions, balance formulas, implementation progress and outcomes remain BLOCKED and unimplemented.
+
+### Source-to-test traceability
+
+| Acceptance ID | Source authority | Contract / evidence | Test state |
+|---|---|---|---|
+| PB2-15 | Domain v1.1 sections 55-66, Appendix B.2-B.4/F.8-F.10; GDS v2.1 sections 37-55; Package 3 sections 4-7 | canonical case/authorization/implementation state, atomic commands, step-5 fixture resolver, status traces, contract doc, handoff and log | READY_FOR_REVIEW |
+| AC-013 / SIM-07 | Domain assessment → case → coalition chain; GDS one-slot escalation; Package 3 Month 2-4 cases | one-slot opening, issue-specific coalition, negotiated-scope trace, and case/auth/implementation separation tests | PASS |
+| AC-013 / SIM-10 | Domain authorization and implementation lifecycles; Package 3 institutional-power and missing-procedure guardrails | known-missing no-mutation rejection, unauthorized-grantor matrix, pending resolution, and separate gated launch | PASS |
+
+Prompt 15 remains unapproved until independent owner review and an accepting commit. Passing synthetic tests does not approve actual AU/AES/ECOWAS/OCHA authority, production legal procedure, real coalition positions, balance values, or implementation dynamics.
