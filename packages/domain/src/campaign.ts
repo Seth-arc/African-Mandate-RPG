@@ -35,6 +35,7 @@ import {
   AttentionStateSchema,
   ScheduledConsequenceSchema,
   SituationStateSchema,
+  WorldEventInstanceSchema,
 } from "./lifecycle-state.js";
 import {
   InstitutionRuntimeStateSchema,
@@ -54,6 +55,10 @@ import {
   ImplementationStateSchema,
   MandateCaseStateSchema,
 } from "./mandate-state.js";
+import {
+  DoctrineStateSchema,
+  EvaluationStateSchema,
+} from "./strategic-state.js";
 
 export const CampaignMetaSchema = z
   .object({
@@ -160,15 +165,15 @@ export const CampaignStateSchema = z
     assessments: z.record(AssessmentIdSchema, AssessmentStateSchema),
     mandateCases: z.record(MandateCaseIdSchema, MandateCaseStateSchema),
     implementations: z.record(ProjectIdSchema, ImplementationStateSchema),
-    worldEvents: z.record(WorldEventIdSchema, JsonObjectSchema),
+    worldEvents: z.record(WorldEventIdSchema, WorldEventInstanceSchema),
     situations: z.record(SituationIdSchema, SituationStateSchema),
     attention: AttentionStateSchema,
     scheduledConsequences: z.record(
       ConsequenceIdSchema,
       ScheduledConsequenceSchema,
     ),
-    doctrine: JsonObjectSchema,
-    evaluation: JsonObjectSchema,
+    doctrine: DoctrineStateSchema,
+    evaluation: EvaluationStateSchema,
     decisions: z.array(DecisionRecordSchema),
     domainEvents: z.array(DomainEventRecordSchema),
     processedCommandIds: z.record(z.string(), z.literal(true)),
@@ -632,6 +637,48 @@ export const CampaignStateSchema = z
           code: "custom",
           message: "situation key must match situationId",
           path: ["situations", key, "situationId"],
+        });
+      }
+      situation.relatedWorldEventIds.forEach((worldEventId, index) => {
+        if (state.worldEvents[worldEventId] === undefined) {
+          ctx.addIssue({
+            code: "custom",
+            message: "situation event must reference a world event",
+            path: ["situations", key, "relatedWorldEventIds", index],
+          });
+        }
+      });
+    }
+    for (const [key, worldEvent] of Object.entries(state.worldEvents)) {
+      if (worldEvent.worldEventId !== key) {
+        ctx.addIssue({
+          code: "custom",
+          message: "world-event key must match worldEventId",
+          path: ["worldEvents", key, "worldEventId"],
+        });
+      }
+      if (
+        worldEvent.sourceDecisionId !== undefined &&
+        !state.decisions.some(
+          (decision) => decision.decisionId === worldEvent.sourceDecisionId,
+        )
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          message: "world-event sourceDecisionId must reference a decision",
+          path: ["worldEvents", key, "sourceDecisionId"],
+        });
+      }
+      if (
+        worldEvent.sourceConsequenceId !== undefined &&
+        state.scheduledConsequences[worldEvent.sourceConsequenceId] ===
+          undefined
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          message:
+            "world-event sourceConsequenceId must reference a scheduled consequence",
+          path: ["worldEvents", key, "sourceConsequenceId"],
         });
       }
     }

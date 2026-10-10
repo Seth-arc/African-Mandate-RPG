@@ -16,6 +16,7 @@ export * from "./consultations.js";
 export * from "./determinism/canonical-json.js";
 export * from "./determinism/primitives.js";
 export * from "./determinism/sha256.js";
+export * from "./event-director.js";
 export * from "./mandatory-attention.js";
 export * from "./knowledge.js";
 export * from "./mandates.js";

@@ -6,6 +6,7 @@ import {
   ConsequenceIdSchema,
   DecisionIdSchema,
   EffectProfileIdSchema,
+  EventDefinitionIdSchema,
   MandateCaseIdSchema,
   SituationIdSchema,
   WorldEventIdSchema,
@@ -25,6 +26,27 @@ export const AttentionLevelSchema = z.enum([
   "critical",
   "decision_required",
 ]);
+
+export const EventFamilySchema = z.enum([
+  "anchor",
+  "systemic",
+  "callback",
+  "ambient",
+]);
+
+export const WorldEventInstanceSchema = z
+  .object({
+    worldEventId: WorldEventIdSchema,
+    eventDefinitionId: EventDefinitionIdSchema,
+    triggeredTurn: PositiveIntegerSchema,
+    family: EventFamilySchema,
+    subjectRefs: z.array(SubjectRefSchema),
+    status: z.enum(["active", "resolved", "expired"]),
+    sourceDecisionId: DecisionIdSchema.optional(),
+    sourceConsequenceId: ConsequenceIdSchema.optional(),
+    callbackTags: z.array(NonEmptyStringSchema),
+  })
+  .strict();
 
 export const AttentionItemSchema = z
   .object({
@@ -117,6 +139,8 @@ export const ScheduledConsequenceSchema = z
   });
 
 export type AttentionLevel = z.infer<typeof AttentionLevelSchema>;
+export type EventFamily = z.infer<typeof EventFamilySchema>;
+export type WorldEventInstance = z.infer<typeof WorldEventInstanceSchema>;
 export type AttentionItem = z.infer<typeof AttentionItemSchema>;
 export type AttentionState = z.infer<typeof AttentionStateSchema>;
 export type SituationState = z.infer<typeof SituationStateSchema>;

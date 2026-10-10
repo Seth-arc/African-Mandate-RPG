@@ -230,6 +230,23 @@ export const DoctrineDeltaSchema = z
   })
   .strict();
 
+export const DoctrineVectorSchema = z
+  .object({
+    prevention: SignedScoreSchema,
+    centralization: SignedScoreSchema,
+    policyOrientation: SignedScoreSchema,
+    diplomaticStyle: SignedScoreSchema,
+  })
+  .strict();
+
+export const DoctrineModifierSchema = z
+  .object({
+    parameterKey: NonEmptyStringSchema,
+    operation: z.enum(["add", "multiply"]),
+    value: z.number().finite(),
+  })
+  .strict();
+
 export const ActionDefinitionSchema = z
   .object({
     actionId: ActionIdSchema,
@@ -341,23 +358,8 @@ export const DoctrineProfileSchema = z
   .object({
     doctrineProfileId: NonEmptyStringSchema,
     nameKey: NonEmptyStringSchema,
-    qualifyingVector: z
-      .object({
-        prevention: SignedScoreSchema,
-        centralization: SignedScoreSchema,
-        policyOrientation: SignedScoreSchema,
-        diplomaticStyle: SignedScoreSchema,
-      })
-      .strict(),
-    modifiers: z.array(
-      z
-        .object({
-          parameterKey: NonEmptyStringSchema,
-          operation: z.enum(["add", "multiply"]),
-          value: z.number().finite(),
-        })
-        .strict(),
-    ),
+    qualifyingVector: DoctrineVectorSchema,
+    modifiers: z.array(DoctrineModifierSchema),
   })
   .strict();
 
@@ -805,3 +807,7 @@ export type ScenarioDefinition = z.infer<typeof ScenarioDefinitionSchema>;
 export type ScenarioBundle = z.infer<typeof ScenarioBundleSchema>;
 export type FixturePackage = z.infer<typeof FixturePackageSchema>;
 export type ActionDefinition = z.infer<typeof ActionDefinitionSchema>;
+export type EventDefinition = z.infer<typeof EventDefinitionSchema>;
+export type DoctrineDelta = z.infer<typeof DoctrineDeltaSchema>;
+export type DoctrineVector = z.infer<typeof DoctrineVectorSchema>;
+export type DoctrineModifier = z.infer<typeof DoctrineModifierSchema>;

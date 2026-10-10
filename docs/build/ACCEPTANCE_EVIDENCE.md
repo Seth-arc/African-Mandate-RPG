@@ -686,3 +686,47 @@ PB2-14 was subsequently accepted under AM-GOV-001/038 by repository-owner commit
 | AC-013 / SIM-10 | Domain authorization and implementation lifecycles; Package 3 institutional-power and missing-procedure guardrails | known-missing no-mutation rejection, unauthorized-grantor matrix, pending resolution, and separate gated launch | PASS |
 
 Prompt 15 remains unapproved until independent owner review and an accepting commit. Passing synthetic tests does not approve actual AU/AES/ECOWAS/OCHA authority, production legal procedure, real coalition positions, balance values, or implementation dynamics.
+
+PB2-15 was subsequently accepted under AM-GOV-001/040 by repository-owner commit `8540bfb0d109a3081a7d83d6cb0554cb6e1a3eea` after independent reproduction reported a frozen install, 6/6 focused tests, 111/111 full-CI tests, 7/7 governance tests, and a clean diff check. The TEST_ONLY classification and all documented production legal, procedure, coalition-position, balance, and implementation blockers remain unchanged.
+
+## AM-PB2-16 — state-driven events, doctrine and evaluation traces
+
+**Status proposed:** READY_FOR_REVIEW
+
+**Acceptance IDs:** PB2-16; AC-014 / SIM-03 / SIM-04; AC-007 / AC-025 / SIM-11; AC-024
+
+**Implementation base:** accepted PB2-15 commit `8540bfb0d109a3081a7d83d6cb0554cb6e1a3eea`
+
+### Evidence produced
+
+- `CampaignState.worldEvents` now uses the exact canonical `WorldEventInstance` owner. Source decision/consequence links, record keys, and situation-to-event references validate against the same aggregate.
+- `CampaignState.doctrine` now uses the canonical signed four-axis `DoctrineState`. An opt-in TEST_ONLY source-step-16 adapter recomputes observation from authoritative decision signals so repeated resolution cannot double-accumulate them.
+- `CampaignState.evaluation` now exposes all six canonical dimensions only as `unavailable` / `unscored`, with no snapshots, overall score, or zero substitution while coefficients remain unapproved.
+- An opt-in TEST_ONLY source-step-9 Event Director evaluates registered deterministic facts, authored windows, cooldowns, and occurrence bounds in stable definition-ID order. Unknown facts and event definitions requiring unimplemented effects fail closed.
+- Every triggered event writes a typed developer-only cause trace and immutable technical event. The player projection excludes cause references, rule/fact values, callback tags, and developer traces.
+- Explicit situation directives can open or update the single canonical situation registry. Ineligible/quiet turns preserve existing situations, and same-turn reruns cannot duplicate event or situation reactions.
+- A pure review-eligibility API exposes observational Doctrine Review only when active Month 5 has begun. It never codifies a doctrine or consumes a decision.
+- `docs/build/EVENT_DOCTRINE_EVALUATION_CONTRACT.md`, AM-GOV-041, this evidence, the Prompt 16 handoff, and the raw test log publish ownership, version, proposal boundaries, and reproduction.
+
+### Tests and negative cases
+
+- A false conditional path permits an empty decision month to advance without any forced crisis/catastrophe and preserves an existing opportunity.
+- A true path creates one event, one source-linked technical trace, one situation link, and a knowledge-safe projection with no developer cause fields.
+- Re-running the same eligible rule in the same month creates no second world event, domain event, or situation callback.
+- Missing deterministic fact input rejects `UNKNOWN_ELIGIBILITY` without mutating authoritative state.
+- Month 4 remains ineligible for review; after Month 4 resolution the state enters Month 5 with the observational vector recomputed and `codified = false`.
+- The six-dimension evaluation state rejects an invented `score: 0`, contains no overall score, and records no snapshot.
+- Three consequential commands exhaust the month; a fourth rejects without mutation.
+- Production event weights/effects, situation dynamics, doctrine coefficients/profiles/codification, evaluation formulas/snapshots/results, and narrative remain BLOCKED and unimplemented.
+
+### Source-to-test traceability
+
+| Acceptance ID | Source authority | Contract / evidence | Test state |
+|---|---|---|---|
+| PB2-16 | Domain v1.1 sections 70-81, 97 and 106-110; GDS v2.1 sections 66-78, 85 and 104-108; Stage 1 sections 7-11 | typed authority state, event/director trace and projection, doctrine observation/review, unavailable evaluation, contract doc, handoff, and log | READY_FOR_REVIEW |
+| AC-014 / SIM-03 | GDS inaction and quiet-month rules; Stage 1 non-escalation branch | false event path, persistent opportunity and clean rollover | PASS |
+| AC-014 / SIM-04 | GDS and Stage 1 exact Month-5 timing | Month-4 negative, Month-5 positive and no-codification assertions | PASS |
+| AC-007 / AC-025 / SIM-11 | Domain/GDS three-slot economy | fourth-action rejection and unchanged hash | PASS |
+| AC-024 | Domain/GDS six-dimension evaluation; methodology approval gate | unavailable/unscored interface negative test | BLOCKED for production coefficients; interface PASS |
+
+Prompt 16 remains unapproved until independent owner review and an accepting commit. Passing synthetic tests does not approve production event content, weighting, dynamics, doctrine profiles or coefficients, evaluation formulas, or overall scoring.

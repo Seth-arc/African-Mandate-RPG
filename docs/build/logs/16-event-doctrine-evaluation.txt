@@ -1,0 +1,96 @@
+AM-PB2-16 event/doctrine/evaluation implementation log
+Base/HEAD at preflight: 8540bfb0d109a3081a7d83d6cb0554cb6e1a3eea
+Working tree at preflight: clean
+
+Preflight commit:
+8540bfb0d109a3081a7d83d6cb0554cb6e1a3eea Seth-arc 2026-10-10T14:36:22-04:00 prompt 15
+
+Prerequisite reconciliation:
+PB2-10 through PB2-14 were already recorded ACCEPTED.
+PB2-15 independent reproduction: frozen install; focused 6/6; full CI 111/111 across 14 files; governance 7/7; diff check clean.
+PB2-15 owner acceptance commit: 8540bfb0d109a3081a7d83d6cb0554cb6e1a3eea.
+AM-GOV-040 and BUILD_STATE.json preserve the acceptance before Prompt 16 evidence.
+
+Pinned source SHA-256 values verified:
+aa8a03380e93bb4adee9ef6115d59f64a98409f988eeaf132fa70460dec3c75c docs/African_Mandate_Domain_Model_Simulation_Spec_v1_1.md
+982be4ecd82b996e14be83b6fd89a60a2876bb4e2505ed195889ad4f81dcee30 docs/AFRICAN_MANDATE_TECHNICAL_ARCHITECTURE_v2.md
+89f7387d041e006e3cc1e21d52fdc07e2234227600321eea5601a35415341f04 docs/AFRICAN_MANDATE_GAME_DESIGN_SPEC_v2_1.md
+f5a935f08e1dfda8df6d9b7f0ff6aa001a80c562e356faa59a2682150de933c1 docs/AFRICAN_MANDATE_SAHEL_SCENARIO_STAGE_1_NARRATIVE_FOUNDATION_v1.md
+b5d13123b5c8af22c65272d6f8a433f061fcaab8c632ca9414fc09fcea22cd5a build/AFRICAN_MANDATE_PROMPTBOOK_v2/prompts/16_EVENT_DIRECTOR.md
+
+Initial sandboxed typecheck attempt:
+> corepack pnpm exec tsc --noEmit -p tsconfig.json
+Error: EPERM: operation not permitted, lstat 'C:\Users\ssnguna'
+Node.js v22.16.0
+Result: environment-blocked before project execution; rerun outside managed filesystem sandbox.
+
+Initial executable typecheck:
+> corepack pnpm exec tsc --noEmit -p tsconfig.json
+Branded WorldEventId/SignedScore values and unparsed fixture definitions were rejected by TypeScript.
+Exit: 2
+Resolution: parsed derived event IDs, world-event instances, doctrine vectors, and all test definitions through their authoritative Zod schemas. No schema was weakened.
+
+Corrected typecheck:
+> corepack pnpm exec tsc --noEmit -p tsconfig.json
+Exit: 0
+
+Focused test:
+> corepack pnpm exec vitest run tests/unit/event-doctrine-evaluation.test.ts
+Test Files  1 passed (1)
+Tests       7 passed (7)
+Duration    1.15s
+Exit: 0
+
+The first full-CI escalation review timed out before a result was returned. A retry was allowed; its detached session output was incomplete in the wrapper, so the gate was rerun with the session identifier retained. No test failure was reported by either incomplete attempt. The complete captured run follows.
+
+Complete gate:
+> corepack pnpm run ci
+Formatting: All matched files use Prettier code style.
+Dependencies: No peer dependency issues found.
+Lint: pass.
+Typecheck: pass.
+Test Files  15 passed (15)
+Tests       118 passed (118)
+Duration    4.22s
+Determinism: PASS: two fresh processes produced identical deterministic bytes.
+Fixture: PASS: two fresh fixture builds produced byte-identical artifacts.
+Boundaries: PASS: web-to-simulation import rejected; Math.random and randomUUID rejected inside simulation scope.
+Schema: PASS: governance and toolchain artifacts match their public schemas.
+Exit: 0
+
+> corepack pnpm install --frozen-lockfile
+Scope: all 9 workspace projects
+Already up to date
+Done in 454ms using pnpm v11.23.0
+Exit: 0
+
+Initial sandboxed governance attempt:
+> py -3 -B -m unittest discover -s tests/governance -p "test_*.py" -v
+Windows Python launcher: Access is denied.
+Result: environment-blocked before project execution; rerun outside managed filesystem sandbox.
+
+> py -3 -B -m unittest discover -s tests/governance -p "test_*.py" -v
+Ran 7 tests in 0.026s
+OK
+Exit: 0
+
+> git diff --check
+Exit: 0. Git printed only LF-to-CRLF working-copy conversion warnings; no whitespace error was reported.
+
+Negative results preserved:
+- false conditional path: no world event, no catastrophe, existing situation preserved;
+- unknown conditional fact: UNKNOWN_ELIGIBILITY and no input mutation;
+- same event in the same turn: no second event/domain event/situation callback;
+- Month 4 doctrine review: unavailable; Month 5: observational only and not codified;
+- evaluation score 0/scored object: schema rejection; all six dimensions remain unscored;
+- fourth same-month consequential command: DECISION_SLOTS_RESERVED and unchanged state hash.
+
+Status recommendation: READY_FOR_REVIEW only. No self-approval or accepting commit was created.
+
+Final regression after tightening evaluation causal-chain decision IDs to the canonical branded schema:
+> corepack pnpm run ci
+Test Files  15 passed (15)
+Tests       118 passed (118)
+Duration    6.11s
+All formatting, dependency, lint, type, determinism, fixture, boundary and schema checks passed.
+Exit: 0

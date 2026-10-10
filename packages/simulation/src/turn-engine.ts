@@ -18,6 +18,7 @@ import {
   TestOnlyCommitmentResolutionProfileSchema,
   TestOnlyAuthorizationProcedureEntrySchema,
   TestOnlyAuthorizationResolutionPlanSchema,
+  EVENT_DOCTRINE_CONTRACT_VERSION,
   type CampaignState,
   type ActorAdaptationPlan,
   type ActorAdaptationProfile,
@@ -27,6 +28,10 @@ import {
   type TestOnlyCommitmentResolutionProfile,
   type TestOnlyAuthorizationProcedureEntry,
   type TestOnlyAuthorizationResolutionPlan,
+  type EventDefinition,
+  type FactDefinition,
+  type KnownFactObservation,
+  type TestOnlyEventTriggerPlan,
   type EndTurnRejectionReason,
   type EndTurnSimulationInput,
   type EndTurnSimulationResult,
@@ -47,6 +52,10 @@ import { resolveActorAdaptation } from "./actors.js";
 import { recalculateAssessmentMetadata } from "./assessments.js";
 import { resolveDueCommitments } from "./consultations.js";
 import { resolveAuthorizationPlan } from "./mandates.js";
+import {
+  resolveDoctrineObservation,
+  resolveTestOnlyEventDirector,
+} from "./event-director.js";
 
 export interface TurnResolverContext {
   readonly currentTurn: number;
@@ -450,6 +459,81 @@ export const createTestOnlyAuthorizationResolverRegistry = (
         }
       : resolver,
   );
+};
+
+export interface TestOnlyEventDoctrineResolverRegistryInput {
+  readonly eventDefinitions: readonly EventDefinition[];
+  readonly triggerPlans: readonly TestOnlyEventTriggerPlan[];
+  readonly factDefinitions: readonly FactDefinition[];
+  readonly factObservations: readonly KnownFactObservation[];
+  readonly baseRegistry?: readonly TurnResolverDefinition[];
+}
+
+export const createTestOnlyEventDoctrineResolverRegistry = (
+  input: TestOnlyEventDoctrineResolverRegistryInput,
+): readonly TurnResolverDefinition[] => {
+  const base = input.baseRegistry ?? createInitialTurnResolverRegistry();
+  return base.map((resolver) => {
+    if (resolver.resolverId === "event_director") {
+      return {
+        ...resolver,
+        adapterKind: "test_only_fixture" as const,
+        resolve: (draft: CampaignState) => {
+          const result = resolveTestOnlyEventDirector({
+            contractVersion: EVENT_DOCTRINE_CONTRACT_VERSION,
+            classification: "TEST_ONLY_EVENT_DIRECTOR",
+            currentState: draft,
+            eventDefinitions: input.eventDefinitions,
+            triggerPlans: input.triggerPlans,
+            factDefinitions: input.factDefinitions,
+            factObservations: input.factObservations,
+          });
+          if (result.status !== "resolved") {
+            throw new TypeError(
+              `Event Director rejected: ${result.reasonCode}:${result.detailCode ?? ""}`,
+            );
+          }
+          Object.assign(draft, result.nextState);
+        },
+      };
+    }
+    if (resolver.resolverId === "doctrine") {
+      return {
+        ...resolver,
+        adapterKind: "test_only_fixture" as const,
+        resolve: (draft: CampaignState) => {
+          const result = resolveDoctrineObservation({
+            contractVersion: EVENT_DOCTRINE_CONTRACT_VERSION,
+            classification: "TEST_ONLY_DOCTRINE_OBSERVATION",
+            currentState: draft,
+          });
+          if (result.status !== "resolved") {
+            throw new TypeError(
+              `Doctrine observation rejected: ${result.reasonCode}`,
+            );
+          }
+          Object.assign(draft, result.nextState);
+        },
+      };
+    }
+    if (resolver.resolverId === "evaluation_snapshot") {
+      return {
+        ...resolver,
+        adapterKind: "test_only_fixture" as const,
+        resolve: (draft: CampaignState) => {
+          if (
+            draft.evaluation.status !== "unavailable" ||
+            draft.evaluation.reasonCode !== "APPROVED_COEFFICIENTS_UNAVAILABLE"
+          ) {
+            throw new TypeError(
+              "Evaluation must remain unavailable until coefficients are approved",
+            );
+          }
+        },
+      };
+    }
+    return resolver;
+  });
 };
 
 const registryIsExact = (
