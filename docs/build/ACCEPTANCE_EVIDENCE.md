@@ -730,3 +730,44 @@ PB2-15 was subsequently accepted under AM-GOV-001/040 by repository-owner commit
 | AC-024 | Domain/GDS six-dimension evaluation; methodology approval gate | unavailable/unscored interface negative test | BLOCKED for production coefficients; interface PASS |
 
 Prompt 16 remains unapproved until independent owner review and an accepting commit. Passing synthetic tests does not approve production event content, weighting, dynamics, doctrine profiles or coefficients, evaluation formulas, or overall scoring.
+
+PB2-16 was subsequently accepted under AM-GOV-001/042 by repository-owner commit `8810730873ae2dfbceedc3d874643c50331635cf` after independent reproduction reported a frozen install, 7/7 focused tests, 118/118 full-CI tests, 7/7 governance tests, and a clean diff check. The TEST_ONLY classification and all documented production event, doctrine, evaluation, coefficient, and content blockers remain unchanged.
+
+## AM-PB2-17 — deterministic narrative fallback and templates
+
+**Status proposed:** READY_FOR_REVIEW
+
+**Acceptance IDs:** PB2-17; AC-020 / SIM-16; AC-022 automated subset
+
+**Implementation base:** accepted PB2-16 commit `8810730873ae2dfbceedc3d874643c50331635cf`
+
+### Evidence produced
+
+- A dedicated `@african-mandate/narrative` package renders plain text from strict domain-owned knowledge-safe request contracts. It depends only on `@african-mandate/domain`, uses no network/provider/clock/random source, and cannot mutate authoritative state.
+- Canonical perspective, semantic-context, request-identity, and response fields are published as Zod schemas. Exact Prompt 17 collection-template/provider/result wrappers remain conspicuously TEST_ONLY under AM-GOV-043.
+- All useful, partial, contested, inconclusive, delayed, and failed collection outcomes have deterministic factual fallback copy. Each output begins with `SIMULATED`, identifies the task/date, preserves stable evidence IDs, states source/date, and includes an explicit knowledge-limit line.
+- Dates and numeric claims use `Intl` formatters. Numeric claims without units and evidence without dates reject before rendering. Evidence is emitted in stable ID order.
+- The application port contract advances to `1.2.0` and defaults `NarrativePort` to the Zod-inferred request/result types while retaining custom injected test families.
+- Missing generation, invalid schema, stale request identity/hash, disallowed claim or memory references, prohibited claim codes, a missing `SIMULATED` marker, markup-bearing output, and direct-quotation marks all fail to the current deterministic template.
+- `docs/build/NARRATIVE_FALLBACK_CONTRACT.md`, AM-GOV-043, this evidence, the Prompt 17 handoff, and the raw test log publish ownership, version, copy conformance, proposal boundaries, and reproduction.
+
+### Tests and negative cases
+
+- All six collection outcomes render with the fixed simulated marker and outcome-specific factual wording.
+- `DeterministicNarrativePort` returns the same fallback with no provider and makes no `fetch` call.
+- A candidate with a different semantic context hash cannot render and returns the current fallback.
+- Strict request parsing rejects undeclared hidden state; generated hidden/disallowed claims cannot cross the allowlist; source-party identity is not copied into fallback prose.
+- Date `2025-11-01` renders as `1 November 2025`; `1250` renders as `1,250 people`; omitting the unit rejects.
+- Plain-text schemas reject angle-bracket markup, and fallback output contains no markup delimiters.
+- Repeated rendering is byte-stable and contested evidence IDs are emitted in stable lexical order.
+- Production AI/provider/cache integration, localized templates, reading-level and container caps, regional review, and production content remain BLOCKED and unimplemented.
+
+### Source-to-test traceability
+
+| Acceptance ID | Source authority | Contract / evidence | Test state |
+|---|---|---|---|
+| PB2-17 | Domain v1.1 sections 117-122; Technical v2 sections 29 and 66-72; VOICE/GLOSSARY/Writing v2; Package 2 opening documents and collection matrix | strict knowledge-only schemas, narrative package, application port binding, contract doc, handoff, and log | READY_FOR_REVIEW |
+| AC-020 / SIM-16 | Technical stale-response/plain-text/failure invariants; Writing WH4/W12 | six outcomes, no-network fallback, stale identity, claim allowlist, hidden-field, markup, unit/date, and stability tests | PASS |
+| AC-022 automated subset | VOICE/Writing simulated marker, source/date/unit, no invented quote, plain text | fixed marker and renderer assertions | PASS automated subset; regional review BLOCKED |
+
+Prompt 17 remains unapproved until independent owner review and an accepting commit. Passing synthetic tests does not approve a production AI provider, model policy, cache, translation, production copy metric, opening-document content, or regional/editorial conformance.

@@ -6,6 +6,7 @@ const packageNames = [
   "@african-mandate/content",
   "@african-mandate/data-pipeline",
   "@african-mandate/domain",
+  "@african-mandate/narrative",
   "@african-mandate/simulation",
   "@african-mandate/tooling",
   "@african-mandate/ui",
@@ -86,6 +87,12 @@ export default tseslint.config(
         "@african-mandate/domain",
         "@african-mandate/simulation",
       ]),
+    },
+  },
+  {
+    files: ["packages/narrative/**/*.ts"],
+    rules: {
+      "no-restricted-imports": boundaryRule(["@african-mandate/domain"]),
     },
   },
   {

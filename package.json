@@ -26,6 +26,7 @@
     "@african-mandate/content": "workspace:*",
     "@african-mandate/data-pipeline": "workspace:*",
     "@african-mandate/domain": "workspace:*",
+    "@african-mandate/narrative": "workspace:*",
     "@african-mandate/simulation": "workspace:*",
     "@african-mandate/tooling": "workspace:*",
     "@african-mandate/ui": "workspace:*",

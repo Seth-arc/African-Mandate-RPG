@@ -1,15 +1,17 @@
 # Serialized domain contract inventory
 
 **Contract version:** 1.0.0
-**Task:** AM-PB2-03 / PB2-03 through AM-PB2-16 / PB2-16
+**Task:** AM-PB2-03 / PB2-03 through AM-PB2-17 / PB2-17
 **Owner:** `@african-mandate/domain`  
-**Status:** PB2-03 and PB2-07 through PB2-15 ACCEPTED; Prompt 16 event/doctrine/evaluation contract 1.0.0 is READY_FOR_REVIEW; no production scenario admission
+**Status:** PB2-03 and PB2-07 through PB2-16 ACCEPTED; Prompt 17 narrative fallback contract 1.0.0 is READY_FOR_REVIEW; no production scenario admission
 
 ## Authority and boundary
 
 Zod schemas exported by `@african-mandate/domain` are the executable serialization authority. TypeScript types are inferred from those schemas; no parallel handwritten public interface is maintained. The source shapes come from Domain Model v1.1, with Zod/JSON mechanics from Technical Architecture v2 and validation requirements from the Executable Contract Inventory.
 
 This contract set does not claim a production-valid scenario. The upstream AM-BUILD-001 contract explicitly reserves that claim until all registries are complete and reviewed. Prompt 10 closes the world/institution runtime envelopes and its bounded world-effect union. Prompt 11 closes the canonical player-knowledge envelope and canonical `create_collection_task` effect subset. Prompt 12 closes the actor, directional-relationship, issue-position, memory, and red-line runtime envelopes plus the canonical `create_memory`, relationship-adjustment, and position-change effect subsets. Prompt 13 closes the canonical assessment runtime envelope while keeping authored hypothesis relevance, confidence-band mapping, metadata tables, and command bindings TEST_ONLY. Prompt 14 closes the canonical commitment registry while keeping consultation packages, legal/response/conflict profiles, fulfillment resolution, and callbacks TEST_ONLY. Prompt 15 closes the canonical mandate-case and implementation registries while every procedure, case/scope/implementation template, authorization outcome plan, and status wrapper remains conspicuously TEST_ONLY. Prompt 16 closes the canonical world-event and doctrine owners and an explicit unavailable/unscored evaluation boundary while event trigger wrappers, cause traces, situation directives, doctrine accumulation, and review eligibility remain conspicuously TEST_ONLY. The remainder of `EffectProfile.effects` and later-prompt registries remain gated until their assigned milestones. No partial typed contract admits production content.
+
+Prompt 17 publishes the canonical source-listed narrative perspective, context, request-identity, and response fields inside strict AM-GOV-043 TEST_ONLY request/provider/render wrappers. It adds no campaign owner: narrative output is non-authoritative, separate from campaign hashes, and consumes only copied player-knowledge records.
 
 ## Crosswalk
 
@@ -47,6 +49,7 @@ This contract set does not claim a production-valid scenario. The upstream AM-BU
 | Mandate and authorization operations | mandate template/binding/command/prevalidation/status schemas, `AuthorizationResolution*Schema`, TEST_ONLY implementation profile | Domain sections 55-66 and 97; GDS sections 37-55; Package 3 sections 4-7; Prompt 15 | Canonical state inside AM-GOV-039 TEST_ONLY template/procedure/resolution wrappers; production procedure, real positions, formulas and dynamics remain BLOCKED |
 | Event, doctrine, and evaluation authority state | `WorldEventInstanceSchema`, `DoctrineStateSchema`, `EvaluationStateSchema`, canonical scored result interfaces | Domain sections 70-81 and 106-110; Appendices F.11/F.14-F.15 | Exact world-event and doctrine fields; strict unavailable/unscored six-dimension evaluation owner; production evaluation state remains blocked |
 | Event and doctrine operations | `EventDirectorResolution*Schema`, typed cause/situation/knowledge-safe projection schemas, `DoctrineObservation*Schema`, `DoctrineReviewEligibilitySchema` | Domain sections 74-81, 97 and 110; GDS sections 66-78/85; Stage 1 sections 7-11; Prompt 16 | Canonical state inside AM-GOV-041 TEST_ONLY trigger/trace/observation wrappers; effects, weights, production dynamics, coefficients, codification and evaluation formulas remain BLOCKED |
+| Narrative context and fallback | `NarrativePerspectiveSchema`, `NarrativeContextSchema`, `NarrativeRequestIdentitySchema`, `NarrativeRequestSchema`, `NarrativeResponseSchema`, provider/render result schemas | Domain sections 117-122; Technical sections 29 and 66-72; VOICE/Writing v2; Prompt 17 | Canonical perspective/context/response fields inside AM-GOV-043 strict TEST_ONLY collection-template and guard wrappers; prose is plain text, non-authoritative, knowledge-only, and excluded from campaign state |
 
 ## Referential validation
 
@@ -93,3 +96,4 @@ The following remain intentionally outside Prompt 03: production content admissi
 | AC-014 / SIM-03 / SIM-04 | Quiet inaction remains legal and Month-5 review is not available early or auto-codified | Prompt 16 quiet-month and Month-5 tests |
 | AC-007 / AC-025 / SIM-11 | A fourth consequential action rejects without state mutation | Prompt 16 slot-cap negative test |
 | AC-024 | Six dimensions remain unavailable/unscored and reject invented zero/overall scores | Prompt 16 interface test; production methodology gate remains BLOCKED |
+| PB2-17 / AC-020 / SIM-16 | Deterministic knowledge-safe narrative fallback, fixed simulated marker, stale identity guard, plain-text security, and source/date/unit rendering | `tests/unit/narrative-fallback.test.ts`; `docs/build/NARRATIVE_FALLBACK_CONTRACT.md` |

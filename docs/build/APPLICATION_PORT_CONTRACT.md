@@ -1,9 +1,9 @@
 # Application port and operation contract
 
-**Contract version:** 1.1.0 (`1.0.0` accepted by PB2-05)
-**Task:** AM-PB2-05 / PB2-05; AM-PB2-09 / PB2-09
+**Contract version:** 1.2.0 (`1.0.0` accepted by PB2-05; `1.1.0` accepted with PB2-09)
+**Task:** AM-PB2-05 / PB2-05; AM-PB2-09 / PB2-09; AM-PB2-17 / PB2-17
 **Owner:** `@african-mandate/application`  
-**Status:** PB2-05 and PB2-08 ACCEPTED; Prompt 09 EndTurn binding is READY_FOR_REVIEW; no production browser adapter
+**Status:** PB2-05, PB2-08, and PB2-09 ACCEPTED; Prompt 17 narrative binding is READY_FOR_REVIEW; no production browser or narrative-provider adapter
 
 ## Ownership boundary
 
@@ -18,7 +18,7 @@ The application package serializes authoritative operations, calls a `Simulation
 | `CampaignEditLock` / `CampaignEditLockPort` | Acquire exclusive campaign write authority and release its lease | Technical v2 §§13, 17, 23 |
 | `CampaignOperationCoordinator` | Serialize the five source-listed authoritative operation classes per campaign | Technical v2 §§9, 19-20, 48 |
 
-`APPLICATION_PORT_CONTRACT_VERSION` is `1.1.0`. Prompt 09 adds the typed `turnCommand` generic and passes it to `endTurn`; this review-required AM-GOV-027 extension binds the already accepted operation to an explicit request without weakening package ownership.
+`APPLICATION_PORT_CONTRACT_VERSION` is `1.2.0`. Prompt 09 added the typed `turnCommand` generic and passed it to `endTurn`. Prompt 17 adds `CanonicalNarrativePortTypes` and makes it the default `NarrativePort` family, binding the existing optional port to Zod-inferred request/result contracts without importing narrative implementation code into application. Custom injected test families remain compatible.
 
 ## Deliberate generic boundary
 
@@ -39,6 +39,8 @@ Prompt 08 adds `AtomicCampaignCommandService` without adding another coordinator
 
 Prompt 09 adds `AtomicCampaignTurnService` through the same coordinator, repository, snapshot, and runtime store. It calls the injected EndTurn dispatcher, validates its result and current-state immutability, writes durably, and only then replaces runtime authority. It adds no second mutable store.
 
+Prompt 17 binds only the optional presentational narrative port. `DeterministicNarrativePort` lives in the separate narrative package, imports only domain contracts, performs no authoritative operation, and requires no operation lock. Provider and cache adapters remain unimplemented.
+
 ## Test adapters
 
 The public root exposes in-memory adapters for injected simulation handlers, local snapshots with one-shot write failure, artifact handlers, narrative handlers, and an exclusive edit lock. They are deterministic test infrastructure only. No IndexedDB, Web Locks, cloud, network, browser session, or production narrative provider is implemented.
@@ -52,4 +54,5 @@ The public root exposes in-memory adapters for injected simulation handlers, loc
 | AC-006 | Duplicate command cannot double-apply | Prompt 08 duplicate submission test pins one decision, event, revision, cost, and slot charge |
 | AC-007 | Successful EndTurn advances/refreshed or finalizes exactly once | Prompt 09 lifecycle and durable-service tests |
 | AC-025 | Mandatory response cannot be bypassed or softlock the final slot | Prompt 09 reservation and blocking-EndTurn tests |
+| AC-020 / SIM-16 | Narrative is knowledge-safe, plain text, stale-guarded, and available without a provider | `tests/unit/narrative-fallback.test.ts`; `docs/build/NARRATIVE_FALLBACK_CONTRACT.md` |
 | AC-021 | UI/web may not import simulation or hidden state | Existing forbidden-import fixture remains green; no UI change in Prompt 05 |

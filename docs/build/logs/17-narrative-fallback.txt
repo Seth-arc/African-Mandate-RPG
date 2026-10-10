@@ -1,0 +1,85 @@
+AM-PB2-17 — deterministic narrative fallback and templates
+Base: 8810730873ae2dfbceedc3d874643c50331635cf (prompt 16)
+Date: 2026-10-10
+
+PRELIMINARY FAILURES PRESERVED
+
+1. The first sandboxed Prettier/typecheck/focused command did not reach project tooling.
+   Node failed with EPERM while resolving C:\Users\ssnguna.
+
+2. The first unsandboxed pnpm exec attempt failed before project tooling because the
+   newly added workspace package had not yet been linked. Corepack reported that pnpm
+   was not recognized while attempting its dependency-status install.
+
+3. After frozen workspace linking, the first typecheck/focused run failed:
+   - TypeScript: entity-relation rendering used nonexistent SubjectRef.id.
+   - Vitest: test fixtures used id rather than zoneId/actorId.
+   The implementation and fixtures were corrected to the canonical reference schemas.
+
+4. The first full CI attempt passed formatting and peer checks, then stopped on two
+   no-control-regex lint errors in the plain-text validator. The validator was rewritten
+   with explicit character checks. No lint rule was weakened.
+
+5. Prettier initially rewrote the full pnpm lockfile. That mechanical churn was removed;
+   the final lockfile diff contains only the root narrative link and narrative-package
+   importer (9 added lines).
+
+FINAL COMMANDS AND RESULTS
+
+corepack pnpm install --frozen-lockfile
+  Exit: 0
+  Scope: all 10 workspace projects
+  Already up to date
+  pnpm 11.23.0
+
+corepack pnpm exec vitest run tests/unit/narrative-fallback.test.ts
+  Exit: 0
+  Test Files  1 passed (1)
+  Tests       7 passed (7)
+  Duration    917ms
+
+corepack pnpm run ci
+  Exit: 0
+  prettier --check: all matched files use Prettier code style
+  corepack pnpm peers check: no peer dependency issues
+  eslint: pass
+  tsc --noEmit: pass
+  vitest: 16 files passed; 125 tests passed; duration 4.48s
+  deterministic verifier: PASS; canonical hash
+    4aa57f67e81dc8523b49aed611338644d749c74fdfcf61a4c65e8bd18bbe0ae3
+  fixture verifier: PASS; two fresh builds byte-identical
+  forbidden import verifier: PASS
+  forbidden Math.random/randomUUID verifier: PASS
+  governance/toolchain schema verifier: PASS
+
+python -m unittest tests.governance.test_build_state -v
+  Exit: 0
+  Ran 7 tests in 0.003s
+  OK
+
+Prompt 17 copy lint over packages/narrative/src
+  Exit: 0
+  PASS: no fail/review copy-lint matches.
+
+git diff --check
+  Exit: 0
+  No whitespace errors. Git emitted only expected LF-to-CRLF working-tree warnings.
+
+FIXED TEST MATERIAL
+
+- Classification: TEST_ONLY_KNOWLEDGE_SAFE_NARRATIVE
+- Current semantic context hash: 64 lowercase "a" characters
+- Stale semantic context hash: 64 lowercase "b" characters
+- Collection task: collection_test_narrative
+- Evidence: evidence_test_narrative_people, evidence_test_narrative_access
+- Subject: zone_test_narrative
+- Dates: 2025-10-28 and 2025-11-01
+- Numeric fixture: 1250 people
+- No random seed is used; the renderer has no random, clock, provider, or network input.
+
+VISIBLE BLOCKERS
+
+- AC-022 regional/institutional review remains BLOCKED.
+- VOICE.md has no approved reading-level measure or production container-derived caps.
+- No production AI provider, prompt transport, cache adapter, localization, or compiled
+  opening-document content is implemented.

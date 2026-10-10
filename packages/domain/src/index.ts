@@ -24,6 +24,7 @@ export * from "./knowledge-state.js";
 export * from "./lifecycle-state.js";
 export * from "./mandate-operations.js";
 export * from "./mandate-state.js";
+export * from "./narrative.js";
 export * from "./references.js";
 export * from "./rules.js";
 export * from "./scalars.js";

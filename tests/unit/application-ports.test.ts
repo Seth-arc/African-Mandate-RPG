@@ -77,7 +77,7 @@ interface TestNarrativeTypes extends NarrativePortTypes {
 
 describe("application port contract", () => {
   it("freezes a public contract version before command and UI implementation", () => {
-    expect(APPLICATION_PORT_CONTRACT_VERSION).toBe("1.1.0");
+    expect(APPLICATION_PORT_CONTRACT_VERSION).toBe("1.2.0");
   });
 
   it("injects every SimulationPort operation without resolving effects in application", async () => {

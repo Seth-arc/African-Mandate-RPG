@@ -1,6 +1,10 @@
-import type { CampaignId } from "@african-mandate/domain";
+import type {
+  CampaignId,
+  NarrativeRenderResult,
+  NarrativeRequest,
+} from "@african-mandate/domain";
 
-export const APPLICATION_PORT_CONTRACT_VERSION = "1.1.0" as const;
+export const APPLICATION_PORT_CONTRACT_VERSION = "1.2.0" as const;
 
 export interface SimulationPortTypes {
   readonly command: unknown;
@@ -75,7 +79,14 @@ export interface NarrativePortTypes {
   readonly response: unknown;
 }
 
-export interface NarrativePort<Types extends NarrativePortTypes> {
+export interface CanonicalNarrativePortTypes extends NarrativePortTypes {
+  readonly request: NarrativeRequest;
+  readonly response: NarrativeRenderResult;
+}
+
+export interface NarrativePort<
+  Types extends NarrativePortTypes = CanonicalNarrativePortTypes,
+> {
   request(context: Types["request"]): Promise<Types["response"]>;
 }
 

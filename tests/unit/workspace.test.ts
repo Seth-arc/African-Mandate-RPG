@@ -4,6 +4,7 @@ import { applicationPackage } from "@african-mandate/application";
 import { contentPackage } from "@african-mandate/content";
 import { dataPipelinePackage } from "@african-mandate/data-pipeline";
 import { domainPackage } from "@african-mandate/domain";
+import { narrativePackage } from "@african-mandate/narrative";
 import { simulationPackage } from "@african-mandate/simulation";
 import { toolingPackage } from "@african-mandate/tooling";
 import { uiPackage } from "@african-mandate/ui";
@@ -13,6 +14,7 @@ describe("workspace package graph", () => {
   it("exposes every requested package through its public root", () => {
     expect([
       domainPackage.name,
+      narrativePackage.name,
       simulationPackage.name,
       applicationPackage.name,
       dataPipelinePackage.name,
@@ -22,6 +24,7 @@ describe("workspace package graph", () => {
       toolingPackage.name,
     ]).toEqual([
       "@african-mandate/domain",
+      "@african-mandate/narrative",
       "@african-mandate/simulation",
       "@african-mandate/application",
       "@african-mandate/data-pipeline",
