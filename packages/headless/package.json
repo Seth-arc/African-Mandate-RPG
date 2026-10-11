@@ -1,0 +1,18 @@
+{
+  "name": "@african-mandate/headless",
+  "version": "0.0.0-test-only",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@african-mandate/application": "workspace:*",
+    "@african-mandate/content": "workspace:*",
+    "@african-mandate/data-pipeline": "workspace:*",
+    "@african-mandate/domain": "workspace:*",
+    "@african-mandate/narrative": "workspace:*",
+    "@african-mandate/simulation": "workspace:*",
+    "zod": "4.6.5"
+  }
+}

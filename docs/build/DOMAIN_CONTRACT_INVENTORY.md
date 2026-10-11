@@ -1,9 +1,9 @@
 # Serialized domain contract inventory
 
 **Contract version:** 1.0.0
-**Task:** AM-PB2-03 / PB2-03 through AM-PB2-17 / PB2-17
+**Task:** AM-PB2-03 / PB2-03 through AM-PB2-19 / PB2-19
 **Owner:** `@african-mandate/domain`  
-**Status:** PB2-03 and PB2-07 through PB2-16 ACCEPTED; Prompt 17 narrative fallback contract 1.0.0 is READY_FOR_REVIEW; no production scenario admission
+**Status:** PB2-03 and PB2-07 through PB2-18 ACCEPTED; Prompt 19 headless acceptance contract 1.0.0 is READY_FOR_REVIEW; no production scenario admission
 
 ## Authority and boundary
 
@@ -51,6 +51,7 @@ Prompt 17 publishes the canonical source-listed narrative perspective, context, 
 | Event and doctrine operations | `EventDirectorResolution*Schema`, typed cause/situation/knowledge-safe projection schemas, `DoctrineObservation*Schema`, `DoctrineReviewEligibilitySchema` | Domain sections 74-81, 97 and 110; GDS sections 66-78/85; Stage 1 sections 7-11; Prompt 16 | Canonical state inside AM-GOV-041 TEST_ONLY trigger/trace/observation wrappers; effects, weights, production dynamics, coefficients, codification and evaluation formulas remain BLOCKED |
 | Narrative context and fallback | `NarrativePerspectiveSchema`, `NarrativeContextSchema`, `NarrativeRequestIdentitySchema`, `NarrativeRequestSchema`, `NarrativeResponseSchema`, provider/render result schemas | Domain sections 117-122; Technical sections 29 and 66-72; VOICE/Writing v2; Prompt 17 | Canonical perspective/context/response fields inside AM-GOV-043 strict TEST_ONLY collection-template and guard wrappers; prose is plain text, non-authoritative, knowledge-only, and excluded from campaign state |
 | Four-month compiled test content | `FourMonthTestContentArtifactSchema`, action-audit, gap-alias, source-stream, message, branch, runtime-contract and unimplemented-system schemas | Package 1 actor registry; Package 2 content/opening/intelligence; Package 3 gameplay/briefing/implementation; Package 4 readiness/validation; Prompt 18 | Contract 1.0.0 / content 0.1.0-test.1 under AM-GOV-045; all added wrappers and values are TEST_ONLY, the 18 authoring IDs are audited, and production serialization fails closed |
+| Independent headless acceptance artifact | `HeadlessGoldenCaseSchema`, `HeadlessScenarioOutcomeSchema`, `HeadlessDifficultyCoverageSchema`, `HeadlessProductionGateSchema`, `HeadlessAcceptanceArtifactSchema` in `@african-mandate/headless` | Package 4 Validation Spec sections 3-6; Prompt 19 | Contract 1.0.0 / runner 0.1.0-test.1 under AM-GOV-047; fixed SIM-01…SIM-16 goldens, 50-sample coverage, replay/reload hashes and explicit blocked production gates; never production-admissible |
 
 ## Referential validation
 

@@ -1,0 +1,104 @@
+AM-PB2-19 verification log
+Date: 2026-10-10 America/Indianapolis
+Base HEAD: 7e4a297bb6c6b0cc596ac4b2d4caa6e1ebc0797f
+
+PRE-FLIGHT
+git rev-parse HEAD
+exit 0
+7e4a297bb6c6b0cc596ac4b2d4caa6e1ebc0797f
+
+git status --short
+exit 0
+(clean before Prompt 19 edits)
+
+Owner acceptance evidence at base:
+author: Seth-arc
+subject: prompt 18
+commit timestamp: 2026-10-10T16:21:02-04:00
+Disposition: PB2-18 ACCEPTED under AM-GOV-001/046.
+
+DEPENDENCY INSTALL
+node C:\Users\ssnguna\AppData\Local\node\corepack\v1\pnpm\11.23.0\bin\pnpm.cjs install
+exit 0
+Scope: all 11 workspace projects
+Already up to date
+@african-mandate/headless 0.0.0-test-only <- packages\headless
+
+CORRECTED IMPLEMENTATION FAILURES (retained)
+
+1. Initial typecheck: exit 1. The new runner used unparsed string keys and numeric values against branded domain IDs/scores. The implementation was corrected to use canonical exported schemas. Rerun: exit 0.
+
+2. First focused test run: exit 1. Vitest's default 10-second hook timeout expired while executing the 50-campaign sweep; 9 tests were skipped. The suite was given an explicit 60-second timeout. No acceptance assertion was weakened.
+
+3. Second focused test run: exit 1, 7 passed / 2 failed. SIM-07 lacked `known_missing_rejected` because its fixture was still at `assessment_basis`, so prevalidation correctly rejected the case stage before reaching the known-missing procedure. The independent fixture was corrected to the required coalition/authorization-ready state. The divergent-replay negative test had depended on the overall FAILED result and therefore also did not throw. No golden observable was changed.
+
+4. Initial format check: exit 1 for `packages/headless/src/headless-acceptance.ts`. Prettier was applied only to that file. Rerun inside full CI: exit 0.
+
+5. Initial Python governance/authoring commands inside the restricted sandbox: exit 1, Windows Store Python launcher access denied before tests started. Both exact commands were rerun outside the sandbox and passed below. This was an execution-environment failure, not a test failure.
+
+FOCUSED ACCEPTANCE
+node C:\Users\ssnguna\AppData\Local\node\corepack\v1\pnpm\11.23.0\bin\pnpm.cjs run test:headless
+exit 0
+Test Files  1 passed (1)
+Tests       9 passed (9)
+Duration    39.28s
+
+DETERMINISTIC RUNNER OUTPUT
+classification: TEST_ONLY_HEADLESS_ACCEPTANCE
+overallStatus: READY_FOR_REVIEW
+SIM reports: 16 PASS / 0 FAIL / 0 BLOCKED
+seed: am-pb2-19-independent-golden-seed-v1
+difficulty: difficulty_test_only_standard_v1
+requested/completed/failed: 50 / 50 / 0
+turns per sample: 4
+decisions per turn: 3
+command count: 800
+unique final hashes: 50
+coverage aggregate hash: a10c63c39627c5420391d367db69024179021e6956d8a051530a3d392ee00701
+replay fixture: replay_four_month_headless_v1
+first/repeat/reload hash: 8b903e93b5f0ac00d1804fe385e018bc72e1e9b86f03d51fd3a94b5ee7f23f32
+artifact hash: 47195790f1e7ba07285c8ef59b422045cfec6d2262e8999045f2d07231dc2fab
+production gates: 9 BLOCKED
+
+FULL PROJECT CI
+node C:\Users\ssnguna\AppData\Local\node\corepack\v1\pnpm\11.23.0\bin\pnpm.cjs run ci
+exit 0
+format: PASS
+peer dependencies: PASS
+lint: PASS
+typecheck: PASS
+Test Files  18 passed (18)
+Tests       142 passed (142)
+Duration    48.97s
+determinism vectors: PASS, two fresh processes identical
+fixture build: PASS, two fresh builds byte-identical
+forbidden web-to-simulation import: PASS
+forbidden randomness: PASS
+governance/toolchain schema: PASS
+
+FROZEN INSTALL
+node C:\Users\ssnguna\AppData\Local\node\corepack\v1\pnpm\11.23.0\bin\pnpm.cjs install --frozen-lockfile
+exit 0
+Scope: all 11 workspace projects
+Already up to date
+
+GOVERNANCE
+py -3 -B -m unittest discover -s tests/governance -p "test_*.py" -v
+exit 0
+Ran 7 tests in 0.018s
+OK
+
+AUTHORING VALIDATOR
+py -3 -B docs/validate_authoring.py docs/AFRICAN_MANDATE_STAGE2_PACKAGE3_FOUR_MONTH_GAMEPLAY_SPEC_v0_1.md
+exit 0
+STATIC_AUTHORING_CHECK: PASS
+catalogue_actions=18 script_templates=7 decisions_per_month=3
+SIMULATION_TESTS: NOT RUN (no compiled ScenarioBundle/engine supplied)
+RELEASE_GATE: BLOCKED
+
+The validator's simulation/release lines are its unchanged production-gate output. Prompt 19's compiled TEST_ONLY simulations ran through Vitest and the headless runner above; no production release is claimed.
+
+DIFF CHECK
+git diff --check
+exit 0
+No whitespace errors. Git emitted only expected LF-to-CRLF working-copy warnings.

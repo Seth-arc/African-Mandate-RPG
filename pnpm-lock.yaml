@@ -20,6 +20,9 @@ importers:
       '@african-mandate/domain':
         specifier: workspace:*
         version: link:packages/domain
+      '@african-mandate/headless':
+        specifier: workspace:*
+        version: link:packages/headless
       '@african-mandate/narrative':
         specifier: workspace:*
         version: link:packages/narrative
@@ -98,6 +101,30 @@ importers:
 
   packages/domain:
     dependencies:
+      zod:
+        specifier: 4.6.5
+        version: 4.6.5
+
+  packages/headless:
+    dependencies:
+      '@african-mandate/application':
+        specifier: workspace:*
+        version: link:../application
+      '@african-mandate/content':
+        specifier: workspace:*
+        version: link:../content
+      '@african-mandate/data-pipeline':
+        specifier: workspace:*
+        version: link:../data-pipeline
+      '@african-mandate/domain':
+        specifier: workspace:*
+        version: link:../domain
+      '@african-mandate/narrative':
+        specifier: workspace:*
+        version: link:../narrative
+      '@african-mandate/simulation':
+        specifier: workspace:*
+        version: link:../simulation
       zod:
         specifier: 4.6.5
         version: 4.6.5

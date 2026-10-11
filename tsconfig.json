@@ -9,6 +9,7 @@
         "./packages/data-pipeline/src/index.ts"
       ],
       "@african-mandate/domain": ["./packages/domain/src/index.ts"],
+      "@african-mandate/headless": ["./packages/headless/src/index.ts"],
       "@african-mandate/narrative": ["./packages/narrative/src/index.ts"],
       "@african-mandate/simulation": ["./packages/simulation/src/index.ts"],
       "@african-mandate/tooling": ["./packages/tooling/src/index.ts"],

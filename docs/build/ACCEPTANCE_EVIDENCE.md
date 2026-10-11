@@ -818,3 +818,57 @@ PB2-17 was subsequently accepted under AM-GOV-001/044 by repository-owner confir
 | AC-022 | Simulated copy marker | all fixture messages are `SIMULATED` and TEST_ONLY | PASS automated subset; editorial review BLOCKED |
 
 Prompt 18 remains unapproved until independent owner review and an accepting commit. Passing synthetic tests does not approve production content, geography, historical data, actor positions, legal procedures, finance terms, balance, event/doctrine dynamics, evaluation formulas, or editorial conformance.
+
+PB2-18 was subsequently accepted under AM-GOV-001/046 by repository-owner commit `7e4a297bb6c6b0cc596ac4b2d4caa6e1ebc0797f`, authored and committed by Seth-arc at `2026-10-10T16:21:02-04:00`. That acceptance preserves all nine production blockers and does not promote the synthetic four-month artifact.
+
+## AM-PB2-19 — independent SIM-01 to SIM-16 headless acceptance
+
+**Status proposed:** READY_FOR_REVIEW
+
+**Acceptance IDs:** PB2-19; AC-005–AC-020, AC-022, AC-023 and AC-025 as mapped below
+
+**Implementation base:** accepted PB2-18 commit `7e4a297bb6c6b0cc596ac4b2d4caa6e1ebc0797f`
+
+### Preflight
+
+- HEAD matched the repository-owner Prompt 18 commit. Under AM-GOV-001/046, that reviewed commit is PB2-18's durable acceptance event even though the committed mutable state still showed READY_FOR_REVIEW.
+- Package 4 Validation Spec sections 3-6, Prompt 19, the source manifest, and the accepted Prompt 18 artifact were hash-checked before implementation.
+- No prerequisite contract was changed. New exact fields are isolated under AM-GOV-047 as a TEST_ONLY proposal.
+
+### Evidence produced
+
+- `@african-mandate/headless` is a separate integration-test leaf. It consumes only public accepted package APIs and cannot be imported by production runtime layers.
+- Sixteen immutable goldens define source-derived observables and fixed fixture IDs for SIM-01 through SIM-16. PASS is schema-valid only when expected and observed arrays match exactly.
+- The probes cover collect delay, consultation/memory, alternative and inaction paths, overconfidence/contradiction, hidden-state differential, authorization refusal, duplicate idempotency, commitment breach, scope negotiation, reserved capacity, save failure/replay, calendar ordering, contradiction scoping, null-vs-zero, and narrative fallback/staleness.
+- The sole compiled difficulty runs 50 four-month samples. Every sample executes three strategic actions and one EndTurn in each of four months: 800 commands total, 50 complete, 0 failed.
+- Sample zero repeats and reloads from a frozen save snapshot with identical hash `8b903e93b5f0ac00d1804fe385e018bc72e1e9b86f03d51fd3a94b5ee7f23f32`. Coverage aggregate hash is `a10c63c39627c5420391d367db69024179021e6956d8a051530a3d392ee00701`; complete artifact hash is `47195790f1e7ba07285c8ef59b422045cfec6d2262e8999045f2d07231dc2fab`.
+- All nine unavailable canonical systems remain `BLOCKED` in the result. In particular, four-month synthetic coverage does not claim the unavailable twenty-month production gate.
+- `docs/build/HEADLESS_ACCEPTANCE_CONTRACT.md`, AM-GOV-047, the Prompt 19 handoff, and the raw log publish ownership, schema/version, source pins, fixed results, failures corrected during implementation, and reproduction.
+
+### Tests and negative cases
+
+- All sixteen mandatory SIM reports are present, ordered, and PASS against independent golden observables.
+- Fifty deterministic samples complete with zero failure; replay, repeat, and snapshot reload match.
+- PASS with altered observables, a missing SIM report, and a divergent replay hash fail schema validation.
+- Required negative boundaries remain explicit: differential hidden knowledge, null-vs-zero, duplicate command, calendar edge, injected save failure, no forced case, and trace order.
+- Production admission of the synthetic bundle rejects, and nine production gaps remain blocked.
+
+### Source-to-test traceability
+
+| Acceptance ID / SIM | Source authority | Executable evidence | Test state |
+|---|---|---|---|
+| PB2-19 | Prompt 19; Package 4 Validation Spec sections 3-6 | 16 goldens/outcomes, 50-sample coverage, fixed replay and artifact hashes | READY_FOR_REVIEW |
+| AC-009 / SIM-01 | Package 4 collection timing and evidence invariant | delayed collection task, no immediate evidence, due resolution | PASS TEST_ONLY |
+| AC-010 / SIM-02, SIM-09 | consultation/actor memory and commitment lifecycle | known response, one memory, one breach transition, no repeat effect | PASS TEST_ONLY |
+| AC-007, AC-014, AC-015 / SIM-03, SIM-04, SIM-13 | alternative/inaction/calendar invariants | no forced case, Month 5 boundary, exact resolver order and slot reset | PASS TEST_ONLY |
+| AC-012 / SIM-05 | assessment accountability | contradiction contests metadata without rewriting player-authored claim/confidence | PASS TEST_ONLY |
+| AC-008 / SIM-06 | hidden-state safety | equal projection/menu for unequal hidden state; difference only after evidence | PASS TEST_ONLY |
+| AC-013, AC-023 / SIM-07, SIM-10 | mandate and legal-boundary invariants | known-missing rejection and scope negotiation without inferred authorization | PASS TEST_ONLY; production procedure BLOCKED |
+| AC-006 / SIM-08, SIM-12 | idempotency and replay | duplicate classification, single mutation, repeat/reload hash | PASS |
+| AC-007, AC-025 / SIM-11 | capacity and deadlock safety | reserved optional rejection, mandatory response, successful EndTurn | PASS TEST_ONLY |
+| AC-005 / SIM-12 | atomic persistence | injected write failure leaves runtime unchanged | PASS |
+| AC-011 / SIM-14 | contradiction scope | same key/scope contested; different subject scope not contested | PASS TEST_ONLY |
+| AC-016–AC-019 / SIM-15 | missingness, geography, source admission | UNKNOWN_NOT_ZERO, no inferred stability, production rejection | PASS isolation; production data/GIS/licensing BLOCKED |
+| AC-020, AC-022 / SIM-16 | narrative safety and copy marker | deterministic SIMULATED fallback, stale rejection, no mutation/hidden truth | PASS automated subset; editorial review BLOCKED |
+
+Prompt 19 remains unapproved until independent owner review and an accepting commit. Passing the synthetic acceptance runner does not approve production geography, data, actor claims, legal authority, balance, finance terms, reallocation effects, full twenty-month content, evaluation, or editorial conformance.
