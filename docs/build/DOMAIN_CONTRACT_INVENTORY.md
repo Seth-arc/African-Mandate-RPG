@@ -1,9 +1,9 @@
 # Serialized domain contract inventory
 
 **Contract version:** 1.0.0
-**Task:** AM-PB2-03 / PB2-03 through AM-PB2-19 / PB2-19
+**Task:** AM-PB2-03 / PB2-03 through AM-PB2-20 / PB2-20
 **Owner:** `@african-mandate/domain`  
-**Status:** PB2-03 and PB2-07 through PB2-18 ACCEPTED; Prompt 19 headless acceptance contract 1.0.0 is READY_FOR_REVIEW; no production scenario admission
+**Status:** PB2-03 and PB2-07 through PB2-19 ACCEPTED; Prompt 20 application adapter contract 1.0.0 is READY_FOR_REVIEW; no production scenario admission
 
 ## Authority and boundary
 
@@ -52,6 +52,8 @@ Prompt 17 publishes the canonical source-listed narrative perspective, context, 
 | Narrative context and fallback | `NarrativePerspectiveSchema`, `NarrativeContextSchema`, `NarrativeRequestIdentitySchema`, `NarrativeRequestSchema`, `NarrativeResponseSchema`, provider/render result schemas | Domain sections 117-122; Technical sections 29 and 66-72; VOICE/Writing v2; Prompt 17 | Canonical perspective/context/response fields inside AM-GOV-043 strict TEST_ONLY collection-template and guard wrappers; prose is plain text, non-authoritative, knowledge-only, and excluded from campaign state |
 | Four-month compiled test content | `FourMonthTestContentArtifactSchema`, action-audit, gap-alias, source-stream, message, branch, runtime-contract and unimplemented-system schemas | Package 1 actor registry; Package 2 content/opening/intelligence; Package 3 gameplay/briefing/implementation; Package 4 readiness/validation; Prompt 18 | Contract 1.0.0 / content 0.1.0-test.1 under AM-GOV-045; all added wrappers and values are TEST_ONLY, the 18 authoring IDs are audited, and production serialization fails closed |
 | Independent headless acceptance artifact | `HeadlessGoldenCaseSchema`, `HeadlessScenarioOutcomeSchema`, `HeadlessDifficultyCoverageSchema`, `HeadlessProductionGateSchema`, `HeadlessAcceptanceArtifactSchema` in `@african-mandate/headless` | Package 4 Validation Spec sections 3-6; Prompt 19 | Contract 1.0.0 / runner 0.1.0-test.1 under AM-GOV-047; fixed SIM-01…SIM-16 goldens, 50-sample coverage, replay/reload hashes and explicit blocked production gates; never production-admissible |
+| Application artifact registry | exact `CampaignArtifactRefsSchema`, `ReleaseManifestSchema`, `MapArtifactManifestSchema`; proposed resolved-fetch envelope | Technical v2 sections 26, 29-32, 40 and 92; Prompt 20 | Canonical JSON is schema-validated and SHA-256 checked before use; immutable campaign pins cannot be replaced by the current release |
+| Projection and browser adapter facades | `CampaignProjectionSchema`, `ActionPreviewSchema`, `ResolutionProjectionSchema`, `CampaignSyncStateSchema`; IndexedDB/Web Locks adapters | Technical v2 sections 16, 20-23, 45-48 and 65-72; Prompt 20 | Contract 1.0.0 under AM-GOV-049; projection/status/envelope fields absent from canonical exact shapes remain explicit TEST_ONLY proposals |
 
 ## Referential validation
 
@@ -100,3 +102,5 @@ The following remain intentionally outside Prompt 03: production content admissi
 | AC-024 | Six dimensions remain unavailable/unscored and reject invented zero/overall scores | Prompt 16 interface test; production methodology gate remains BLOCKED |
 | PB2-17 / AC-020 / SIM-16 | Deterministic knowledge-safe narrative fallback, fixed simulated marker, stale identity guard, plain-text security, and source/date/unit rendering | `tests/unit/narrative-fallback.test.ts`; `docs/build/NARRATIVE_FALLBACK_CONTRACT.md` |
 | PB2-18 / AC-007 / AC-009 / AC-010 / AC-013 / AC-016-AC-019 / AC-022 / AC-023 / AC-025 | Four-month TEST_ONLY artifact, 18-ID audit, three-slot branches, collect/consult/defer paths, explicit gap alias, stable hash, no fake real data, and dual production rejection | `tests/unit/four-month-content.test.ts`; `docs/build/FOUR_MONTH_TEST_CONTENT_CONTRACT.md` |
+| PB2-19 / SIM-01-SIM-16 | Independent mandatory headless outcomes, deterministic sample coverage, replay/reload, negative cases, and blocked production gates | `tests/unit/headless-acceptance.test.ts`; `docs/build/HEADLESS_ACCEPTANCE_CONTRACT.md` |
+| PB2-20 / AC-005 / AC-008 / AC-020 / AC-021 | Verified immutable artifacts, durability-before-swap, stale revision/sync refusal, revision-aware projection cache, offline narrative fallback, and UI projection firewall | `tests/unit/application-adapters.test.ts`; `scripts/verify-forbidden-import.mjs`; `docs/build/PRODUCTION_APPLICATION_ADAPTER_CONTRACT.md` |

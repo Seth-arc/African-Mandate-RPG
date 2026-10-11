@@ -872,3 +872,47 @@ PB2-18 was subsequently accepted under AM-GOV-001/046 by repository-owner commit
 | AC-020, AC-022 / SIM-16 | narrative safety and copy marker | deterministic SIMULATED fallback, stale rejection, no mutation/hidden truth | PASS automated subset; editorial review BLOCKED |
 
 Prompt 19 remains unapproved until independent owner review and an accepting commit. Passing the synthetic acceptance runner does not approve production geography, data, actor claims, legal authority, balance, finance terms, reallocation effects, full twenty-month content, evaluation, or editorial conformance.
+
+PB2-19 was subsequently accepted under AM-GOV-001/048 by repository-owner commit `3ac2753e5f34534e6e3acb786c4e12728e3dcc87`, authored and committed by Seth-arc at `2026-10-10T23:02:31-04:00`. That acceptance preserves every reported production blocker and does not promote synthetic content.
+
+## AM-PB2-20 — production application adapters and projections
+
+**Status proposed:** READY_FOR_REVIEW
+
+**Acceptance IDs:** PB2-20; AC-005; AC-008; AC-020; AC-021
+
+**Implementation base:** accepted PB2-19 commit `3ac2753e5f34534e6e3acb786c4e12728e3dcc87`
+
+### Preflight
+
+- HEAD was the repository-owner `prompt 19` commit, authored by Seth-arc at `2026-10-10T23:02:31-04:00`. Under AM-GOV-001, it is PB2-19's durable acceptance event; AM-GOV-048 and the sole mutable build-state record now reconcile that fact.
+- Required Prompt 05, 08, 11, 17 and 19 contracts were ACCEPTED before implementation. The source manifest hash is `4ce13c6d0fa6eb7d99f4e7023a7c48669bb57407827dc83f661f8ab6eccbb436`; Technical v2 hash is `982be4ecd82b996e14be83b6fd89a60a2876bb4e2505ed195889ad4f81dcee30`; Prompt 20 hash is `0f3d40e5869ee25d0c3e973aae0407ec963610ff3ba4a8511d29abec1695e0e2`.
+
+### Evidence produced
+
+- `@african-mandate/application` publishes adapter contract `1.0.0` without changing the accepted generic `SimulationPort` or implementing simulation effects.
+- The artifact registry validates scenario, baseline, methodology and map JSON, computes canonical SHA-256, rejects mismatches, and cross-checks resolved URLs/hashes against the exact Technical v2 CampaignArtifactRefs identity.
+- The IndexedDB adapter owns the five source-listed stores, retains the immediately previous current snapshot as recovery in the same transaction, separates local storage schema version, validates hashes, and rejects stale/equal revisions.
+- Web Locks provides exclusive per-campaign edit authority. Browsers without Web Locks fail closed because canonical lease/heartbeat constants and record fields are not approved.
+- CampaignProjection, ActionPreview and ResolutionProjection schemas form the UI facade. The revision-aware cache includes type, subject, locale and presentation-options hash and invalidates older entries on authoritative revision change.
+- Sync state preserves the source-defined five statuses and discards stale upload completions. It has no automatic merge or state-overwrite capability.
+- Narrative failover validates request/result identity and invokes the accepted deterministic plain-text fallback when the primary renderer is offline, invalid or stale.
+- UI now depends only on application. ESLint independently rejects UI-to-domain and web-to-simulation imports; `headless` is included in the restricted package registry.
+
+### Tests and negative cases
+
+- The focused adapter suite covers local durability-before-runtime-swap, current-to-recovery rotation, stale local revision rejection, Web Locks lease lifetime, artifact hash mismatch, exact campaign artifact-ref shape, projection caching/invalidation/stale response, public action/resolution projections, stale sync completion, offline narrative fallback and adapter version.
+- The boundary verifier requires both deliberately forbidden imports to fail ESLint.
+- Full CI, governance validation, diff checks and their actual outcomes are preserved in `docs/build/logs/20-test.log`; failed environment attempts and corrected failures remain visible.
+
+### Source-to-test traceability
+
+| Acceptance ID | Source authority | Executable evidence | Test state |
+|---|---|---|---|
+| PB2-20 | Prompt 20; Technical v2 application, persistence, registry and projection sections | typed adapters/schemas, contract doc, focused suite, full CI, handoff and log | READY_FOR_REVIEW |
+| AC-005 | Technical v2 section 20 durable sequence | deferred local transaction leaves runtime at revision 0 until commit, then moves to revision 1; stale write rejects | PASS |
+| AC-008 | Technical v2 sections 45-48; accepted player-knowledge projection | facade/cache schemas and safe action/resolution envelopes expose no CampaignState or resolver trace | PASS TEST_ONLY interface |
+| AC-020 | Technical v2 sections 65-72; accepted Prompt 17 narrative contract | offline primary uses deterministic SIMULATED fallback with exact request identity | PASS |
+| AC-021 | Technical v2 projection firewall | UI-to-domain and web-to-simulation negative lint fixtures | PASS |
+
+Prompt 20 remains unapproved until independent owner review and an accepting commit. Passing these tests does not approve a SaveSnapshot artifact-pin migration, fallback heartbeat lease, cloud transport/conflict UI, real-browser IndexedDB gate, production artifacts/map provider, external narrative provider, production data/content, or downstream UI.

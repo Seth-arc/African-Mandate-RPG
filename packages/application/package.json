@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@african-mandate/domain": "workspace:*",
-    "@african-mandate/simulation": "workspace:*"
+    "@african-mandate/simulation": "workspace:*",
+    "zod": "4.6.5"
   }
 }

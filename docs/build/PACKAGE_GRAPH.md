@@ -4,29 +4,23 @@
 
 **Task:** AM-PB2-02
 
-**Classification:** ACCEPTED TEST_ONLY foundations through Prompt 18; Prompt 19 headless acceptance is READY_FOR_REVIEW
+**Classification:** ACCEPTED TEST_ONLY foundations through Prompt 19; Prompt 20 application adapters are READY_FOR_REVIEW
 
 ## Dependency direction
 
 ```text
-domain
-├── simulation
-│   └── application
-│       ├── ui
-│       │   └── web
-│       └── web
-├── application
-├── content
-├── data-pipeline
-├── ui
-└── web
+domain -> simulation -> application -> ui -> web
+domain -> application
+domain -> content
+domain -> data-pipeline
+domain -> web
+application -> web
 
 tooling (build/verification only; no runtime dependency)
-
 headless (TEST_ONLY acceptance only) -> domain, simulation, application, content, data-pipeline, narrative
 ```
 
-The repeated arrows from `domain` show direct contract imports. `application` may consume the public `simulation` API; `ui` and `web` may not. Every package is private, ESM-only, TypeScript-source-first, and exposes only its root `exports["."]` entry.
+Arrows show direct contract imports. `application` may consume the public `simulation` API; `ui` and `web` may not. `ui` has no direct domain import. Every package is private, ESM-only, TypeScript-source-first, and exposes only its root `exports["."]` entry.
 
 ## Public roots and allowed internal dependencies
 
@@ -34,23 +28,23 @@ The repeated arrows from `domain` show direct contract imports. `application` ma
 |---|---|---|---|
 | `packages/domain` | `@african-mandate/domain` | none | Serialized contracts, domain types, typed lifecycle/world state and effects, command/EndTurn/world request/results, save snapshots, and deterministic artifacts |
 | `packages/simulation` | `@african-mandate/simulation` | `domain` | Deterministic primitives, pure command/world-effect logic, mandatory-capacity rules, exact calendar, and ordered lifecycle resolver registry |
-| `packages/application` | `@african-mandate/application` | `domain`, public `simulation` API | Versioned ports, serial coordinator, atomic durable command/EndTurn services, one frozen runtime store, and in-memory TEST_ONLY adapters; no production browser adapter |
+| `packages/application` | `@african-mandate/application` | `domain`, public `simulation` API | Versioned ports, atomic services, verified immutable-artifact client, IndexedDB repository, Web Locks edit lock, sync status, narrative fallback, and projection facade/cache |
 | `packages/data-pipeline` | `@african-mandate/data-pipeline` | `domain` | TEST_ONLY synthetic fixture parser/compiler and versioned artifact schemas; no production source admission or GIS tool selected |
 | `packages/content` | `@african-mandate/content` | `domain` | Versioned four-month TEST_ONLY compiled artifact, strict cross-reference schema, branch inventory and hard production rejection; no production content admitted |
 | `packages/headless` | `@african-mandate/headless` | `domain`, public `simulation`, `application`, `content`, `data-pipeline`, `narrative` APIs | Independent TEST_ONLY SIM-01…SIM-16 goldens, deterministic sample/replay runner and blocked-production-gate report; not a production runtime dependency |
-| `packages/ui` | `@african-mandate/ui` | `domain`, `application` | Presentation-only boundary; simulation and raw state forbidden |
+| `packages/ui` | `@african-mandate/ui` | `application` | Projection-only presentation boundary; domain, simulation, and raw state forbidden |
 | `apps/web` | `@african-mandate/web` | `domain`, `application`, `ui` | Knowledge-safe shell boundary; no React/browser behavior yet |
 | `packages/tooling` | `@african-mandate/tooling` | none | Build and verification boundary; owns the toolchain artifact schema |
 
 ## Enforced restrictions
 
 - Deep imports such as `@african-mandate/domain/internal` are forbidden; callers use public package roots.
-- Normal UI and web code cannot import `@african-mandate/simulation`, raw campaign stores, or debug projections.
+- Normal UI cannot import domain, simulation, headless tooling, raw campaign stores, or debug projections. Web cannot import simulation, headless tooling, raw campaign stores, or debug projections.
 - Domain cannot import another workspace package.
 - Content and data-pipeline can import only domain. Prompt 18 keeps the compiled artifact in content. The Prompt 19 `headless` integration package may consume public package roots solely for TEST_ONLY acceptance and is not imported by production packages.
-- Package exports expose only their public roots. Prompt 10 adds pure TEST_ONLY world-effect handlers and opt-in ordered fixture adapters without relaxing package boundaries. Default world and all actor/event/evaluation resolvers remain labeled initial no-ops. Production formulas, IndexedDB/Web Locks, recovery, cloud sync, balance, source admission, legal, map, narrative, and UI behavior remain outside this milestone.
+- Package exports expose only their public roots. Prompt 20 adds application-owned IndexedDB/Web Locks, revision-aware sync status, verified JSON artifact loading, knowledge-safe projections, and deterministic narrative failover without moving simulation ownership. Cloud transport, approved fallback lease constants, map binaries, production artifact publication/source admission, and UI behavior remain outside this milestone.
 
-`tests/fixtures/forbidden-import/web-imports-simulation.ts` deliberately violates the UI firewall. `scripts/verify-forbidden-import.mjs` passes only when ESLint rejects that fixture with `no-restricted-imports`.
+`tests/fixtures/forbidden-import/web-imports-simulation.ts` and `ui-imports-domain.ts` deliberately violate the projection firewall. `scripts/verify-forbidden-import.mjs` passes only when ESLint rejects both fixtures with `no-restricted-imports`.
 
 ## Toolchain and unresolved choices
 

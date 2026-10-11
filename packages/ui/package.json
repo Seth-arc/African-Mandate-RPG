@@ -7,7 +7,6 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@african-mandate/application": "workspace:*",
-    "@african-mandate/domain": "workspace:*"
+    "@african-mandate/application": "workspace:*"
   }
 }

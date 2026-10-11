@@ -1,9 +1,9 @@
 # Application port and operation contract
 
 **Contract version:** 1.2.0 (`1.0.0` accepted by PB2-05; `1.1.0` accepted with PB2-09)
-**Task:** AM-PB2-05 / PB2-05; AM-PB2-09 / PB2-09; AM-PB2-17 / PB2-17
+**Task:** AM-PB2-05 / PB2-05; AM-PB2-09 / PB2-09; AM-PB2-17 / PB2-17; AM-PB2-20 / PB2-20
 **Owner:** `@african-mandate/application`  
-**Status:** PB2-05, PB2-08, and PB2-09 ACCEPTED; Prompt 17 narrative binding is READY_FOR_REVIEW; no production browser or narrative-provider adapter
+**Status:** PB2-05, PB2-08, PB2-09, PB2-17 and PB2-19 ACCEPTED; Prompt 20 browser/projection adapters are READY_FOR_REVIEW; no cloud or production narrative-provider adapter
 
 ## Ownership boundary
 
@@ -24,7 +24,7 @@ The application package serializes authoritative operations, calls a `Simulation
 
 Technical v2 names method payloads such as `CommandResult`, `ProjectionRequest`, `EditLock`, artifact references, and map/release manifests without defining all exact serialized fields in Prompt 05's accepted predecessors. The ports therefore use required generic type families rather than permissive `any`, placeholder fields, or duplicate handwritten serialized interfaces. Later prompts must bind those families to their Zod-inferred canonical contracts without changing operation ownership.
 
-No new serialized artifact is created by Prompt 05, so no new artifact schema is claimed. The requested repository/lock naming, compatibility aliases, minimal `{ campaignId, release() }` lease, generic families, and `runExclusive` signature are recorded as the TEST_ONLY design proposal AM-GOV-019.
+No new serialized artifact was created by Prompt 05. Its repository/lock naming, compatibility aliases, minimal `{ campaignId, release() }` lease, generic families, and `runExclusive` signature are recorded as TEST_ONLY design proposal AM-GOV-019. Prompt 20 now binds the artifact, projection, persistence and sync families described in `PRODUCTION_APPLICATION_ADAPTER_CONTRACT.md` without changing the frozen generic `SimulationPort`.
 
 ## Coordinator semantics
 
@@ -39,11 +39,13 @@ Prompt 08 adds `AtomicCampaignCommandService` without adding another coordinator
 
 Prompt 09 adds `AtomicCampaignTurnService` through the same coordinator, repository, snapshot, and runtime store. It calls the injected EndTurn dispatcher, validates its result and current-state immutability, writes durably, and only then replaces runtime authority. It adds no second mutable store.
 
-Prompt 17 binds only the optional presentational narrative port. `DeterministicNarrativePort` lives in the separate narrative package, imports only domain contracts, performs no authoritative operation, and requires no operation lock. Provider and cache adapters remain unimplemented.
+Prompt 17 binds only the optional presentational narrative port. `DeterministicNarrativePort` lives in the separate narrative package, imports only domain contracts, performs no authoritative operation, and requires no operation lock. Prompt 20 adds application-owned failover and identity checking around that port; no production provider is selected.
 
-## Test adapters
+Prompt 20 adds the browser IndexedDB repository, Web Locks edit authority, verified immutable JSON artifact client, revision-aware sync status, and projection facade/cache. These consume the accepted atomic services and ports; they do not calculate effects or create another runtime store. Cloud transport, real-browser validation, the fallback heartbeat lease, and SaveSnapshot artifact-pin migration remain explicit blockers.
 
-The public root exposes in-memory adapters for injected simulation handlers, local snapshots with one-shot write failure, artifact handlers, narrative handlers, and an exclusive edit lock. They are deterministic test infrastructure only. No IndexedDB, Web Locks, cloud, network, browser session, or production narrative provider is implemented.
+## Application and test adapters
+
+The public root retains deterministic in-memory adapters for injected simulation handlers, local snapshots with one-shot write failure, artifact handlers, narrative handlers, and an exclusive edit lock. It additionally exports the Prompt 20 production adapter foundations. No cloud backend, browser session/authentication, fallback heartbeat lease, or production narrative provider is implemented.
 
 ## Source-to-test traceability
 
@@ -55,4 +57,5 @@ The public root exposes in-memory adapters for injected simulation handlers, loc
 | AC-007 | Successful EndTurn advances/refreshed or finalizes exactly once | Prompt 09 lifecycle and durable-service tests |
 | AC-025 | Mandatory response cannot be bypassed or softlock the final slot | Prompt 09 reservation and blocking-EndTurn tests |
 | AC-020 / SIM-16 | Narrative is knowledge-safe, plain text, stale-guarded, and available without a provider | `tests/unit/narrative-fallback.test.ts`; `docs/build/NARRATIVE_FALLBACK_CONTRACT.md` |
-| AC-021 | UI/web may not import simulation or hidden state | Existing forbidden-import fixture remains green; no UI change in Prompt 05 |
+| PB2-20 / AC-005 / AC-008 / AC-020 | Browser durability, immutable artifact verification, projection revision safety and offline narrative failover | `tests/unit/application-adapters.test.ts`; `docs/build/PRODUCTION_APPLICATION_ADAPTER_CONTRACT.md` |
+| AC-021 | UI/web may not import simulation or hidden state; UI may not import domain | Both forbidden-import fixtures must fail ESLint |

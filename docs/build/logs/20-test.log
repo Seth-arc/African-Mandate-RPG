@@ -1,0 +1,99 @@
+AM-PB2-20 actual verification log
+Date: 2026-10-10 America/Indianapolis
+Implementation base: 3ac2753e5f34534e6e3acb786c4e12728e3dcc87
+
+Preflight
+---------
+$ git rev-parse HEAD
+3ac2753e5f34534e6e3acb786c4e12728e3dcc87
+
+$ git show -s --format="%H%n%an%n%aI%n%s" HEAD
+3ac2753e5f34534e6e3acb786c4e12728e3dcc87
+Seth-arc
+2026-10-10T23:02:31-04:00
+prompt 19
+
+Initial environment and correction history
+------------------------------------------
+1. Initial restricted-sandbox `corepack pnpm run typecheck`: exit 1 before TypeScript started. Node reported `EPERM: operation not permitted, lstat 'C:\Users\ssnguna'`. This was an execution-environment failure.
+2. First escalated typecheck: exit 1 because pnpm's dependency-status check attempted bare `pnpm install`, which was not on PATH after package metadata changed.
+3. `corepack pnpm install`: exit 0; all 11 workspace projects, lockfile policy passed, already up to date.
+4. First real TypeScript run: exit 1 with four implementation errors: nonexistent `MethodologyManifest` type export, unbranded campaign ID, campaign-status mismatch, and incorrect ActionMenuEntry test shape.
+5. Second TypeScript run: exit 1 with one branded Score fixture error.
+6. Corrected TypeScript run: exit 0.
+7. Early focused suite before final boundary additions: exit 0, 1 file and 8 tests passed.
+
+Final focused adapter suite
+---------------------------
+$ corepack pnpm exec vitest run tests/unit/application-adapters.test.ts
+exit 0
+
+ RUN  v5.0.3 C:/Users/ssnguna/Local Sites/African-Mandate-RPG
+
+ Test Files  1 passed (1)
+      Tests  11 passed (11)
+   Duration  1.55s
+
+Final explicit boundary gate
+----------------------------
+$ corepack pnpm run test:boundaries
+exit 0
+
+PASS: web-to-simulation import was rejected by no-restricted-imports.
+PASS: ui-to-domain import was rejected by no-restricted-imports.
+PASS: Math.random and randomUUID were rejected inside simulation scope.
+
+Earlier full workspace CI (before the final no-live-substitution assertion)
+----------------------------------------------------------------------------
+$ corepack pnpm run ci
+exit 0
+
+Formatting: PASS
+Peer dependency check: PASS
+ESLint: PASS
+TypeScript: PASS
+Test Files  19 passed (19)
+Tests  152 passed (152)
+Determinism vectors: PASS
+Fixture two-process reproducibility: PASS
+Forbidden web-to-simulation import: PASS
+Forbidden ui-to-domain import: PASS
+Forbidden simulation randomness: PASS
+Governance/toolchain artifact schema check: PASS
+
+Controlling final full workspace CI
+-----------------------------------
+$ corepack pnpm run ci
+exit 0
+
+Formatting: PASS
+Peer dependency check: PASS
+ESLint: PASS
+TypeScript: PASS
+Test Files  19 passed (19)
+Tests  153 passed (153)
+Determinism vectors: PASS
+Fixture two-process reproducibility: PASS
+Forbidden web-to-simulation import: PASS
+Forbidden ui-to-domain import: PASS
+Forbidden simulation randomness: PASS
+Governance/toolchain artifact schema check: PASS
+
+Python governance suite
+-----------------------
+$ py -3 -B -m unittest discover -s tests/governance -p "test_*.py" -v
+exit 0
+
+Ran 7 tests in 0.028s
+OK
+
+Final checks
+------------
+The controlling full-CI and final governance reruns include all implementation, test and handoff paths.
+
+$ git diff --check
+exit 0
+No whitespace errors. Git emitted only the repository's existing LF-to-CRLF checkout warnings.
+
+$ git status --short / git diff --stat
+24 Prompt 20 paths: 14 tracked files modified and 10 new files. No path outside the handoff inventory was changed.
