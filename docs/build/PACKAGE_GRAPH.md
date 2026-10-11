@@ -4,7 +4,7 @@
 
 **Task:** AM-PB2-02
 
-**Classification:** ACCEPTED TEST_ONLY foundations through Prompt 19; Prompt 20 application adapters are READY_FOR_REVIEW
+**Classification:** ACCEPTED TEST_ONLY foundations through Prompt 20; Prompt 21 accessible UI shell is READY_FOR_REVIEW
 
 ## Dependency direction
 
@@ -32,8 +32,8 @@ Arrows show direct contract imports. `application` may consume the public `simul
 | `packages/data-pipeline` | `@african-mandate/data-pipeline` | `domain` | TEST_ONLY synthetic fixture parser/compiler and versioned artifact schemas; no production source admission or GIS tool selected |
 | `packages/content` | `@african-mandate/content` | `domain` | Versioned four-month TEST_ONLY compiled artifact, strict cross-reference schema, branch inventory and hard production rejection; no production content admitted |
 | `packages/headless` | `@african-mandate/headless` | `domain`, public `simulation`, `application`, `content`, `data-pipeline`, `narrative` APIs | Independent TEST_ONLY SIM-01…SIM-16 goldens, deterministic sample/replay runner and blocked-production-gate report; not a production runtime dependency |
-| `packages/ui` | `@african-mandate/ui` | `application` | Projection-only presentation boundary; domain, simulation, and raw state forbidden |
-| `apps/web` | `@african-mandate/web` | `domain`, `application`, `ui` | Knowledge-safe shell boundary; no React/browser behavior yet |
+| `packages/ui` | `@african-mandate/ui` | `application` | Projection-only React presentation boundary, TEST_ONLY shell schemas/components and canonical-token stylesheet; domain, simulation, and raw state forbidden |
+| `apps/web` | `@african-mandate/web` | `domain`, `application`, `ui` | Knowledge-safe React/Vite shell host and TEST_ONLY browser fixture; no simulation import |
 | `packages/tooling` | `@african-mandate/tooling` | none | Build and verification boundary; owns the toolchain artifact schema |
 
 ## Enforced restrictions
@@ -42,9 +42,9 @@ Arrows show direct contract imports. `application` may consume the public `simul
 - Normal UI cannot import domain, simulation, headless tooling, raw campaign stores, or debug projections. Web cannot import simulation, headless tooling, raw campaign stores, or debug projections.
 - Domain cannot import another workspace package.
 - Content and data-pipeline can import only domain. Prompt 18 keeps the compiled artifact in content. The Prompt 19 `headless` integration package may consume public package roots solely for TEST_ONLY acceptance and is not imported by production packages.
-- Package exports expose only their public roots. Prompt 20 adds application-owned IndexedDB/Web Locks, revision-aware sync status, verified JSON artifact loading, knowledge-safe projections, and deterministic narrative failover without moving simulation ownership. Cloud transport, approved fallback lease constants, map binaries, production artifact publication/source admission, and UI behavior remain outside this milestone.
+- Package exports expose only their public roots. Prompt 20 adds application-owned IndexedDB/Web Locks, revision-aware sync status, verified JSON artifact loading, knowledge-safe projections, and deterministic narrative failover without moving simulation ownership. Prompt 21 adds only projection-derived shell/status rendering. Cloud transport, approved fallback lease constants, map binaries, production artifact publication/source admission, map/document/decision surfaces, and production UI certification remain outside these milestones.
 
-`tests/fixtures/forbidden-import/web-imports-simulation.ts` and `ui-imports-domain.ts` deliberately violate the projection firewall. `scripts/verify-forbidden-import.mjs` passes only when ESLint rejects both fixtures with `no-restricted-imports`.
+`tests/fixtures/forbidden-import/web-imports-simulation.ts`, `ui-imports-domain.ts`, and `ui-imports-simulation.ts` deliberately violate the projection firewall. `scripts/verify-forbidden-import.mjs` passes only when ESLint rejects all three fixtures with `no-restricted-imports`.
 
 ## Toolchain and unresolved choices
 

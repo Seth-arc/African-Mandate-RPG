@@ -38,7 +38,12 @@ const boundaryRule = (allowed) => [
 
 export default tseslint.config(
   {
-    ignores: ["node_modules/**", "tests/governance/**"],
+    ignores: [
+      "node_modules/**",
+      "**/dist/**",
+      "output/**",
+      "tests/governance/**",
+    ],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
@@ -104,8 +109,9 @@ export default tseslint.config(
   },
   {
     files: [
-      "packages/ui/**/*.ts",
+      "packages/ui/**/*.{ts,tsx}",
       "tests/fixtures/forbidden-import/ui-imports-domain.ts",
+      "tests/fixtures/forbidden-import/ui-imports-simulation.ts",
     ],
     rules: {
       "no-restricted-imports": boundaryRule(["@african-mandate/application"]),
@@ -113,7 +119,7 @@ export default tseslint.config(
   },
   {
     files: [
-      "apps/web/**/*.ts",
+      "apps/web/**/*.{ts,tsx}",
       "tests/fixtures/forbidden-import/web-imports-simulation.ts",
     ],
     rules: {

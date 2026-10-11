@@ -16,8 +16,15 @@
       "@african-mandate/ui": ["./packages/ui/src/index.ts"],
       "@african-mandate/web": ["./apps/web/src/index.ts"]
     },
-    "types": ["vitest/globals"]
+    "types": ["vitest/globals", "node"]
   },
-  "include": ["apps/**/*.ts", "packages/**/*.ts", "tests/unit/**/*.ts"],
+  "include": [
+    "apps/**/*.ts",
+    "apps/**/*.tsx",
+    "packages/**/*.ts",
+    "packages/**/*.tsx",
+    "tests/unit/**/*.ts",
+    "tests/unit/**/*.tsx"
+  ],
   "exclude": ["tests/fixtures/**", "node_modules/**"]
 }

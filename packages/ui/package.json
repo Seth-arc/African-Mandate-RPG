@@ -4,9 +4,12 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./styles.css": "./src/styles.css"
   },
   "dependencies": {
-    "@african-mandate/application": "workspace:*"
+    "@african-mandate/application": "workspace:*",
+    "react": "19.1.1",
+    "zod": "4.6.5"
   }
 }

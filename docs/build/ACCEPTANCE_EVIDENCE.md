@@ -916,3 +916,45 @@ PB2-19 was subsequently accepted under AM-GOV-001/048 by repository-owner commit
 | AC-021 | Technical v2 projection firewall | UI-to-domain and web-to-simulation negative lint fixtures | PASS |
 
 Prompt 20 remains unapproved until independent owner review and an accepting commit. Passing these tests does not approve a SaveSnapshot artifact-pin migration, fallback heartbeat lease, cloud transport/conflict UI, real-browser IndexedDB gate, production artifacts/map provider, external narrative provider, production data/content, or downstream UI.
+
+PB2-20 was subsequently accepted under AM-GOV-001/050 by repository-owner commit `709a2bfda126c6d96badd7098495446daf353565`, authored and committed by Seth-arc at `2026-10-11T15:07:44-04:00`. That acceptance preserves every reported blocker and accepts no downstream UI implementation.
+
+## AM-PB2-21 â€” accessible UI shell and status surfaces
+
+**Status proposed:** READY_FOR_REVIEW
+
+**Acceptance IDs:** PB2-21; AC-021; AC-022; AC-024
+
+**Implementation base:** accepted PB2-20 commit `709a2bfda126c6d96badd7098495446daf353565`
+
+### Preflight
+
+- HEAD was the repository-owner `prompt 20` commit, authored and committed by Seth-arc at `2026-10-11T15:07:44-04:00`. Under AM-GOV-001 it is PB2-20's durable acceptance event; AM-GOV-050 and the sole mutable build-state record reconcile that fact.
+- The source manifest hash is `4ce13c6d0fa6eb7d99f4e7023a7c48669bb57407827dc83f661f8ab6eccbb436`; Prompt 21 hash is `28f43bb5dcbb255413b99b227fa6f5a9fb6af4feb1a9e3dba4a498ecd88c345e`. Component, brief, decision, token and owner-confirmed design-standard hashes are pinned in `docs/build/UI_SHELL_CONTRACT.md`.
+- `docs/DESIGN_STANDARDS.md` is present and owner-confirmed. Final conformance is still not claimed because production fonts, browser matrix, regional/editorial review and human playtesting remain unavailable.
+
+### Evidence produced
+
+- `@african-mandate/ui` publishes schema version 1 / contract `0.1.0-test.1`, a CampaignProjection-to-shell adapter, semantic React shell, status strip, navigation, attention queue and ready/loading/error/partial states.
+- The shell consumes application exports only. A third negative import fixture now independently proves UI-to-simulation imports fail in addition to the accepted UI-to-domain and web-to-simulation cases.
+- Canonical `docs/tokens.css` is imported directly and retains its manifest hash. No duplicate token palette or component registry was added.
+- The act value remains explicitly unavailable because Prompt 20 publishes no act field. The five unapproved headline indicators are absent. The web fixture is visibly `Simulated Â· Test-only interface` and contains no claimed real data.
+- Playwright measures the proposed 1920Ã—1080, 1440Ã—900, 1280Ã—720 and 1024Ã—768 layouts, captures each, checks 200% text sizing, reduced motion, keyboard navigation, named buttons and automated axe violations.
+
+### Tests and negative cases
+
+- The focused unit suite covers projection derivation, semantic shell markup, loading/error/partial states, omission of five phantom metrics and duplicate attention reference rejection.
+- Browser tests cover axe accessibility smoke, keyboard-only skip/navigation paths, accessible button names, all non-ideal states, 200% text with no horizontal overflow, reduced motion, four measured viewports and screenshot generation.
+- Static design/copy lint rejects raw colors, arbitrary font sizes/radii/durations, emoji, inaccessible click targets, vague controls and fabricated headline indicator copy.
+- The complete command transcript, including initial sandbox launch failures, corrected type/dependency failures, the original 200% overflow failure and final results, is preserved in `docs/build/logs/21-test.log`.
+
+### Source-to-test traceability
+
+| Acceptance ID | Source authority                                                                  | Executable evidence                                                                               | Test state                                               |
+| ------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| PB2-21        | Prompt 21; Components Reconciled; Design Brief; tokens; design decisions/standard | public schemas/components, React/Vite host, focused/full tests, screenshots, contract and handoff | READY_FOR_REVIEW                                         |
+| AC-021        | Technical projection firewall; Design Standard H1/H3                              | axe, keyboard, button-name and viewport tests; three forbidden-import negatives                   | PASS automated subset                                    |
+| AC-022        | VOICE/Glossary/Writing Standard; Design Standard H4                               | visible simulated/test-only marker, locale date, no real-world claims                             | PASS automated subset; regional/editorial review BLOCKED |
+| AC-024        | reconciliation notice and Acceptance Matrix                                       | unit/browser absence checks for all five candidate indicator labels                               | PASS omission; formulas/methodology remain BLOCKED       |
+
+Prompt 21 remains unapproved until independent owner review and an accepting commit. Passing this shell does not implement map/documents/decisions, approve production UI contracts, clear the browser/font/audio/editorial/regional/playtest gates, or make synthetic content production-ready.

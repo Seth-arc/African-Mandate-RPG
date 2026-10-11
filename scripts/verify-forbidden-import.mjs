@@ -10,6 +10,10 @@ const fixtures = [
     label: "ui-to-domain",
     path: "../tests/fixtures/forbidden-import/ui-imports-domain.ts",
   },
+  {
+    label: "ui-to-simulation",
+    path: "../tests/fixtures/forbidden-import/ui-imports-simulation.ts",
+  },
 ];
 const eslintBin = fileURLToPath(
   new URL("../node_modules/eslint/bin/eslint.js", import.meta.url),

@@ -1,0 +1,204 @@
+AM-PB2-21 verification transcript
+Date: 2026-10-11
+Base HEAD: 709a2bfda126c6d96badd7098495446daf353565
+Classification: TEST_ONLY
+
+PREFLIGHT
+git rev-parse HEAD
+exit 0
+709a2bfda126c6d96badd7098495446daf353565
+
+git log -1 --format=fuller
+exit 0
+Author/committer: Seth-arc
+Commit date: 2026-10-11T15:07:44-04:00
+Subject: prompt 20
+Result: PB2-20 accepted under AM-GOV-001/050 owner-commit workflow.
+
+Get-FileHash docs/tokens.css
+exit 0
+f534d03bbf1b60e65781972d5e358076b8b572005672bb5b1c61727a9718d4e9
+Result: exact SOURCE_MANIFEST hash retained after implementation.
+
+DEPENDENCIES
+corepack pnpm install
+exit 0
+Scope: all 11 workspace projects
+Lockfile supply-chain policy: PASS
+Pinned additions: React 19.1.1, React DOM 19.1.1, Vite 8.3.3,
+Playwright 1.55.1, axe-core Playwright 4.10.2 and matching exact types.
+The environment emitted NODE_TLS_REJECT_UNAUTHORIZED=0 warnings; no warning is hidden.
+
+INITIAL COMMAND LAUNCH FAILURE
+corepack pnpm run format:check
+corepack pnpm run typecheck
+corepack pnpm run lint
+corepack pnpm run test:ui
+corepack pnpm --filter @african-mandate/web run build
+exit 1 before project execution for each command
+Error: EPERM: operation not permitted, lstat 'C:\Users\ssnguna'
+Action: reran the exact checks with approved filesystem-sandbox escalation.
+
+CORRECTED IMPLEMENTATION CHECKS
+corepack pnpm run format:check
+initial exit 1
+Prettier identified apps/web/src/main.tsx, packages/ui/src/ui-shell.tsx and
+tests/unit/ui-shell.test.tsx. The pinned formatter corrected those files.
+
+corepack pnpm run typecheck
+initial project exit 1
+Findings: missing CSS module declaration; Playwright/Vite Node typings were not
+isolated/pinned; @types/node 22.15.30 conflicted with TypeScript 6.
+Corrections: added the CSS declaration, excluded Playwright runner files from
+the application compilation boundary, pinned Node 22.19.0 types and added the
+required ESNext.Disposable library.
+
+corepack pnpm run typecheck
+final exit 0
+$ tsc --noEmit -p tsconfig.json
+
+corepack pnpm run lint
+initial exit 1 after a concurrent build placed generated dist assets under the
+lint glob and the stylesheet subpath matched the deep-import guard.
+Corrections: ignored generated dist/output paths and made the public UI root
+own its stylesheet side effect.
+
+corepack pnpm run lint
+final exit 0
+$ eslint apps packages scripts tests/unit
+
+corepack pnpm run test:ui
+initial exit 1 because react-dom/server was not a root test dependency.
+Correction: pinned root React/React DOM test dependencies.
+
+corepack pnpm run test:ui
+final exit 0
+Test Files  1 passed (1)
+Tests       7 passed (7)
+
+corepack pnpm --filter @african-mandate/web run build
+final exit 0
+vite v8.3.3
+169 modules transformed
+dist/index.html                  0.53 kB | gzip 0.32 kB
+dist/assets/index-HZGAh2lQ.css 16.46 kB | gzip 3.85 kB
+dist/assets/index-vR9JoONA.js 381.07 kB | gzip 110.11 kB
+
+BROWSER INSTALL AND TESTS
+corepack pnpm exec playwright install chromium
+exit 0
+The first CDN attempt timed out after 30000ms at 0%; the retry downloaded
+Chromium and Chromium Headless Shell build 1193 successfully. The timeout is
+retained here as failed external-attempt evidence.
+
+corepack pnpm run test:e2e
+initial exit 1
+8 passed, 1 failed
+Failure: 200% text-size document width was 1304 CSS px for a 1280 CSS px
+viewport. Diagnostics identified save and attention status labels as the only
+overflowing elements. No assertion was relaxed.
+
+corepack pnpm exec playwright test --config playwright.config.ts --grep "200 percent"
+diagnostic exit 1
+Overflowing elements:
+- Saved locally; sync unavailable, right edge 1302
+- 2 open, right edge 1304
+
+After status wrapping/compact-layout correction, the focused test passed 1/1.
+
+corepack pnpm run test:e2e
+final exit 0
+Running 9 tests using 1 worker
+9 passed (23.8s)
+Covered: axe accessibility smoke, no unnamed buttons, keyboard skip and
+navigation paths, loading/error/partial states, 200% text, reduced motion,
+no five candidate headline indicators, and four measured screenshots.
+
+After the final semantic-glyph, localized attention-count, live-region and
+skip-link focus assertions were added, lint, typecheck and the 7-test unit
+suite passed again. A final direct Playwright rerun exited 0 with 9 passed in
+28.7s; the skip link moved focus to the main landmark.
+
+SCREENSHOT ARTIFACTS (SHA-256)
+desktop-target-1920x1080.png
+a5bb5ffbb573206a68ebbaea7f02244fc214ffdf44282265a2d9391d539c20b6
+desktop-common-1440x900.png
+9d004ced42dee4b56de7c5f10933e7fac4f6f6c4d884f7f82c31aa4303ce2aa5
+desktop-minimum-1280x720.png
+83484ae24746d9dacb8d9db0818219fac31c753d065812980483f11f7b753514
+tablet-landscape-1024x768.png
+252ee34bc6bf4fa121704e7f7285db5bbeb5e1c6eb6837fc50e53a7c8e09ee9c
+text-zoom-200.png
+19ea2b792280e16990346928d018f83051c0127881eaa63fb2829ad70631a8d3
+Visual review: no clipped/hidden content or controls in final captures.
+
+DESIGN AND COPY MECHANICAL LINT
+rg checks over apps/web/src and packages/ui/src
+exit 1 for each no-match search, interpreted as PASS by direct inspection
+No matches: raw colors; raw font sizes/radii/durations; removed focus;
+non-semantic clickable div/span; gradients/blur/shadows/transition-all/idle
+motion/important/inline style; generic error/placeholder/vague control copy;
+the five unapproved headline indicator labels.
+
+Registry audit: all reusable patterns map to existing Button, Panel, Panel
+header, Notice, Attention queue, Status strip, Status label, Skip link and Link
+entries. No registry definition or canonical token was changed.
+
+Copy proxy review: control labels predict their implemented action; standalone
+errors/notices state what happened and next action; no hidden/real-world claim
+appears. VOICE has no approved numeric readability target or measured length
+caps, so no reading-level figure is invented. Comprehension remains proxy-only.
+
+GOVERNANCE
+py -3 -B -m unittest discover -s tests/governance -p "test_*.py" -v
+initial exit 1: 5 passed, 2 failed
+Cause: two negative tests still mutated Prompt 20, which is now accepted.
+Correction: advanced the unapproved-state fixture to Prompt 21 without changing
+the approval invariants.
+
+py -3 -B -m unittest discover -s tests/governance -p "test_*.py" -v
+final exit 0
+Ran 7 tests in 0.041s
+OK
+
+FULL WORKSPACE CI
+corepack pnpm run ci
+final exit 0
+- format: PASS
+- peer dependencies: PASS
+- lint: PASS
+- typecheck: PASS
+- Vitest: 20 files, 160 tests passed
+- deterministic two-process vectors: PASS
+- byte-identical fixture build: PASS
+- forbidden imports: web-to-simulation, UI-to-domain and UI-to-simulation PASS
+- forbidden randomness: PASS
+- governance/toolchain artifact schemas: PASS
+
+The exact final code state was rerun after the accessibility refinements:
+exit 0; 20 test files / 160 tests; deterministic vectors, fixture build,
+three forbidden-import cases, forbidden randomness and governance schemas all
+passed again.
+
+FINAL STATIC CHECKS
+corepack pnpm install --frozen-lockfile
+exit 0; all 11 workspace projects already up to date.
+
+corepack pnpm run format:check
+exit 0; all scoped files use pinned Prettier style.
+
+corepack pnpm run schema:check
+exit 0; governance and toolchain artifacts match public schemas.
+
+Final governance rerun: exit 0; 7/7.
+
+git diff --check
+exit 0 (line-ending notices only; no whitespace error)
+
+Handoff path audit: no changed path missing from `docs/build/handoffs/21.md`
+and no extra path claimed.
+
+Production exclusions remain BLOCKED: production UI contract approval,
+map/document/decision surfaces, browser support matrix, self-hosted font and
+glyph pipeline, audio conformance, regional/editorial review, human novice
+playtesting, and production content/data/legal/methodology gates.

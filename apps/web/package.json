@@ -6,9 +6,19 @@
   "exports": {
     ".": "./src/index.ts"
   },
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "preview": "vite preview"
+  },
   "dependencies": {
     "@african-mandate/application": "workspace:*",
     "@african-mandate/domain": "workspace:*",
-    "@african-mandate/ui": "workspace:*"
+    "@african-mandate/ui": "workspace:*",
+    "react": "19.1.1",
+    "react-dom": "19.1.1"
+  },
+  "devDependencies": {
+    "vite": "8.3.3"
   }
 }
