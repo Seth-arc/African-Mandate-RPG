@@ -30,14 +30,14 @@ The projection validator enforces:
 - document references only to known subjects; and
 - an explicit glyph probe, missing/unknown states and blocked production gates.
 
-`selectMapSubjectById` accepts an exact stable ID only. Display names are not identity and have no fallback behavior. `verifyMapDocumentArtifact` validates the projection and its whole-artifact SHA-256 before the web host renders it.
+`selectMapSubjectById` accepts an exact stable ID only. Display names are not identity and have no fallback behavior. `verifyMapDocumentArtifact` validates the projection and its canonical-JSON whole-artifact SHA-256 before the web host renders it.
 
 `MapDocumentsWorkspace` keeps MapLibre controls, the searchable keyboard list and the dossier synchronized by subject ID. Map styling uses only `knowledge_status` plus transient selected UI state. No hidden campaign state, simulator trace or private actor state is accepted by this API. `KnowledgeDocumentView` renders document metadata, evidence and assessment as separate semantic sections.
 
 ## Frozen TEST_ONLY fixture
 
 - Fixture: `apps/web/src/test-map-document-artifact.json`.
-- Whole artifact SHA-256: `55b38466a3ce3e58367592749ade0295a1bef36588b63b1c204090bb6b8a8c8f`.
+- Canonical JSON whole-artifact SHA-256: `7c5178d2ddcb54e127ff3eb7b6afdae2567d1cd5e8a39c295dcd949b3a383f73` (Prompt 24 editorial revision; geometry is unchanged).
 - Geometry SHA-256: `2c0b076749e96610617f327204101b76c8a1b1562a7af352fd33105529476eed`.
 - Subjects: four abstract territory/zone/asset/corridor records.
 - Documents: two synthetic records with evidence and assessment explicitly separated.

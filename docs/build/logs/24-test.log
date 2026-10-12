@@ -1,0 +1,246 @@
+AM-PB2-24 actual verification log
+Date: 2026-10-12 America/Indianapolis
+Base HEAD: 5a87ae80b59f6f53a65678caf7ae0adf45fc6faa
+Base subject: prompt 23
+Initial worktree: clean
+Source manifest SHA-256: 4ce13c6d0fa6eb7d99f4e7023a7c48669bb57407827dc83f661f8ab6eccbb436
+Prompt SHA-256: cc3e56a04fa92e968a0c196c080c31191f5a0e1805f79c0acf9b18911316eb05
+
+1. corepack pnpm install --frozen-lockfile
+Exit: 0
+Output:
+Scope: all 11 workspace projects
+Verifying lockfile against supply-chain policies (221 entries)...
+Lockfile is up to date, resolution step is skipped
+Already up to date
+Lockfile passes supply-chain policies (221 entries in 1.2s)
+Done in 1.9s using pnpm v11.23.0
+Note: Node reported the host environment's NODE_TLS_REJECT_UNAUTHORIZED=0 warning. This change did not set or modify that environment value.
+
+2. corepack pnpm run test:editorial-lint — initial finding
+Exit: 1
+Output:
+Editorial copy audit found 0 failure(s) and 2 unresolved review item(s):
+- COPY_EM_DASH, apps/web/src/test-map-document-artifact.json, "Simulated development — Month 1"
+- COPY_EM_DASH, apps/web/src/test-map-document-artifact.json, "Simulated development — Month 1"
+Correction: replaced decorative dashes with source-label colons and updated the canonical artifact hash.
+
+3. corepack pnpm run test:editorial-lint — second finding
+Exit: 1
+Output:
+Undefined UI token references: --type-body-line-height
+Correction: map labels now use registered --type-interface-leading.
+
+4. corepack pnpm run test:editorial-lint — final
+Exit: 0
+Output:
+PASS: copy/glossary markers, dates, token references, component semantics, and fail-closed human approvals conform.
+
+5. corepack pnpm run test:editorial — initial test harness finding
+Exit: 1
+Output:
+FAIL tests/unit/editorial-qa.test.ts
+ReferenceError: describe is not defined
+Correction: imported describe/expect/it from Vitest.
+
+6. corepack pnpm run test:editorial — final
+Exit: 0
+Output:
+Test Files  2 passed (2)
+Tests       11 passed (11)
+
+7. corepack pnpm run typecheck
+Exit: 0
+Output: tsc --noEmit -p tsconfig.json
+
+8. corepack pnpm run lint
+Exit: 0
+Output: eslint apps packages scripts tests/unit
+
+9. corepack pnpm run format:check
+Exit: 0
+Output:
+Checking formatting...
+All matched files use Prettier code style!
+
+10. corepack pnpm run test:editorial:e2e — initial measurement
+Exit: 1
+Output:
+Running 4 tests using 1 worker
+FAILED: measures every current major surface at the minimum viewport and 200 percent text
+clippedText: [{"text":"African Mandate","clientHeight":56,"scrollHeight":58}]
+Other tests: 3 passed
+Correction: added tokenized masthead heading block padding to accommodate the measured font glyph box.
+
+11. corepack pnpm run test:editorial:e2e — final
+Exit: 0
+Output:
+Running 4 tests using 1 worker
+PB2-24 measurement {"viewportWidth":1024,"viewportHeight":768,"textScalePercent":200,"containerCount":72,"documentWidth":1024,"horizontalOverflow":[],"clippedText":[]}
+PB2-24 measurement {"viewportWidth":1024,"viewportHeight":768,"textScalePercent":200,"containerCount":72,"documentWidth":1024,"horizontalOverflow":[],"clippedText":[]}
+PB2-24 measurement {"viewportWidth":1024,"viewportHeight":768,"textScalePercent":200,"containerCount":77,"documentWidth":1024,"horizontalOverflow":[],"clippedText":[]}
+4 passed (11.7s)
+
+12. corepack pnpm run test:e2e
+Exit: 0
+Output:
+Running 24 tests using 4 workers
+PB2-24 measurements repeated with 72/72/77 containers, documentWidth 1024, and no overflow/clipping.
+24 passed (25.1s)
+Final rerun after binding each browser measurement to `TextContainerMeasurementSchema`: 24 passed (23.4s).
+Final rerun after action-specific confirmation copy: 24 passed (25.0s).
+
+13. corepack pnpm run ci
+Exit: 0
+Output:
+Formatting: PASS
+Peer dependencies: No peer dependency issues found
+Lint: PASS
+Typecheck: PASS
+Test Files  23 passed (23)
+Tests       175 passed (175)
+Determinism: PASS, two fresh processes produced identical deterministic bytes
+Fixture build: PASS, two fresh fixture builds produced byte-identical artifacts
+Forbidden imports: PASS for web-to-simulation, ui-to-domain, ui-to-simulation
+Forbidden randomness: PASS
+Editorial conformance: PASS
+Governance/toolchain schemas: PASS
+
+14. corepack pnpm --filter @african-mandate/web run build
+Exit: 0
+Output:
+vite v8.3.3 building client environment for production...
+179 modules transformed
+dist/index.html 0.53 kB (gzip 0.32 kB)
+dist/assets/maplibre-gl-worker-CUx-2NaE.js 507.77 kB
+dist/assets/index-XYOyJfe9.css 109.10 kB (gzip 15.85 kB)
+dist/assets/index-Dx0eMPLK.js 436.69 kB (gzip 125.59 kB)
+dist/assets/maplibre-gl-DdXBSafQ.js 1,040.88 kB (gzip 282.02 kB)
+built in 677ms
+Advisory: Vite retained its non-blocking >500 kB chunk warning; no performance claim is made by Prompt 24.
+
+15. py -3 -B -m unittest discover -s tests/governance -p "test_*.py" -v
+First sandbox attempt: exit 1, WindowsApps Python process access denied.
+Escalated exact retry: exit 0.
+Output:
+Ran 7 tests in 0.019s
+OK
+
+16. hashes
+Prompt 24 raw SHA-256:
+cc3e56a04fa92e968a0c196c080c31191f5a0e1805f79c0acf9b18911316eb05
+Map/document JSON raw file SHA-256:
+08025d76665302c693d87a2fc06890a5d0c903a77f5191e34ef181cef31daa93
+Map/document canonical JSON SHA-256:
+7c5178d2ddcb54e127ff3eb7b6afdae2567d1cd5e8a39c295dcd949b3a383f73
+Prompt 24 screenshot SHA-256 values:
+b4b5e9a9e2b3af21738e185a101d7258df7b6d40b5f108383232f7214b9329c3  decision-workflow-1024x768-text-zoom-200.png
+4cf1e95519b67e57f454e7decc5b4e4c93bdf3f460f7b9fcb7b255e1c497b42c  documents-1024x768-text-zoom-200.png
+8260388ece6c14f3bbb26712001c4f7e9703942796441da00c6399fac4fc41f7  keyboard-reduced-motion-ledger.png
+35ad0e4ab473b3ff883339a8a11b2db8421a3e04d4670f99e5d323f9ba1ac2a6  strategic-map-1024x768-text-zoom-200.png
+
+17. visual inspection
+The four Prompt 24 captures and representative regenerated Prompt 21-23 captures were opened after generation. No lost content, overlapping text, raw ISO player-facing date, or missing simulation notice was observed. This is implementer inspection only, not independent human design, regional, publication, cold-read or assistive-technology approval.
+
+18. git diff --check
+Exit: 0
+Output: no whitespace errors. Git emitted only existing Windows LF-to-CRLF conversion warnings.
+
+Expected changed paths from base (including generated captures and this log):
+apps/web/src/main.tsx
+apps/web/src/test-map-document-artifact.json
+docs/build/ACCEPTANCE_EVIDENCE.md
+docs/build/BUILD_STATE.json
+docs/build/DECISION_LEDGER.md
+docs/build/DOMAIN_CONTRACT_INVENTORY.md
+docs/build/EDITORIAL_APPROVAL_REGISTER.json
+docs/build/EDITORIAL_QA_CONTRACT.md
+docs/build/MAP_DOCUMENT_CONTRACT.md
+docs/build/PACKAGE_GRAPH.md
+docs/build/handoffs/24.md
+docs/build/logs/24-test.log
+docs/build/screenshots/21/desktop-common-1440x900.png
+docs/build/screenshots/21/desktop-minimum-1280x720.png
+docs/build/screenshots/21/desktop-target-1920x1080.png
+docs/build/screenshots/21/tablet-landscape-1024x768.png
+docs/build/screenshots/21/text-zoom-200.png
+docs/build/screenshots/22/documents-1440x900.png
+docs/build/screenshots/22/map-list-dossier-1440x900.png
+docs/build/screenshots/23/four-month-resolution-ledger.png
+docs/build/screenshots/24/README.md
+docs/build/screenshots/24/decision-workflow-1024x768-text-zoom-200.png
+docs/build/screenshots/24/documents-1024x768-text-zoom-200.png
+docs/build/screenshots/24/keyboard-reduced-motion-ledger.png
+docs/build/screenshots/24/strategic-map-1024x768-text-zoom-200.png
+package.json
+packages/narrative/src/narrative-port.ts
+packages/tooling/package.json
+packages/tooling/src/editorial-qa.ts
+packages/tooling/src/index.ts
+packages/ui/src/decision-workspace.tsx
+packages/ui/src/map-documents.tsx
+packages/ui/src/styles.css
+packages/ui/src/ui-shell.tsx
+playwright.config.ts
+pnpm-lock.yaml
+progress.md
+scripts/verify-editorial-conformance.ts
+tests/e2e/decision-workflow.spec.ts
+tests/e2e/editorial-conformance.spec.ts
+tests/governance/test_build_state.py
+tests/unit/headless-acceptance.test.ts
+tests/unit/editorial-qa.test.ts
+tests/unit/map-documents.test.tsx
+
+Gate classification: READY_FOR_REVIEW only. No ACCEPTED claim.
+Human approval register: 3 BLOCKED, 2 PENDING, 0 APPROVED.
+
+19. independent reviewer reproduction and timeout correction
+
+The independent reproduction supplied after the initial implementation did not
+pass and remains part of the evidence:
+
+- `corepack pnpm run test:editorial:e2e`: exit 1; 2 passed and 2 failed in
+  3.3 minutes. Both failures exhausted the former 5-second locator wait for
+  `[data-map-status='ready']`.
+- `corepack pnpm run test:e2e`: exit 1 under four-worker contention. Failures
+  included delayed MapLibre canvas/readiness, axe browser-context startup, and
+  keyboard focus; all exhausted the former 30-second test budget.
+- `corepack pnpm run ci`: exit 1 in the complete unit stage; 22 files passed,
+  one file failed, 166 tests passed and 9 were skipped. The
+  `headless-acceptance.test.ts` `beforeAll` exhausted its former 60-second
+  budget after 139.91 seconds of process time.
+
+The Playwright traces contained no application console exception. In the
+failed editorial trace, Vite did not report connected until roughly 20.6
+seconds after navigation and React initialization followed roughly two seconds
+later. The error context subsequently captured the map in its ready state.
+Together with the slow transform/import timings in the independent log, this
+isolated wall-clock resource contention rather than a failed product assertion.
+
+Correction, without retries, skipped cases, reduced sample counts, or weakened
+assertions:
+
+- Playwright is serialized to one worker, with a 180-second test/server budget
+  and 60-second assertion budget.
+- Each deterministic headless artifact construction receives 240 seconds. The
+  fixed seed, 50 samples per difficulty, replay hashes, expected observables,
+  and all nine acceptance assertions are unchanged.
+
+Corrective verification:
+
+- Concurrent stress run of `corepack pnpm run test:headless` and
+  `corepack pnpm run test:editorial:e2e`: both exit 0; headless 9/9 in 302.59
+  seconds total and editorial browser 4/4 in 2.4 minutes.
+- `corepack pnpm run test:e2e`: exit 0; 24/24 in 6.3 minutes with one worker.
+- `corepack pnpm run ci`: exit 0. Formatting, peer checks, lint and typecheck
+  passed; complete unit suite passed 23 files / 175 tests in 336.59 seconds;
+  deterministic bytes, byte-identical fixture builds, forbidden import and
+  randomness negatives, editorial conformance, and governance/toolchain schema
+  checks all passed.
+- `py -3 -B -m unittest discover -s tests/governance -p "test_*.py" -v`:
+  the sandboxed WindowsApps launcher was denied, and the exact escalated retry
+  exited 0 with 7/7 tests passing in 0.279 seconds.
+
+This correction improves test reliability only. It does not convert any human
+review row or production gate to PASS, and Prompt 24 remains READY_FOR_REVIEW.

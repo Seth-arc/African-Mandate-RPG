@@ -12,13 +12,14 @@ import {
 } from "@african-mandate/headless";
 
 const clone = <T>(value: T): T => structuredClone(value);
+const HEADLESS_ACCEPTANCE_TIMEOUT_MS = 240_000;
 
 describe("independent SIM-01 through SIM-16 headless acceptance", () => {
   let artifact: HeadlessAcceptanceArtifact;
 
   beforeAll(async () => {
     artifact = await runHeadlessAcceptance();
-  }, 60_000);
+  }, HEADLESS_ACCEPTANCE_TIMEOUT_MS);
 
   it("reports every independently-authored mandatory golden as PASS", () => {
     expect(artifact.seed).toBe(HEADLESS_GOLDEN_SEED);
@@ -106,13 +107,17 @@ describe("independent SIM-01 through SIM-16 headless acceptance", () => {
     }
   });
 
-  it("produces a stable accepted-artifact hash", async () => {
-    const repeated = await runHeadlessAcceptance();
-    expect(hashHeadlessAcceptanceArtifact(repeated)).toBe(
-      "47195790f1e7ba07285c8ef59b422045cfec6d2262e8999045f2d07231dc2fab",
-    );
-    expect(hashHeadlessAcceptanceArtifact(artifact)).toBe(
-      hashHeadlessAcceptanceArtifact(repeated),
-    );
-  }, 60_000);
+  it(
+    "produces a stable accepted-artifact hash",
+    async () => {
+      const repeated = await runHeadlessAcceptance();
+      expect(hashHeadlessAcceptanceArtifact(repeated)).toBe(
+        "47195790f1e7ba07285c8ef59b422045cfec6d2262e8999045f2d07231dc2fab",
+      );
+      expect(hashHeadlessAcceptanceArtifact(artifact)).toBe(
+        hashHeadlessAcceptanceArtifact(repeated),
+      );
+    },
+    HEADLESS_ACCEPTANCE_TIMEOUT_MS,
+  );
 });

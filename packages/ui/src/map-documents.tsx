@@ -43,6 +43,14 @@ const knowledgeLabels: Readonly<Record<MapKnowledgeStatus, string>> = {
 export const knowledgeStatusLabel = (status: MapKnowledgeStatus): string =>
   knowledgeLabels[status];
 
+const formatPlayerDate = (value: string): string =>
+  new Intl.DateTimeFormat("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(`${value}T00:00:00.000Z`));
+
 const resolveTokenColor = (host: HTMLElement, token: string): string => {
   const probe = globalThis.document.createElement("span");
   probe.style.color = `var(${token})`;
@@ -525,7 +533,7 @@ export const KnowledgeDocumentView = ({
         </div>
         <div>
           <dt>Date</dt>
-          <dd>{document.metadata.date}</dd>
+          <dd>{formatPlayerDate(document.metadata.date)}</dd>
         </div>
         <div>
           <dt>Preparer</dt>
@@ -554,7 +562,7 @@ export const KnowledgeDocumentView = ({
                 Evidence ID: {evidence.evidenceId} · {evidence.sourceLabel}
                 {evidence.observedDate === undefined
                   ? ""
-                  : ` · ${evidence.observedDate}`}{" "}
+                  : ` · ${formatPlayerDate(evidence.observedDate)}`}{" "}
                 · {knowledgeStatusLabel(evidence.confidence)}
               </p>
             </li>

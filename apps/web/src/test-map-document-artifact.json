@@ -299,14 +299,14 @@
         "classification": "SIMULATED"
       },
       "title": "Opening test brief",
-      "summary": "Reporting about the synthetic zone remains inconsistent. The disagreement is evidence; the office assessment is shown separately.",
+      "summary": "Two synthetic reports disagree about access. Review the evidence and office assessment before choosing a response.",
       "subjectIds": ["zone_test_epreuve", "territory_test_atlas"],
       "evidence": [
         {
           "evidenceId": "evidence_test_access_restricted",
           "heading": "Reported restriction",
           "statement": "A synthetic field report describes access as restricted.",
-          "sourceLabel": "Simulated development — Month 1",
+          "sourceLabel": "Simulated development: Month 1",
           "observedDate": "2025-10-01",
           "confidence": "estimated"
         },
@@ -314,7 +314,7 @@
           "evidenceId": "evidence_test_access_conditional",
           "heading": "Reported conditional access",
           "statement": "A second synthetic report describes access as conditional.",
-          "sourceLabel": "Simulated development — Month 1",
+          "sourceLabel": "Simulated development: Month 1",
           "observedDate": "2025-10-01",
           "confidence": "estimated"
         }
@@ -344,7 +344,7 @@
         "classification": "SIMULATED"
       },
       "title": "Relay status note",
-      "summary": "The fixture has no evidence supporting an operational-status assertion for the synthetic relay.",
+      "summary": "No evidence supports an operational-status claim for the synthetic relay. Treat its status as not known; no decision is requested.",
       "subjectIds": ["asset_test_relay_nga"],
       "evidence": [],
       "assessments": [],

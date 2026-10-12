@@ -9,7 +9,7 @@
   },
   "packageManager": "pnpm@11.23.0",
   "scripts": {
-    "format:check": "prettier --check package.json pnpm-workspace.yaml tsconfig.base.json tsconfig.json eslint.config.js toolchain.json .github/workflows/ci.yml apps packages scripts tests/unit tests/fixtures",
+    "format:check": "prettier --check package.json pnpm-workspace.yaml tsconfig.base.json tsconfig.json eslint.config.js toolchain.json .github/workflows/ci.yml apps packages scripts tests/unit tests/e2e tests/fixtures",
     "deps:check": "corepack pnpm peers check",
     "lint": "eslint apps packages scripts tests/unit",
     "typecheck": "tsc --noEmit -p tsconfig.json",
@@ -18,13 +18,16 @@
     "test:ui": "vitest run tests/unit/ui-shell.test.tsx",
     "test:map-docs": "vitest run tests/unit/map-documents.test.tsx",
     "test:decisions": "vitest run tests/unit/decision-workflow.test.ts",
+    "test:editorial": "vitest run tests/unit/editorial-qa.test.ts tests/unit/narrative-fallback.test.ts",
+    "test:editorial-lint": "tsx scripts/verify-editorial-conformance.ts",
+    "test:editorial:e2e": "playwright test tests/e2e/editorial-conformance.spec.ts --config playwright.config.ts",
     "test:e2e": "playwright test --config playwright.config.ts",
     "test:headless": "vitest run tests/unit/headless-acceptance.test.ts",
     "test:determinism": "node scripts/verify-determinism-vectors.mjs",
     "test:fixture": "node scripts/verify-fixture-build.mjs",
     "test:boundaries": "node scripts/verify-forbidden-import.mjs && node scripts/verify-forbidden-random.mjs",
     "schema:check": "node scripts/verify-governance-artifacts.mjs",
-    "ci": "corepack pnpm run format:check && corepack pnpm run deps:check && corepack pnpm run lint && corepack pnpm run typecheck && corepack pnpm run test && corepack pnpm run schema:check"
+    "ci": "corepack pnpm run format:check && corepack pnpm run deps:check && corepack pnpm run lint && corepack pnpm run typecheck && corepack pnpm run test && corepack pnpm run test:editorial-lint && corepack pnpm run schema:check"
   },
   "devDependencies": {
     "@african-mandate/application": "workspace:*",

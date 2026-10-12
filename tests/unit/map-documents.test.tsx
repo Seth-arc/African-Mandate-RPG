@@ -14,7 +14,7 @@ import {
 import mapDocumentArtifact from "../../apps/web/src/test-map-document-artifact.json";
 
 const artifactHash =
-  "55b38466a3ce3e58367592749ade0295a1bef36588b63b1c204090bb6b8a8c8f";
+  "7c5178d2ddcb54e127ff3eb7b6afdae2567d1cd5e8a39c295dcd949b3a383f73";
 
 const projection = () =>
   verifyMapDocumentArtifact(mapDocumentArtifact, artifactHash);

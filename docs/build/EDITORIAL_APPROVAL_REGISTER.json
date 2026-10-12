@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": "0.1.0-test.1",
+  "classification": "HUMAN_APPROVAL_REGISTER",
+  "taskId": "AM-PB2-24",
+  "entries": [
+    {
+      "approvalId": "AM-EDITORIAL-001",
+      "area": "sahel_regional_language",
+      "status": "BLOCKED",
+      "ownerRole": "Qualified Sahel regional reviewer",
+      "scope": "Actor names, regional terminology, contested labels, event copy and institutional framing",
+      "missingEvidence": [
+        "Named qualified reviewer",
+        "Dated findings covering all player-facing regional copy"
+      ]
+    },
+    {
+      "approvalId": "AM-EDITORIAL-002",
+      "area": "institutional_legal_protocol",
+      "status": "BLOCKED",
+      "ownerRole": "African Union institutional and legal reviewer",
+      "scope": "Forms of address, authorization language, institutional competence and legal procedure",
+      "missingEvidence": [
+        "Dated source-backed protocol review",
+        "Legal approval of every production authorization path"
+      ]
+    },
+    {
+      "approvalId": "AM-EDITORIAL-003",
+      "area": "publication_and_licensing",
+      "status": "BLOCKED",
+      "ownerRole": "Publication and licensing owner",
+      "scope": "Public copy, source attribution, fonts, map artifacts and redistribution permissions",
+      "missingEvidence": [
+        "Production source and asset licence manifest",
+        "Publication review of real-world claims"
+      ]
+    },
+    {
+      "approvalId": "AM-EDITORIAL-004",
+      "area": "novice_cold_read",
+      "status": "PENDING",
+      "ownerRole": "Player research owner",
+      "scope": "Three event messages and two document summaries read without surrounding interface context",
+      "missingEvidence": [
+        "Three to five matching novice participants",
+        "Dated comprehension findings and resulting decisions"
+      ]
+    },
+    {
+      "approvalId": "AM-EDITORIAL-005",
+      "area": "assistive_technology_lab",
+      "status": "PENDING",
+      "ownerRole": "Accessibility reviewer",
+      "scope": "Manual NVDA, JAWS and VoiceOver journeys on an approved production browser matrix",
+      "missingEvidence": [
+        "Approved production browser matrix",
+        "Dated assistive-technology findings"
+      ]
+    }
+  ]
+}

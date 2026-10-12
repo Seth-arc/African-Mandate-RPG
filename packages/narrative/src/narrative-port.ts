@@ -1,6 +1,7 @@
 import {
   NARRATIVE_CONTRACT_VERSION,
   NARRATIVE_FORMAT_VERSION,
+  CollectionOutcomeSchema,
   NarrativeProviderResponseSchema,
   NarrativeRenderResultSchema,
   NarrativeRequestSchema,
@@ -13,6 +14,10 @@ import {
   type NarrativeResponse,
   type SubjectRef,
 } from "@african-mandate/domain";
+
+export const COLLECTION_NARRATIVE_OUTCOMES = Object.freeze([
+  ...CollectionOutcomeSchema.options,
+]);
 
 type FallbackReason = NonNullable<NarrativeRenderResult["fallbackReason"]>;
 

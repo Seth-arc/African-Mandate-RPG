@@ -525,7 +525,7 @@ export const UiShell = ({
         if (outcome.result.status === "rejected") {
           setTransactionState("idle");
           setTransactionError(
-            `End Month rejected (${outcome.result.reasonCode}). Campaign state is unchanged.`,
+            `End month rejected (${outcome.result.reasonCode}). Campaign state is unchanged.`,
           );
           return;
         }
@@ -638,6 +638,11 @@ export const UiShell = ({
               <StatusLabel severity="info">Projection only</StatusLabel>
             </header>
             <div className="am-panel__body">
+              <Notice heading="Simulation notice" severity="info" role="status">
+                This is a simulation. Events, quotes, and figures are invented
+                unless a source is shown. The test interface does not predict
+                real events.
+              </Notice>
               <WorkspaceState
                 state={state}
                 viewId={selected.id}

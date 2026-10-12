@@ -1045,3 +1045,65 @@ PB2-22 was subsequently accepted under AM-GOV-001/054 by repository-owner commit
 | AC-022 | simulated copy marker | visible simulated/test-only markers and no real-data claims | PASS automated subset; regional/editorial review BLOCKED |
 
 Prompt 23 remains unapproved until independent owner review and an accepting commit. Passing the synthetic UI does not implement production values/content, hidden forecasts, full-campaign balance, cloud sync, production browser support or final editorial/accessibility certification.
+
+PB2-23 was subsequently accepted under AM-GOV-001/056 by repository-owner commit `5a87ae80b59f6f53a65678caf7ae0adf45fc6faa`, authored and committed by Seth-arc at `2026-10-12T00:23:38-04:00`. That acceptance preserves every reported production, browser, regional, editorial and assistive-technology blocker.
+
+## AM-PB2-24 — editorial, accessibility and visual conformance
+
+**Status proposed:** READY_FOR_REVIEW
+
+**Acceptance IDs:** PB2-24; AC-020; AC-021; AC-022; AC-024
+
+**Implementation base:** accepted PB2-23 commit `5a87ae80b59f6f53a65678caf7ae0adf45fc6faa`
+
+### Preflight
+
+- HEAD was the clean repository-owner `prompt 23` commit, authored and committed by Seth-arc at `2026-10-12T00:23:38-04:00`. Under AM-GOV-001 it is PB2-23's acceptance event; AM-GOV-056 and the sole mutable build-state record reconcile that fact.
+- Required Prompts 21-23 were ACCEPTED before implementation. Source manifest hash is `4ce13c6d0fa6eb7d99f4e7023a7c48669bb57407827dc83f661f8ab6eccbb436`; Prompt 24 hash is `cc3e56a04fa92e968a0c196c080c31191f5a0e1805f79c0acf9b18911316eb05`.
+- Writing Standards v2, VOICE, GLOSSARY, Components Reconciled, design decisions, the owner-confirmed Design Standard and accepted predecessor APIs were reviewed before editing. `docs/DESIGN_STANDARDS.md` exists, so the prompt's missing-file blocker is not active.
+
+### Evidence produced
+
+- `@african-mandate/tooling` publishes schema version 1 / contract `0.1.0-test.1` editorial issue/result, 200% text-measurement, and fail-closed human-approval records plus copy/token audit functions.
+- Copy extraction uses the TypeScript AST for the relevant UI/web source and recursively audits the synthetic JSON fixture. The executable check covers prohibited/review patterns, simulated markers, fixed dates, locale display, all four campaign months, raw colors, undefined tokens, unregistered typography/radius/motion values and semantic interaction source.
+- `COLLECTION_NARRATIVE_OUTCOMES` derives the six required values directly from the existing `CollectionOutcomeSchema`. It adds no parallel outcome list.
+- The UI now gives a persistent plain simulation notice, uses action-specific draft/confirmation labels, renders player-facing document/evidence dates with `Intl.DateTimeFormat`, and uses a class for modal body-scroll state. The audit found and corrected one previously undefined line-height token.
+- Chromium measured the Strategic map, Monthly brief and Decision journal at 1024 by 768 CSS pixels with 200% root text: 72, 72 and 77 visible text containers, zero horizontal overflows, zero clipped containers and document width 1024 in each capture. An initial two-pixel masthead glyph clipping result was fixed and retained in the log.
+- A keyboard-only reduced-motion path committed three decisions and ended one month; axe, locale/simulation/plain-summary checks and offline retention also passed. Four browser captures and hashes are recorded in `docs/build/screenshots/24/README.md`.
+- `docs/build/EDITORIAL_APPROVAL_REGISTER.json` records regional language, institutional/legal, publication/licensing, novice cold-read and assistive-technology reviews as BLOCKED/PENDING. No human approval is fabricated.
+
+### Tests and negative cases
+
+- Focused unit tests pin the six outcomes, prohibited-copy findings, current-fixture cleanliness, undefined-token detection and rejection of an unnamed approval.
+- Static verification rejects unresolved copy review items, token/component-rule violations, incorrect simulated metadata/date inventory and any claimed human approval.
+- Browser tests reject horizontal overflow, clipped text, active motion under reduced-motion preference, keyboard/focus regressions, missing markers/plain summary/locale date, axe violations and loss of local fallback while offline.
+- Existing complete UI, narrative, deterministic, boundary and governance tests remain mandatory regressions. Actual command output, including corrected failures, is retained in `docs/build/logs/24-test.log`.
+
+### Source-to-test traceability
+
+| Acceptance ID | Source authority | Executable evidence | Test state |
+|---|---|---|---|
+| PB2-24 | Prompt 24; Writing Standards v2; VOICE; GLOSSARY; Components; Design Standard/decisions | typed QA APIs, static/focused/full tests, measurements, captures, contract and handoff | READY_FOR_REVIEW |
+| AC-020 / SIM-16 | complete deterministic fallback outcomes and offline availability | six-outcome inventory, existing fallback suite and offline browser path | PASS TEST_ONLY |
+| AC-021 | accessible input semantics and projection firewall | keyboard month, focus checks, axe, 200% measurement, reduced motion and forbidden-import regression | PASS automated subset |
+| AC-022 | simulated marker and source/date/orthography | AST copy lint, marker/locale/plain-summary browser checks, glyph regression and fail-closed review register | PASS automated subset; regional/publication review BLOCKED |
+| AC-024 | no phantom headline meters | existing unit/browser omission assertions and full regression | PASS omission; formulas/methodology remain BLOCKED |
+
+Prompt 24 remains unapproved until independent owner review and an accepting commit. Passing local automation and visual inspection does not constitute regional, legal, publication/licensing, general-reader, assistive-technology, production-font or production-browser approval, and it does not promote TEST_ONLY content.
+
+### Independent reproduction correction
+
+The first independent reproduction failed visibly: focused editorial browser
+tests were 2/4, the complete browser run exhausted readiness/context/focus
+timeouts under four-worker contention, and CI reported 22/23 unit files with
+the nine headless cases skipped after the 60-second `beforeAll` timeout. Trace
+inspection found delayed Vite/React initialization and a map that subsequently
+reached ready state, with no application exception.
+
+The test envelopes were corrected without retries, skipped cases, reduced
+samples, or changed assertions. A concurrent headless/editorial-browser stress
+run then passed 9/9 and 4/4; the complete browser gate passed 24/24; and complete
+CI passed 23 files / 175 unit tests plus deterministic, fixture, boundary,
+editorial, and governance checks. Exact failed and passing results remain in
+`docs/build/logs/24-test.log`. This evidence retains READY_FOR_REVIEW and does
+not satisfy the blocked or pending human approvals.

@@ -4,3 +4,5 @@ export const toolingPackage = {
 } as const;
 
 export type ToolingPackageDescriptor = typeof toolingPackage;
+
+export * from "./editorial-qa.js";

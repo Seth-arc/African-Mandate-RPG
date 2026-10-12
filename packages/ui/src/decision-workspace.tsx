@@ -173,7 +173,7 @@ export const DecisionWorkspaceView = ({
                       disabled={disabled}
                       onClick={() => onRemove(index)}
                     >
-                      Remove
+                      Remove draft
                     </button>
                     <button
                       className="am-button am-button--primary"
@@ -199,7 +199,7 @@ export const DecisionWorkspaceView = ({
           Decision journal
         </h3>
         {workspace.journal.length === 0 ? (
-          <p>No decisions have been committed.</p>
+          <p>No committed decisions appear in the journal.</p>
         ) : (
           <ol className="am-decision-journal">
             {workspace.journal.map((entry) => (
@@ -281,10 +281,9 @@ export const DecisionConfirmationDialog = ({
       : undefined;
   useEffect(() => {
     cancelRef.current?.focus();
-    const priorOverflow = globalThis.document.body.style.overflow;
-    globalThis.document.body.style.overflow = "hidden";
+    globalThis.document.body.classList.add("am-dialog-open");
     return () => {
-      globalThis.document.body.style.overflow = priorOverflow;
+      globalThis.document.body.classList.remove("am-dialog-open");
       returnFocusRef.current?.focus();
     };
   }, [returnFocusRef]);
@@ -313,8 +312,7 @@ export const DecisionConfirmationDialog = ({
     }
   };
 
-  const heading =
-    dialog.kind === "commit" ? "Commit decision?" : "End this month?";
+  const heading = dialog.kind === "commit" ? "Commit decision" : "End month";
   const body =
     dialog.kind === "commit"
       ? `${option?.label ?? "This decision"} will be written as one irreversible campaign decision.`
@@ -353,7 +351,7 @@ export const DecisionConfirmationDialog = ({
               ? "Saving…"
               : error === undefined
                 ? dialog.kind === "commit"
-                  ? "Commit"
+                  ? `Commit ${option?.label ?? "decision"}`
                   : "End month"
                 : "Retry save"}
           </button>

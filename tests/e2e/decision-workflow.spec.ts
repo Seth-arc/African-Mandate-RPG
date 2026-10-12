@@ -39,8 +39,10 @@ const commitDraft = async (page: Page, label: string) => {
   const tray = page.locator(".am-draft-tray");
   const draft = tray.getByRole("listitem").filter({ hasText: label });
   await draft.getByRole("button", { name: "Commit decision" }).click();
-  const dialog = page.getByRole("dialog", { name: "Commit decision?" });
-  await dialog.getByRole("button", { name: "Commit", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "Commit decision" });
+  await dialog
+    .getByRole("button", { name: `Commit ${label}`, exact: true })
+    .click();
   await expect(dialog).toBeHidden();
   await expect(page.locator(".am-sr-only")).toContainText(
     "saved and appears in the immutable decision journal",
@@ -49,7 +51,7 @@ const commitDraft = async (page: Page, label: string) => {
 
 const endMonth = async (page: Page, resolvedTurn: number) => {
   await page.getByRole("button", { name: "End month", exact: true }).click();
-  const dialog = page.getByRole("dialog", { name: "End this month?" });
+  const dialog = page.getByRole("dialog", { name: "End month" });
   await dialog.getByRole("button", { name: "End month", exact: true }).click();
   await expect(dialog).toBeHidden();
   await expect(page.locator(".am-sr-only")).toContainText(
@@ -84,7 +86,7 @@ test("draft operations are reversible and do not change campaign state", async (
 
   await expect(page.getByText("3 of 3 available")).toBeVisible();
   await expect(
-    page.getByText("No decisions have been committed."),
+    page.getByText("No committed decisions appear in the journal."),
   ).toBeVisible();
   const tray = page.locator(".am-draft-tray");
   await tray
@@ -93,11 +95,11 @@ test("draft operations are reversible and do not change campaign state", async (
   await tray
     .getByRole("listitem")
     .filter({ hasText: "Task access verification" })
-    .getByRole("button", { name: "Remove" })
+    .getByRole("button", { name: "Remove draft" })
     .click();
   await expect(page.getByText("3 of 3 available")).toBeVisible();
   await expect(
-    page.getByText("No decisions have been committed."),
+    page.getByText("No committed decisions appear in the journal."),
   ).toBeVisible();
 });
 
@@ -109,18 +111,26 @@ test("confirmation traps focus, returns it, and announces durable commitment", a
   await addDraft(page, "Task access verification");
   const commit = page.getByRole("button", { name: "Commit decision" });
   await commit.click();
-  const dialog = page.getByRole("dialog", { name: "Commit decision?" });
+  const dialog = page.getByRole("dialog", { name: "Commit decision" });
   await expect(dialog.getByRole("button", { name: "Cancel" })).toBeFocused();
   await page.keyboard.press("Shift+Tab");
   await expect(
-    dialog.getByRole("button", { name: "Commit", exact: true }),
+    dialog.getByRole("button", {
+      name: "Commit Task access verification",
+      exact: true,
+    }),
   ).toBeFocused();
   await page.keyboard.press("Escape");
   await expect(dialog).toBeHidden();
   await expect(commit).toBeFocused();
 
   await commit.click();
-  await dialog.getByRole("button", { name: "Commit", exact: true }).click();
+  await dialog
+    .getByRole("button", {
+      name: "Commit Task access verification",
+      exact: true,
+    })
+    .click();
   await expect(page.getByText("2 of 3 available")).toBeVisible();
   await expect(
     page.locator(".am-decision-journal").getByRole("heading", {
@@ -141,15 +151,20 @@ test("failed save keeps prior state and retry reuses the draft", async ({
   await openDecisionJournal(page);
   await addDraft(page, "Task access verification");
   await page.getByRole("button", { name: "Commit decision" }).click();
-  const dialog = page.getByRole("dialog", { name: "Commit decision?" });
-  await dialog.getByRole("button", { name: "Commit", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "Commit decision" });
+  await dialog
+    .getByRole("button", {
+      name: "Commit Task access verification",
+      exact: true,
+    })
+    .click();
 
   await expect(dialog.getByRole("alert")).toContainText(
     "prior campaign state is unchanged",
   );
   await expect(page.getByText("3 of 3 available")).toBeVisible();
   await expect(
-    page.getByText("No decisions have been committed."),
+    page.getByText("No committed decisions appear in the journal."),
   ).toBeVisible();
   await dialog.getByRole("button", { name: "Retry save" }).click();
   await expect(dialog).toBeHidden();
@@ -223,8 +238,13 @@ test("completes the adverse path after a visible save failure", async ({
   await openDecisionJournal(page);
   await addDraft(page, "Task access verification");
   await page.getByRole("button", { name: "Commit decision" }).click();
-  const dialog = page.getByRole("dialog", { name: "Commit decision?" });
-  await dialog.getByRole("button", { name: "Commit", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "Commit decision" });
+  await dialog
+    .getByRole("button", {
+      name: "Commit Task access verification",
+      exact: true,
+    })
+    .click();
   await expect(dialog.getByRole("alert")).toBeVisible();
   await dialog.getByRole("button", { name: "Retry save" }).click();
   for (const label of monthActions[0].slice(1)) await commitDraft(page, label);
