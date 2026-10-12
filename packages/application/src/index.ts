@@ -13,6 +13,7 @@ export * from "./atomic-command-service.js";
 export * from "./atomic-turn-service.js";
 export * from "./artifact-registry.js";
 export * from "./browser-persistence.js";
+export * from "./decision-workflow.js";
 export * from "./map-documents.js";
 export * from "./narrative-service.js";
 export * from "./operation-coordinator.js";

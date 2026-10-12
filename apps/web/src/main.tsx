@@ -10,6 +10,7 @@ import {
 } from "@african-mandate/ui";
 
 import mapDocumentArtifact from "./test-map-document-artifact.json";
+import { createTestDecisionWorkflow } from "./test-decision-workflow.js";
 
 const mapDocumentProjection = verifyMapDocumentArtifact(
   mapDocumentArtifact,
@@ -23,6 +24,12 @@ const viewState: UiShellViewState =
   queryState === "loading" || queryState === "error" || queryState === "partial"
     ? queryState
     : "ready";
+const decisionScenario = new globalThis.URLSearchParams(
+  globalThis.location.search,
+).get("decisionScenario");
+const decisionWorkflow = createTestDecisionWorkflow({
+  failFirstSave: decisionScenario === "adverse",
+});
 
 const model = UiShellModelSchema.parse({
   schemaVersion: 1,
@@ -66,6 +73,7 @@ createRoot(root).render(
       model={model}
       state={viewState}
       mapDocuments={mapDocumentProjection}
+      decisionWorkflow={decisionWorkflow}
     />
   </StrictMode>,
 );

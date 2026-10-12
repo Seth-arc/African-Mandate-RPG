@@ -1,0 +1,116 @@
+AM-PB2-23 verification transcript
+Date: 2026-10-11
+Base HEAD: 1b54622ed8cea85dd32c4e66867ebe10a9dc2011
+Classification: TEST_ONLY
+
+PREFLIGHT
+git show -s --format=%H%n%an%n%aI%n%s HEAD
+exit 0
+1b54622ed8cea85dd32c4e66867ebe10a9dc2011
+Seth-arc
+2026-10-11T20:59:05-04:00
+prompt 22
+Result: PB2-22 accepted under AM-GOV-001/054 owner-commit workflow.
+
+SOURCE HASHES
+Source manifest: 4ce13c6d0fa6eb7d99f4e7023a7c48669bb57407827dc83f661f8ab6eccbb436
+Prompt 23: c69b4fab824a4cde284c8afb841987e18a2806a35b245309f0ebc6f76f174cf6
+Reconciliation: 12c93d88480ced19bf581e2e23a143629bed68ce6140ad26eeee6855218cdf99
+Game Design v2.1: 89f7387d041e006e3cc1e21d52fdc07e2234227600321eea5601a35415341f04
+Components: a512a1e46a3b2c1affca0e776c7ef31a0b9350dc222c21dcc191960ecbcd836c
+
+INITIAL FAILURES (PRESERVED)
+Sandboxed corepack pnpm run typecheck: exit 1.
+- Node could not lstat C:\Users\ssnguna under the restricted traversal boundary.
+Correction: reran the same read/build command under the approved workspace execution boundary.
+
+Typecheck attempt 1: exit 2.
+- strict indexed access required explicit non-null array entries;
+- fixed fixture decision/date values had not been schema-parsed to branded types.
+Correction: non-null proof after bounds checks; atomic result and journal schema parsing.
+
+Focused unit attempt 1: exit 1; 0 passed, 4 failed.
+- DecisionPreview confidence uses the accepted integer Score scale, not 0–1.
+Correction: fixed test-only projection value 0.5 -> 50.
+
+Focused unit attempt 2: exit 1; 1 passed, 3 failed.
+- Fixture decision IDs used hyphens and did not match canonical decision_[a-z0-9_-]+.
+Correction: decision_ui_N canonical-format IDs.
+
+Focused browser attempt 1: exit 1; 6 passed, 1 failed.
+- Confirmation test expected the committed action heading twice, but committed options correctly leave the available list and remain only in the journal.
+Correction: scope the assertion to the immutable journal.
+
+Final focus-management browser attempt: exit 1; 3 passed, 4 failed.
+- The new success-focus assertions used an accessible heading name shared by the workspace h2 and inner h3; strict locators rejected the ambiguity.
+Correction: assert the explicit journal/ledger focus-target IDs. The behavior itself was present; the corrected focused suite passed 7/7.
+
+FOCUSED FINAL
+corepack pnpm run test:decisions
+exit 0
+Test Files 1 passed (1)
+Tests 4 passed (4)
+
+corepack pnpm exec playwright test tests/e2e/decision-workflow.spec.ts --config playwright.config.ts
+exit 0
+7 passed (final run 19.8s)
+
+FULL CI FINAL
+corepack pnpm run ci
+exit 0
+- formatting: PASS
+- peer dependencies: PASS
+- lint: PASS
+- typecheck: PASS
+- unit: 22 files / 171 tests PASS
+- deterministic two-process vectors: PASS
+- synthetic fixture two-process build: PASS
+- web-to-simulation import rejected: PASS
+- ui-to-domain import rejected: PASS
+- ui-to-simulation import rejected: PASS
+- Math.random/randomUUID simulation checks: PASS
+- governance/toolchain artifact schema check: PASS
+
+COMPLETE BROWSER FINAL
+corepack pnpm run test:e2e
+exit 0
+20 passed (25.7s)
+Includes shell, map/document and decision suites. Prompt 23 includes both full four-month paths, focus/keyboard/live-region assertions and axe.
+
+WEB BUILD FINAL
+corepack pnpm --filter @african-mandate/web run build
+exit 0
+179 modules transformed; build completed in 705ms.
+Existing MapLibre chunk-size warning remains visible and non-blocking.
+
+GOVERNANCE FINAL
+py -3 -B -m unittest discover -s tests/governance -p "test_*.py" -v
+exit 0
+Ran 7 tests in 0.020s
+OK
+
+FROZEN INSTALL
+corepack pnpm install --frozen-lockfile
+exit 0
+Scope: all 11 workspace projects
+Already up to date; pnpm 11.23.0.
+
+DIFF CHECK
+git diff --check
+exit 0
+Only Git's existing LF-to-CRLF working-copy notices were emitted.
+
+FIXED ARTIFACTS
+apps/web/src/test-decision-workflow.ts SHA-256:
+5daec48a69b195bc8d7d95e536f604b0d93ca2291f94f90abd02874b6e8a6005
+docs/build/screenshots/23/four-month-resolution-ledger.png SHA-256:
+cb54fac858d592544762c1a942a5c7fb1fdcabb7e49ee08da87780023b0c41bb
+
+KNOWN BLOCKS
+- No approved production decision prose, legal authorization path, actor values or balance effects.
+- No production geography, cloud transport or full twenty-month content.
+- No regional/editorial review, manual assistive-technology lab or production browser certification.
+- The browser script is fixed TEST_ONLY presentation evidence, not a domain engine or production serializer.
+
+FINAL STATE
+Prompt 23 is READY_FOR_REVIEW only. No ACCEPTED claim is made.

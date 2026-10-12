@@ -1,7 +1,7 @@
 # Serialized domain contract inventory
 
 **Contract version:** 1.0.0
-**Task:** AM-PB2-03 / PB2-03 through AM-PB2-22 / PB2-22
+**Task:** AM-PB2-03 / PB2-03 through AM-PB2-23 / PB2-23
 **Owner:** `@african-mandate/domain`  
 **Status:** PB2-03 and PB2-07 through PB2-21 ACCEPTED; Prompt 22 map/document contract is READY_FOR_REVIEW; no production scenario or geography admission
 
@@ -56,6 +56,7 @@ Prompt 17 publishes the canonical source-listed narrative perspective, context, 
 | Projection and browser adapter facades | `CampaignProjectionSchema`, `ActionPreviewSchema`, `ResolutionProjectionSchema`, `CampaignSyncStateSchema`; IndexedDB/Web Locks adapters | Technical v2 sections 16, 20-23, 45-48 and 65-72; Prompt 20 | Contract 1.0.0 under AM-GOV-049; projection/status/envelope fields absent from canonical exact shapes remain explicit TEST_ONLY proposals |
 | Accessible UI shell presentation | `UiShellModelSchema`, `UiSaveStateSchema`, `UiAttentionItemSchema`, `createUiShellModel`, `UiShell` | Components Reconciled v1; Design Brief Reconciled v1; Design Standard v2.1; Prompt 21 | Schema 1 / contract 0.1.0-test.1 under AM-GOV-051; projection facts are copied from CampaignProjection while save/attention envelopes and responsive matrix remain explicit TEST_ONLY proposals |
 | Map, subject, dossier and document projection | `MapDocumentProjectionSchema`, `MapFeaturePropertiesSchema`, `SubjectDossierProjectionSchema`, `KnowledgeDocumentProjectionSchema`, `verifyMapDocumentArtifact`, `MapDocumentsWorkspace`, `DocumentWorkspace` | Technical v2 sections 40-43, 88 and 104; Components Reconciled; VOICE; GLOSSARY; Prompt 22 | Schema 1 / contract 0.1.0-test.1 under AM-GOV-053; immutable synthetic geometry and documents only; production PMTiles, geography and temporal asset admission remain BLOCKED |
+| Decision workflow and presentation | `DecisionWorkspaceProjectionSchema`, action-option/journal/ledger schemas, `DecisionWorkflowCoordinator`, `DecisionWorkspaceView`, `ResolutionLedgerView`, `DecisionConfirmationDialog` | Reconciliation R-01/R-02; GDS v2.1 decision economy; Components Reconciled; Prompt 23 | Schema 1 / contract 0.1.0-test.1 under AM-GOV-055; accepted atomic services remain authoritative; drafts are local, history append-only and exact presentation fields TEST_ONLY |
 
 ## Referential validation
 
@@ -108,3 +109,4 @@ The following remain intentionally outside Prompt 03: production content admissi
 | PB2-20 / AC-005 / AC-008 / AC-020 / AC-021 | Verified immutable artifacts, durability-before-swap, stale revision/sync refusal, revision-aware projection cache, offline narrative fallback, and UI projection firewall | `tests/unit/application-adapters.test.ts`; `scripts/verify-forbidden-import.mjs`; `docs/build/PRODUCTION_APPLICATION_ADAPTER_CONTRACT.md` |
 | PB2-21 / AC-021 / AC-022 / AC-024 | Projection-only accessible shell, keyboard/zoom/reduced-motion behavior, explicit states, simulated marker and no phantom headline meters | `tests/unit/ui-shell.test.tsx`; `tests/e2e/ui-shell.spec.ts`; `scripts/verify-forbidden-import.mjs`; `docs/build/UI_SHELL_CONTRACT.md` |
 | PB2-22 / AC-008 / AC-018 / AC-021 / AC-022 | ID-based map/list equivalence, knowledge-safe dossier, metadata/evidence/assessment separation, missing/unknown legend, glyph probe, synthetic watermark, hidden-style allowlist and immutable hashes | `tests/unit/map-documents.test.tsx`; `tests/e2e/map-documents.spec.ts`; `docs/build/MAP_DOCUMENT_CONTRACT.md` |
+| PB2-23 / AC-005 / AC-007 / AC-008 / AC-021 / AC-022 / AC-025 | Local draft isolation, one atomic durable commit, unchanged prior state on save failure, append-only journal/ledger, hidden-safe preview, mandatory last-slot safety, focus trap/live announcements and four-month happy/adverse paths | `tests/unit/decision-workflow.test.ts`; `tests/e2e/decision-workflow.spec.ts`; `docs/build/DECISION_WORKFLOW_CONTRACT.md` |

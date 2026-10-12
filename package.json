@@ -17,6 +17,7 @@
     "test:unit": "vitest run tests/unit",
     "test:ui": "vitest run tests/unit/ui-shell.test.tsx",
     "test:map-docs": "vitest run tests/unit/map-documents.test.tsx",
+    "test:decisions": "vitest run tests/unit/decision-workflow.test.ts",
     "test:e2e": "playwright test --config playwright.config.ts",
     "test:headless": "vitest run tests/unit/headless-acceptance.test.ts",
     "test:determinism": "node scripts/verify-determinism-vectors.mjs",

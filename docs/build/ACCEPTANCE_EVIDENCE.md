@@ -1002,3 +1002,46 @@ PB2-21 was subsequently accepted under AM-GOV-001/052 by repository-owner commit
 | AC-022 | VOICE/GLOSSARY copy and locale safeguard | simulated watermarks, evidence/assessment separation, unknown/missing language and `Burkinabè · Tillabéri · Ŋ` glyph check | PASS automated subset; regional/editorial/font review BLOCKED |
 
 Prompt 22 remains unapproved until independent owner review and an accepting commit. Passing this isolated synthetic slice does not admit real geography, inferred zones, production map artifacts, production document content, 2026 asset facts, source licences, regional/editorial conformance or full production UI certification.
+
+PB2-22 was subsequently accepted under AM-GOV-001/054 by repository-owner commit `1b54622ed8cea85dd32c4e66867ebe10a9dc2011`, authored and committed by Seth-arc at `2026-10-11T20:59:05-04:00`. That acceptance preserves every reported geography, source, licence, font and regional/editorial blocker.
+
+## AM-PB2-23 — decision preview, commitment and resolution UI
+
+**Status proposed:** READY_FOR_REVIEW
+
+**Acceptance IDs:** PB2-23; AC-005; AC-007; AC-008; AC-021; AC-022; AC-025
+
+**Implementation base:** accepted PB2-22 commit `1b54622ed8cea85dd32c4e66867ebe10a9dc2011`
+
+### Preflight
+
+- HEAD was the clean repository-owner `prompt 22` commit, authored and committed by Seth-arc at `2026-10-11T20:59:05-04:00`. Under AM-GOV-001 it is PB2-22's acceptance event; AM-GOV-054 and the sole mutable build-state record reconcile that fact.
+- Required Prompts 20–22 were ACCEPTED before implementation. Source manifest hash is `4ce13c6d0fa6eb7d99f4e7023a7c48669bb57407827dc83f661f8ab6eccbb436`; Prompt 23 hash is `c69b4fab824a4cde284c8afb841987e18a2806a35b245309f0ebc6f76f174cf6`.
+- Reconciliation R-01/R-02, GDS decision economy/preview/journal/resolution/autosave rules, Components Reconciled and accepted predecessor APIs were reviewed before editing.
+
+### Evidence produced
+
+- `@african-mandate/application` publishes schema version 1 / contract `0.1.0-test.1` workspace, action-option, decision-journal and resolution-ledger projections plus `DecisionWorkflowCoordinator`.
+- The coordinator calls exactly one accepted atomic operation. It cannot load the next projection before durable service completion. It refuses stale revisions, rewritten/reordered history, a committed decision missing from the refreshed journal or an End Month commit missing ledger entries.
+- `@african-mandate/ui` implements reversible local drafts, player-known cost/unknown/dependency preview, explicit Commit and End Month confirmation, immutable history, saving/failure/retry states, a focus trap, focus return, alert errors and polite durable-success announcements.
+- The fixed browser script provides four months of visibly simulated schema-validated projections through the coordinator. It does not import simulation, calculate domain effects or contain production claims. The adverse variant injects a failure before state mutation and retries the unchanged command.
+- The complete happy and adverse paths reach Turn 5. Four month-end resolutions produce 20 ordered entries across implementation, institutions, regional conditions, intelligence and watch.
+
+### Tests and negative cases
+
+- Unit tests prove one dispatch/one refresh, immediate committed journal visibility, no refresh or prior mutation after write failure, strict hidden-field rejection, chronological history rejection and final-slot reservation for a known mandatory response.
+- Browser tests prove reversible drafts do not change slots/journal; focus containment/return; screen-reader confirmation; failed-save unchanged prior state and retry; disabled optional use of a reserved last slot; both full four-month paths; ordered ledger; and axe accessibility.
+- No test treats a blocked production action, regional/editorial review or production value as passing.
+
+### Source-to-test traceability
+
+| Acceptance ID | Source authority | Executable evidence | Test state |
+|---|---|---|---|
+| PB2-23 | Prompt 23; Reconciliation R-01/R-02; GDS decision economy; Components | typed APIs, focused/full tests, four-month capture, contract and handoff | READY_FOR_REVIEW |
+| AC-005 | atomic durable-write invariant | injected exception leaves prior projection, slots and journal unchanged; retry path | PASS TEST_ONLY |
+| AC-007 / AC-025 | three-slot capacity and no mandatory-response softlock | last optional action disabled while required action remains available; End Month blocked until response | PASS TEST_ONLY |
+| AC-008 | knowledge/hidden-state projection firewall | strict action preview fields and hidden-success-probability negative case | PASS TEST_ONLY |
+| AC-021 | engine import firewall and accessible semantics | forbidden import gate, keyboard/focus tests, live regions, semantic buttons and axe | PASS automated subset |
+| AC-022 | simulated copy marker | visible simulated/test-only markers and no real-data claims | PASS automated subset; regional/editorial review BLOCKED |
+
+Prompt 23 remains unapproved until independent owner review and an accepting commit. Passing the synthetic UI does not implement production values/content, hidden forecasts, full-campaign balance, cloud sync, production browser support or final editorial/accessibility certification.

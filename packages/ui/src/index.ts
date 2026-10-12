@@ -10,6 +10,7 @@ export const uiPackage = {
 
 export type UiPackageDescriptor = typeof uiPackage;
 
+export * from "./decision-workspace.js";
 export * from "./map-documents.js";
 export * from "./ui-shell-model.js";
 export * from "./ui-shell.js";

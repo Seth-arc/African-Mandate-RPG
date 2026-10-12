@@ -15,3 +15,12 @@ Original prompt: Prompt 07 — Rule facts, commands and eligibility (AM-PB2-07).
 - Production gates remain explicit: real geography, PMTiles publication, and dated asset admission are BLOCKED. No Mopti polygon, inferred zone, or 2026 asset assertion is present.
 - Verification: focused unit 7/7; focused browser 4/4; complete browser 13/13; web build passed; full CI passed with 21 files/167 tests; governance 7/7; frozen install and lockfile supply-chain policy passed. Corrected failures remain in the Prompt 22 log.
 - Review TODO: independent owner review/commit; production geography, PMTiles publication, font/glyph approval, dated asset evidence, regional/editorial review, and production UI certification remain blocked.
+
+## Prompt 23 — decision preview, commitment, and resolution UI
+
+- Preflight: clean owner-authored Prompt 22 commit `1b54622ed8cea85dd32c4e66867ebe10a9dc2011`; acceptance is reconcilable under AM-GOV-001/054.
+- Source review: Reconciliation R-01/R-02; GDS decision economy, preview, journal, resolution and autosave sections; Components registry; accepted Prompt 20–22 handoffs and APIs.
+- Implemented: strict TEST_ONLY decision workspace/journal/ledger projections; single-operation durable coordinator; local draft tray; knowledge-safe preview; focus-trapped Commit/End Month confirmations; immediate immutable journal; five-group ledger; save failure and same-command retry; mandatory final-slot protection.
+- Browser harness: fixed four-month projection script with no domain-effect execution, production values, simulation import or hidden-state field. Happy and injected-failure adverse paths complete through Month 4.
+- Verification: focused unit 4/4; focused browser 7/7; complete browser 20/20; full CI 22 files/171 tests plus deterministic/fixture/boundary/schema gates; governance 7/7; web build and frozen install passed. Corrected failures remain in the Prompt 23 log.
+- Review TODO: independent owner review/commit. Production copy/content, legal/balance inputs, full campaign, cloud sync, regional/editorial review, assistive-technology lab and production browser certification remain blocked.
