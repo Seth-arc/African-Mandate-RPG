@@ -42,7 +42,10 @@ test("supports keyboard skip navigation and campaign navigation", async ({
   await page.keyboard.press("Enter");
   await expect(
     page.getByRole("heading", { name: "Monthly brief", exact: true }),
-  ).toHaveCount(2);
+  ).toHaveCount(1);
+  await expect(
+    page.getByRole("heading", { name: "Opening test brief" }),
+  ).toBeVisible();
   await expect(briefLink).toHaveAttribute("aria-current", "page");
 });
 

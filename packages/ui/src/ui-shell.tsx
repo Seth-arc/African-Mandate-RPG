@@ -1,5 +1,7 @@
 import { useState, type ReactNode } from "react";
+import type { MapDocumentProjection } from "@african-mandate/application";
 
+import { DocumentWorkspace, MapDocumentsWorkspace } from "./map-documents.js";
 import {
   UiShellModelSchema,
   type UiAttentionItem,
@@ -13,6 +15,7 @@ export interface UiShellProps {
   readonly state?: UiShellViewState;
   readonly locale?: string;
   readonly onRetry?: () => void;
+  readonly mapDocuments?: MapDocumentProjection;
 }
 
 type Severity = "neutral" | "info" | "success" | "warning" | "critical";
@@ -24,6 +27,7 @@ const navigation = [
   { id: "decision-journal", label: "Decision journal" },
   { id: "resolution-ledger", label: "Resolution ledger" },
 ] as const;
+type NavigationId = (typeof navigation)[number]["id"];
 
 const attentionOrder = { critical: 0, warning: 1, info: 2 } as const;
 const minimumSupportedViewportWidth = 1024;
@@ -244,11 +248,15 @@ const AttentionQueue = ({
 
 const WorkspaceState = ({
   state,
+  viewId,
   viewLabel,
+  mapDocuments,
   onRetry,
 }: {
   readonly state: UiShellViewState;
+  readonly viewId: NavigationId;
   readonly viewLabel: string;
+  readonly mapDocuments?: MapDocumentProjection;
   readonly onRetry?: () => void;
 }) => {
   if (state === "loading") {
@@ -279,18 +287,32 @@ const WorkspaceState = ({
       </>
     );
   }
+  const partialNotice =
+    state === "partial" ? (
+      <Notice heading="Partial campaign view" severity="warning" role="status">
+        Some projection fields are unavailable. Available campaign facts remain
+        visible and unavailable values are not estimated.
+      </Notice>
+    ) : null;
+  if (mapDocuments !== undefined && viewId === "strategic-map") {
+    return (
+      <>
+        {partialNotice}
+        <MapDocumentsWorkspace projection={mapDocuments} />
+      </>
+    );
+  }
+  if (mapDocuments !== undefined && viewId === "monthly-brief") {
+    return (
+      <>
+        {partialNotice}
+        <DocumentWorkspace projection={mapDocuments} />
+      </>
+    );
+  }
   return (
     <>
-      {state === "partial" ? (
-        <Notice
-          heading="Partial campaign view"
-          severity="warning"
-          role="status"
-        >
-          Some projection fields are unavailable. Available campaign facts
-          remain visible and unavailable values are not estimated.
-        </Notice>
-      ) : null}
+      {partialNotice}
       <div className="am-workspace-placeholder">
         <p className="am-meta">Selected view</p>
         <h2 id="workspace-heading">{viewLabel}</h2>
@@ -308,6 +330,7 @@ export const UiShell = ({
   state = "ready",
   locale = "en-GB",
   onRetry,
+  mapDocuments,
 }: UiShellProps) => {
   const model = UiShellModelSchema.parse(inputModel);
   const [activeView, setActiveView] =
@@ -391,7 +414,9 @@ export const UiShell = ({
             <div className="am-panel__body">
               <WorkspaceState
                 state={state}
+                viewId={selected.id}
                 viewLabel={selected.label}
+                {...(mapDocuments === undefined ? {} : { mapDocuments })}
                 {...(onRetry === undefined ? {} : { onRetry })}
               />
             </div>

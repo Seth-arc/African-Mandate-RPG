@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@african-mandate/application": "workspace:*",
+    "maplibre-gl": "6.13.0",
     "react": "19.1.1",
     "zod": "4.6.5"
   }

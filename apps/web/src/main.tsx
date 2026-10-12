@@ -1,11 +1,20 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
+import { verifyMapDocumentArtifact } from "@african-mandate/application";
+
 import {
   UiShell,
   UiShellModelSchema,
   type UiShellViewState,
 } from "@african-mandate/ui";
+
+import mapDocumentArtifact from "./test-map-document-artifact.json";
+
+const mapDocumentProjection = verifyMapDocumentArtifact(
+  mapDocumentArtifact,
+  "55b38466a3ce3e58367592749ade0295a1bef36588b63b1c204090bb6b8a8c8f",
+);
 
 const queryState = new globalThis.URLSearchParams(
   globalThis.location.search,
@@ -53,6 +62,10 @@ if (root === null) throw new Error("Web root element is missing");
 
 createRoot(root).render(
   <StrictMode>
-    <UiShell model={model} state={viewState} />
+    <UiShell
+      model={model}
+      state={viewState}
+      mapDocuments={mapDocumentProjection}
+    />
   </StrictMode>,
 );

@@ -1,0 +1,146 @@
+AM-PB2-22 verification transcript
+Date: 2026-10-11
+Base HEAD: 994280a2327fc02d02f4534078d75b4669a764eb
+Classification: TEST_ONLY
+
+PREFLIGHT
+git rev-parse HEAD
+exit 0
+994280a2327fc02d02f4534078d75b4669a764eb
+
+git log -1 --format=%H%n%an%n%aI%n%s
+exit 0
+994280a2327fc02d02f4534078d75b4669a764eb
+Seth-arc
+2026-10-11T19:39:19-04:00
+prompt 21
+Result: PB2-21 accepted under AM-GOV-001/052 owner-commit workflow.
+
+SOURCE HASHES
+Prompt 22: 3989756636de9c430dcb274fc6dd2837cd6762eeb875b7c3615b1805ebf497be
+Technical v2: 982be4ecd82b996e14be83b6fd89a60a2876bb4e2505ed195889ad4f81dcee30
+Components: a512a1e46a3b2c1affca0e776c7ef31a0b9350dc222c21dcc191960ecbcd836c
+VOICE: 73fe2f046da88bf76fe493b1321f6e32ea7986528ecde5a29983a8703bf101e0
+GLOSSARY: 622da2536adeff29d1d472f9a049cda30f7335161336c882302744449a4ee738
+Design Standard: 39755e3cbd573e8682970d2aefd1a98a7b53b9cb935611e6fd17bafdbfe21bb4
+tokens.css: f534d03bbf1b60e65781972d5e358076b8b572005672bb5b1c61727a9718d4e9
+
+DEPENDENCY GATE
+MapLibre latest registry release observed: 6.14.0.
+Supply-chain minimum-age policy did not yet admit it, so implementation pins
+maplibre-gl 6.13.0. No minimum-age exception remains in pnpm-workspace.yaml.
+@types/geojson 7946.0.16 is pinned for MapLibre 6.13 ambient declarations.
+
+INITIAL BROWSER FAILURES (PRESERVED)
+Complete Playwright attempt 1: exit 1; 9 passed, 4 failed.
+- MapLibre worker failed to load.
+- accepted shell test expected the former duplicate Monthly brief heading.
+- two Prompt 22 locators matched both map and list controls.
+Corrections: official Vite worker URL wiring; updated the accepted shell assertion
+for the real document surface; scoped ID locators.
+
+Complete Playwright attempt 2: exit 1; 10 passed, 3 failed.
+- zone marker click was intercepted by overlapping content;
+- missing-state legend locator was ambiguous;
+- subject selector matched map and list controls.
+Corrections: feature-specific label anchors and list/legend scoping.
+
+Focused Playwright attempt: exit 1; 3 passed, 1 failed.
+- zone selected-state assertion still matched both synchronized controls.
+Correction: list-specific selected-state assertion.
+
+Focused Playwright attempt: exit 1; 3 passed, 1 failed.
+- list selection updated the dossier but the corresponding map button did not
+  consistently expose aria-pressed after MapLibre readiness.
+Correction: update marker aria-pressed independently of feature-state readiness.
+
+FOCUSED FINAL TESTS
+node .\node_modules\vitest\vitest.mjs run tests/unit/map-documents.test.tsx
+exit 0
+Test Files  1 passed (1)
+Tests       7 passed (7)
+
+node .\node_modules\@playwright\test\cli.js test tests/e2e/map-documents.spec.ts --config playwright.config.ts --workers=1
+exit 0
+4 passed (10.2s)
+
+COMPLETE BROWSER TESTS
+node .\node_modules\@playwright\test\cli.js test --config playwright.config.ts --workers=1
+exit 0
+13 passed (26.1s)
+Screenshots:
+- docs/build/screenshots/22/map-list-dossier-1440x900.png
+- docs/build/screenshots/22/documents-1440x900.png
+Both were inspected at original resolution. Prompt 21 screenshot binaries were
+restored to the accepted commit after the combined suite regenerated them.
+
+BUILD
+node pinned-pnpm.mjs --filter @african-mandate/web run build
+exit 0
+176 modules transformed.
+CSS 106.37 kB; application JS 413.63 kB; MapLibre worker 507.77 kB;
+MapLibre chunk 1,040.88 kB (282.02 kB gzip).
+Vite emitted its non-failing >500 kB advisory. Browser tests prove the worker
+loads and the map reaches ready state.
+
+CORRECTED FORMAT/TYPE FAILURES (PRESERVED)
+Prettier invocation including tests/governance/test_build_state.py: exit 1.
+TypeScript/CSS/test files were unchanged; Prettier reported that it has no
+parser for Python. Python was not rewritten by Prettier.
+
+Full CI attempt 1: exit 1 at TypeScript after format, peers and lint passed.
+- MapLibre 6.13 declarations could not resolve ambient GeoJSON.
+- readonly style expression tuples were incompatible with MapLibre's mutable
+  ExpressionSpecification.
+- strict noPropertyAccessFromIndexSignature rejected dataset.subjectId.
+Corrections: pinned @types/geojson, included geojson in tsconfig types, typed
+style expressions as ExpressionSpecification, and used dataset["subjectId"].
+
+Direct typecheck before frozen relink: exit 1; ambient GeoJSON still unavailable
+because lockfile-only update had not linked the root type package.
+Frozen install linked the package. Subsequent typecheck: exit 0.
+
+FROZEN INSTALL
+node pinned-pnpm.mjs install --frozen-lockfile
+exit 0
+Scope: all 11 workspace projects
+Lockfile up to date; supply-chain policy PASS for 221 entries.
+The environment emitted its pre-existing NODE_TLS_REJECT_UNAUTHORIZED=0
+warning; the implementation did not set or suppress it.
+
+FULL CI FINAL
+node pinned-pnpm.mjs run ci
+exit 0
+- formatting: PASS
+- peer dependencies: PASS
+- lint: PASS
+- typecheck: PASS
+- unit: 21 files / 167 tests PASS
+- deterministic two-process vectors: PASS
+- synthetic fixture two-process build: PASS
+- web-to-simulation import rejected: PASS
+- ui-to-domain import rejected: PASS
+- ui-to-simulation import rejected: PASS
+- Math.random/randomUUID simulation checks: PASS
+- governance/toolchain artifact schema check: PASS
+
+GOVERNANCE FINAL
+py -3 -B -m unittest discover -s tests/governance -p "test_*.py" -v
+exit 0
+Ran 7 tests in 0.026s
+OK
+
+Direct node scripts/verify-governance-artifacts.mjs: exit 1.
+Reason: the verifier deliberately requires pnpm's execution context to compare
+the executing package-manager version with toolchain.json.
+Canonical node pinned-pnpm.mjs run schema:check: exit 0.
+PASS: governance and toolchain artifacts match their public schemas.
+
+KNOWN BLOCKS
+- No approved production boundary provider/edition/level/crosswalk/licence.
+- No production PMTiles build/publication or approved font/glyph gate.
+- No temporally admissible production asset evidence or 2026-to-2025 claim.
+- No regional/editorial/manual assistive-technology certification.
+
+FINAL STATE
+Prompt 22 is READY_FOR_REVIEW only. No ACCEPTED claim is made.

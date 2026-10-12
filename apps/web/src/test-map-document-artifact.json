@@ -1,0 +1,362 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": "0.1.0-test.1",
+  "classification": "TEST_ONLY_MAP_DOCUMENT_PROJECTION",
+  "campaignId": "campaign_test_map_documents",
+  "campaignRevision": 0,
+  "mapArtifactManifest": {
+    "mapArtifactSchemaVersion": 1,
+    "pmtilesUrl": "https://fixtures.invalid/sha256/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855/synthetic-placeholder.pmtiles",
+    "pmtilesHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "sourceLayers": [
+      {
+        "sourceLayer": "test-territories",
+        "subjectKind": "territory",
+        "selectable": true,
+        "idProperty": "subject_id",
+        "requiredProperties": [
+          "subject_kind",
+          "subject_id",
+          "source_layer",
+          "display_label",
+          "knowledge_status"
+        ]
+      },
+      {
+        "sourceLayer": "test-zones",
+        "subjectKind": "zone",
+        "selectable": true,
+        "idProperty": "subject_id",
+        "requiredProperties": [
+          "subject_kind",
+          "subject_id",
+          "source_layer",
+          "display_label",
+          "knowledge_status"
+        ]
+      },
+      {
+        "sourceLayer": "test-assets",
+        "subjectKind": "asset",
+        "selectable": true,
+        "idProperty": "subject_id",
+        "requiredProperties": [
+          "subject_kind",
+          "subject_id",
+          "source_layer",
+          "display_label",
+          "knowledge_status"
+        ]
+      },
+      {
+        "sourceLayer": "test-corridors",
+        "subjectKind": "corridor",
+        "selectable": true,
+        "idProperty": "subject_id",
+        "requiredProperties": [
+          "subject_kind",
+          "subject_id",
+          "source_layer",
+          "display_label",
+          "knowledge_status"
+        ]
+      }
+    ],
+    "crsSource": "EPSG:4326",
+    "buildToolchainVersion": "test-only-inline-geometry-v1"
+  },
+  "renderTransport": "test_inline_geojson",
+  "geometryHash": "2c0b076749e96610617f327204101b76c8a1b1562a7af352fd33105529476eed",
+  "geometry": {
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "id": "territory_test_atlas",
+        "properties": {
+          "subject_kind": "territory",
+          "subject_id": "territory_test_atlas",
+          "source_layer": "test-territories",
+          "display_label": "Synthetic territory A",
+          "knowledge_status": "known"
+        },
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [-4, -3],
+              [4, -3],
+              [4, 3],
+              [-4, 3],
+              [-4, -3]
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "id": "zone_test_epreuve",
+        "properties": {
+          "subject_kind": "zone",
+          "subject_id": "zone_test_epreuve",
+          "source_layer": "test-zones",
+          "display_label": "Synthetic zone Épreuve",
+          "knowledge_status": "contested"
+        },
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [-1.5, -1.25],
+              [1.75, -1.25],
+              [1.75, 1.5],
+              [-1.5, 1.5],
+              [-1.5, -1.25]
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "id": "asset_test_relay_nga",
+        "properties": {
+          "subject_kind": "asset",
+          "subject_id": "asset_test_relay_nga",
+          "source_layer": "test-assets",
+          "display_label": "Synthetic relay Ŋa",
+          "knowledge_status": "unknown"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [0.75, 0.5]
+        }
+      },
+      {
+        "type": "Feature",
+        "id": "corridor_test_beta",
+        "properties": {
+          "subject_kind": "corridor",
+          "subject_id": "corridor_test_beta",
+          "source_layer": "test-corridors",
+          "display_label": "Synthetic corridor B",
+          "knowledge_status": "missing"
+        },
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [-3.25, -2],
+            [-0.5, -0.25],
+            [3.25, 2]
+          ]
+        }
+      }
+    ]
+  },
+  "labelGlyphProbe": "Burkinabè · Tillabéri · Ŋ",
+  "subjects": [
+    {
+      "subject_kind": "territory",
+      "subject_id": "territory_test_atlas",
+      "display_label": "Synthetic territory A",
+      "knowledge_status": "known",
+      "dossier": {
+        "subject_id": "territory_test_atlas",
+        "title": "Synthetic territory A dossier",
+        "summary": "This abstract test territory exists only to verify map identity and selection behavior.",
+        "sourceConfidence": "Known",
+        "sections": [
+          {
+            "heading": "Role",
+            "statements": [
+              "Provides an explicitly synthetic parent area for the test zone."
+            ]
+          },
+          {
+            "heading": "Known position",
+            "statements": [
+              "The test artifact identifies this subject by territory_test_atlas."
+            ]
+          },
+          {
+            "heading": "What remains unknown",
+            "statements": [
+              "No real administrative status, population, authority or geographic claim is attached."
+            ]
+          }
+        ],
+        "evidenceIds": ["evidence_test_territory_manifest"],
+        "assessmentIds": []
+      }
+    },
+    {
+      "subject_kind": "zone",
+      "subject_id": "zone_test_epreuve",
+      "display_label": "Synthetic zone Épreuve",
+      "knowledge_status": "contested",
+      "dossier": {
+        "subject_id": "zone_test_epreuve",
+        "title": "Synthetic zone Épreuve dossier",
+        "summary": "Two synthetic reports disagree about access conditions in this abstract test zone.",
+        "sourceConfidence": "Contested",
+        "sections": [
+          {
+            "heading": "Role",
+            "statements": [
+              "Exercises contested-evidence and accented-label rendering without representing a real place."
+            ]
+          },
+          {
+            "heading": "What is contested",
+            "statements": [
+              "One test report describes restricted access; another describes conditional access."
+            ]
+          },
+          {
+            "heading": "What you can do",
+            "statements": [
+              "Review the evidence and assessment sections without treating either report as hidden truth."
+            ]
+          },
+          {
+            "heading": "What remains unknown",
+            "statements": ["Current access conditions are not known."]
+          }
+        ],
+        "evidenceIds": [
+          "evidence_test_access_restricted",
+          "evidence_test_access_conditional"
+        ],
+        "assessmentIds": ["assessment_test_access_contested"]
+      }
+    },
+    {
+      "subject_kind": "asset",
+      "subject_id": "asset_test_relay_nga",
+      "display_label": "Synthetic relay Ŋa",
+      "knowledge_status": "unknown",
+      "dossier": {
+        "subject_id": "asset_test_relay_nga",
+        "title": "Synthetic relay Ŋa dossier",
+        "summary": "The fixture includes a marker, but no operational assertion is available.",
+        "sourceConfidence": "Not known",
+        "sections": [
+          {
+            "heading": "Role",
+            "statements": [
+              "Tests an asset-shaped subject without making a production or 2026 operational claim."
+            ]
+          },
+          {
+            "heading": "What remains unknown",
+            "statements": [
+              "Ownership, operation, capacity, status and real-world location are not known because this is not a real asset."
+            ]
+          }
+        ],
+        "evidenceIds": [],
+        "assessmentIds": []
+      }
+    },
+    {
+      "subject_kind": "corridor",
+      "subject_id": "corridor_test_beta",
+      "display_label": "Synthetic corridor B",
+      "knowledge_status": "missing",
+      "dossier": {
+        "subject_id": "corridor_test_beta",
+        "title": "Synthetic corridor B dossier",
+        "summary": "The line exists to test selection, while substantive reporting is deliberately missing.",
+        "sourceConfidence": "Information unavailable",
+        "sections": [
+          {
+            "heading": "Role",
+            "statements": [
+              "Provides an abstract line subject for the isolated map fixture."
+            ]
+          },
+          {
+            "heading": "What remains unknown",
+            "statements": [
+              "No route performance, traffic, ownership or real-world alignment is present. Missing information is not shown as zero."
+            ]
+          }
+        ],
+        "evidenceIds": [],
+        "assessmentIds": []
+      }
+    }
+  ],
+  "documents": [
+    {
+      "documentId": "document_test_month_01_brief",
+      "kind": "brief",
+      "metadata": {
+        "reference": "TEST-BRIEF-001",
+        "date": "2025-10-01",
+        "preparer": "Office of the AU Strategic Envoy (Simulated)",
+        "status": "Issued",
+        "sourceConfidence": "Contested",
+        "classification": "SIMULATED"
+      },
+      "title": "Opening test brief",
+      "summary": "Reporting about the synthetic zone remains inconsistent. The disagreement is evidence; the office assessment is shown separately.",
+      "subjectIds": ["zone_test_epreuve", "territory_test_atlas"],
+      "evidence": [
+        {
+          "evidenceId": "evidence_test_access_restricted",
+          "heading": "Reported restriction",
+          "statement": "A synthetic field report describes access as restricted.",
+          "sourceLabel": "Simulated development — Month 1",
+          "observedDate": "2025-10-01",
+          "confidence": "estimated"
+        },
+        {
+          "evidenceId": "evidence_test_access_conditional",
+          "heading": "Reported conditional access",
+          "statement": "A second synthetic report describes access as conditional.",
+          "sourceLabel": "Simulated development — Month 1",
+          "observedDate": "2025-10-01",
+          "confidence": "estimated"
+        }
+      ],
+      "assessments": [
+        {
+          "assessmentId": "assessment_test_access_contested",
+          "heading": "Office assessment",
+          "statement": "The available reports conflict, so present access conditions are assessed as contested rather than confirmed.",
+          "declaredConfidence": "Moderate"
+        }
+      ],
+      "unknowns": [
+        "No independently supported present access condition is available.",
+        "The fixture makes no claim about a real administrative area."
+      ]
+    },
+    {
+      "documentId": "document_test_relay_note",
+      "kind": "intelligence_report",
+      "metadata": {
+        "reference": "TEST-REPORT-002",
+        "date": "2025-10-01",
+        "preparer": "Office of the AU Strategic Envoy (Simulated)",
+        "status": "Issued",
+        "sourceConfidence": "Information unavailable",
+        "classification": "SIMULATED"
+      },
+      "title": "Relay status note",
+      "summary": "The fixture has no evidence supporting an operational-status assertion for the synthetic relay.",
+      "subjectIds": ["asset_test_relay_nga"],
+      "evidence": [],
+      "assessments": [],
+      "unknowns": [
+        "Operational status is not known.",
+        "No 2026 inventory is used to assert a 2025 condition."
+      ]
+    }
+  ],
+  "productionGates": {
+    "realGeography": "BLOCKED",
+    "pmtilesPublication": "BLOCKED",
+    "assetTemporalAdmission": "BLOCKED"
+  }
+}

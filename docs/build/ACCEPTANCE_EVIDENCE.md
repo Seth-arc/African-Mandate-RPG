@@ -958,3 +958,47 @@ PB2-20 was subsequently accepted under AM-GOV-001/050 by repository-owner commit
 | AC-024        | reconciliation notice and Acceptance Matrix                                       | unit/browser absence checks for all five candidate indicator labels                               | PASS omission; formulas/methodology remain BLOCKED       |
 
 Prompt 21 remains unapproved until independent owner review and an accepting commit. Passing this shell does not implement map/documents/decisions, approve production UI contracts, clear the browser/font/audio/editorial/regional/playtest gates, or make synthetic content production-ready.
+
+PB2-21 was subsequently accepted under AM-GOV-001/052 by repository-owner commit `994280a2327fc02d02f4534078d75b4669a764eb`, authored and committed by Seth-arc at `2026-10-11T19:39:19-04:00`. That acceptance preserves the reported production font/browser/editorial/regional/playtest blockers and does not approve Prompt 22 map or document interfaces.
+
+## AM-PB2-22 — map, subject list, dossiers and documents
+
+**Status proposed:** READY_FOR_REVIEW
+
+**Acceptance IDs:** PB2-22; AC-008; AC-018; AC-021; AC-022
+
+**Implementation base:** accepted PB2-21 commit `994280a2327fc02d02f4534078d75b4669a764eb`
+
+### Preflight
+
+- HEAD was the repository-owner `prompt 21` commit, authored and committed by Seth-arc at `2026-10-11T19:39:19-04:00`. Under AM-GOV-001 it is PB2-21's durable acceptance event; AM-GOV-052 and the sole mutable build-state record reconcile that fact.
+- Required Prompts 20 and 21 were therefore ACCEPTED before implementation. The source manifest hash is `4ce13c6d0fa6eb7d99f4e7023a7c48669bb57407827dc83f661f8ab6eccbb436`; Prompt 22 hash is `3989756636de9c430dcb274fc6dd2837cd6762eeb875b7c3615b1805ebf497be`.
+- Technical v2, Components Reconciled, VOICE, GLOSSARY, the Design Standard and canonical tokens were hash-checked before implementation. No production geography, PMTiles artifact or temporally valid asset evidence was available, so those gates remain explicitly blocked.
+
+### Evidence produced
+
+- `@african-mandate/application` publishes strict schema version 1 / contract `0.1.0-test.1` map, subject, dossier and document projections. It reuses the accepted `MapArtifactManifestSchema` rather than creating a second manifest.
+- Feature identity is exactly `subject_kind` plus `subject_id`. The validator requires unique IDs, exact map/list equivalence, matching source layers and properties, closed polygon rings, valid document subject references and canonical hashes.
+- The web fixture contains only abstract inline TEST geometry and visibly synthetic documents. Its whole-artifact hash is `55b38466a3ce3e58367592749ade0295a1bef36588b63b1c204090bb6b8a8c8f`; geometry hash is `2c0b076749e96610617f327204101b76c8a1b1562a7af352fd33105529476eed`.
+- `@african-mandate/ui` hosts MapLibre `6.13.0`, exposes synchronized map and keyboard-list controls, selects only by stable ID, renders knowledge-safe dossiers, and keeps document metadata, evidence and assessment semantically separate.
+- Styling is limited to player-visible `knowledge_status` plus transient selected UI state. Unknown and missing states, a literal orthography glyph probe and the synthetic watermark remain visible.
+- The placeholder PMTiles reference is never fetched. Production administrative geometry, provider/licence, PMTiles publication, font/glyph approval and 2026 asset assertions remain BLOCKED under AM-GOV-004/053.
+- `docs/build/MAP_DOCUMENT_CONTRACT.md`, AM-GOV-053, two measured screenshots, this evidence, the Prompt 22 handoff and the actual log publish ownership, versioning, proposal boundaries and reviewer reproduction.
+
+### Tests and negative cases
+
+- Unit tests pin the fixture/hash/manifest, ID-only selection with no display-name fallback, exact map/list equivalence, allowed visible style fields, watermark/legend/glyph output, evidence-versus-assessment separation, and artifact/geometry tamper rejection.
+- Browser tests exercise marker and list synchronization, keyboard selection, MapLibre readiness, unknown/missing legend states, label glyph availability, document semantics, axe accessibility and both 1440 by 900 screenshots.
+- The complete command record retains the initial MapLibre worker failure, strict-locator failures, pointer overlap and the map-control selected-state defect alongside the corrected final results in `docs/build/logs/22-test.log`.
+
+### Source-to-test traceability
+
+| Acceptance ID | Source authority | Executable evidence | Test state |
+|---|---|---|---|
+| PB2-22 | Prompt 22; Technical v2 sections 40-43, 88 and 104; Components Reconciled; VOICE; GLOSSARY | public schemas/components, immutable fixture hashes, focused/full tests, screenshots, contract and handoff | READY_FOR_REVIEW |
+| AC-008 | player-knowledge projection and hidden-state firewall | style allowlist accepts only `knowledge_status`; dossiers/documents contain projection-safe fields; UI has no raw simulation import | PASS TEST_ONLY |
+| AC-018 | geography/source admission | abstract coordinates, explicit non-Mopti disclaimer, blocked production gates and no PMTiles fetch | PASS isolation; production GIS/licensing BLOCKED |
+| AC-021 | accessible presentation boundary | synchronized ID-based map/list controls, keyboard path, semantic headings and axe browser check | PASS automated subset |
+| AC-022 | VOICE/GLOSSARY copy and locale safeguard | simulated watermarks, evidence/assessment separation, unknown/missing language and `Burkinabè · Tillabéri · Ŋ` glyph check | PASS automated subset; regional/editorial/font review BLOCKED |
+
+Prompt 22 remains unapproved until independent owner review and an accepting commit. Passing this isolated synthetic slice does not admit real geography, inferred zones, production map artifacts, production document content, 2026 asset facts, source licences, regional/editorial conformance or full production UI certification.
