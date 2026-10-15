@@ -1,0 +1,143 @@
+AM-PB2-25 actual command log — 2026-10-12
+
+PRE-FLIGHT
+git rev-parse HEAD
+a3fa2a1ddca85a43f46ffa6268f7e5f621a5926a
+
+git status --short
+(clean)
+
+FOCUSED TEST — INITIAL SANDBOX ATTEMPT
+corepack pnpm run test:data-acquisition
+EXIT 1
+Error: EPERM: operation not permitted, lstat 'C:\Users\ssnguna'
+
+FOCUSED TEST — ESCALATED WORKSPACE EXECUTION
+corepack pnpm run test:data-acquisition
+EXIT 0
+Test Files  1 passed (1)
+Tests       6 passed (6)
+
+TYPECHECK
+corepack pnpm run typecheck
+EXIT 0
+$ tsc --noEmit -p tsconfig.json
+
+FORMAT CHECK — CORRECTED FAILURE
+corepack pnpm run format:check
+EXIT 1
+[warn] packages/data-pipeline/src/production/source-admission.ts
+[warn] tests/unit/production-data-acquisition.test.ts
+[warn] Code style issues found in 2 files. Run Prettier with --write to fix.
+
+corepack pnpm exec prettier --write packages/data-pipeline/src/production/source-admission.ts tests/unit/production-data-acquisition.test.ts
+EXIT 0
+
+FIRST COMPLETE CI BEFORE EXECUTABLE SOURCE-REPORT VERIFIER
+corepack pnpm run ci
+EXIT 0
+Test Files  24 passed (24)
+Tests       181 passed (181)
+PASS: deterministic vectors; reproducible fixture; forbidden imports/random; editorial conformance; governance artifacts.
+
+PYTHON GOVERNANCE — INITIAL SANDBOX ATTEMPT
+py -3 -B -m unittest discover -s tests/governance -p "test_*.py" -v
+EXIT 1
+Unable to create process ... Access is denied.
+
+PYTHON GOVERNANCE — ESCALATED EXECUTION
+py -3 -B -m unittest discover -s tests/governance -p "test_*.py" -v
+EXIT 0
+Ran 7 tests in 0.049s
+OK
+
+SOURCE AUDIT VERIFIER — CORRECTED FAILURES
+corepack pnpm run test:data-audit
+EXIT 1
+Error: Conflict CSV is missing event_id_cnty
+Cause: UTF-8 BOM on the first header. The verifier was corrected to normalize the BOM.
+
+corepack pnpm run test:data-audit
+TERMINATED after exceeding the intended interactive wait envelope.
+Cause: character-by-character string concatenation was too slow for the large quoted notes field. The parser was replaced with a linear slice-based implementation; assertions and data were unchanged.
+
+corepack pnpm run test:data-audit
+EXIT 0
+PASS: Prompt 25 aggregate source audit matches pinned artifacts (1335 conflict rows; 80 in scope; 41 unique in-scope event IDs; 0 displacement features).
+
+FINAL FOCUSED TEST
+corepack pnpm run test:data-acquisition
+EXIT 0
+Test Files  1 passed (1)
+Tests       7 passed (7)
+
+FINAL COMPLETE CI
+corepack pnpm run ci
+EXIT 0
+All matched files use Prettier code style.
+No peer dependency issues found.
+Test Files  24 passed (24)
+Tests       182 passed (182)
+PASS: two fresh processes produced identical deterministic bytes.
+PASS: two fresh fixture builds produced byte-identical artifacts.
+PASS: web-to-simulation, ui-to-domain, and ui-to-simulation imports were rejected.
+PASS: Math.random and randomUUID were rejected inside simulation scope.
+PASS: editorial conformance.
+PASS: Prompt 25 aggregate source audit matches pinned artifacts (1335 conflict rows; 80 in scope; 41 unique in-scope event IDs; 0 displacement features).
+PASS: governance and toolchain artifacts match their public schemas.
+
+MANDATORY EXTERNAL TEST STATE
+Geometry topology: BLOCKED_NOT_RUN — no approved geometry artifact.
+Geography allocation: BLOCKED_NOT_RUN — no approved geometry/crosswalk.
+Representative five-country conflict source: BLOCKED — supplied extract has zero Chad rows and unsigned provenance/licence.
+Displacement: PROPOSED_OMISSION_REQUIRES_APPROVAL — supplied GeoJSON has zero features.
+Finance/status: PROPOSED_OMISSION_REQUIRES_APPROVAL — local metadata is not source-native.
+Production baseline: BLOCKED — productionBaselineAllowed=false.
+
+REVISION — 2026-10-13 OWNER WORKFLOW CORRECTION
+
+Owner direction:
+The existing data/ artifacts are the intended inputs for this individual build. Citations and executable audit evidence are required; a separate four-role approval panel is not.
+
+corepack pnpm run test:data-acquisition
+EXIT 0
+Test Files  1 passed (1)
+Tests       8 passed (8)
+
+corepack pnpm run test:data-audit
+EXIT 0
+PASS: Prompt 25 owner-approved source audit matches pinned artifacts (97 zones; 41 unique in-scope events; 265 in-scope finance rows; 0 displacement features).
+
+corepack pnpm run ci
+FIRST REVISION EXIT 1
+Prettier reported three revised TypeScript files.
+
+corepack pnpm exec prettier --write packages/data-pipeline/src/production/source-admission.ts scripts/verify-production-source-audit.ts tests/unit/production-data-acquisition.test.ts
+EXIT 0
+
+corepack pnpm run ci
+SECOND REVISION EXIT 1
+ESLint found financeArtifact assigned but unused in scripts/verify-production-source-audit.ts.
+
+Correction:
+The verifier now requires finance and geometry to reference the same pinned map path and reads that finance artifact directly.
+
+corepack pnpm run ci
+FINAL REVISION EXIT 0
+All matched files use Prettier code style.
+No peer dependency issues found.
+Test Files  24 passed (24)
+Tests       183 passed (183)
+PASS: deterministic vectors, fixture build, forbidden imports/random, editorial conformance, Prompt 25 source audit, and governance artifacts.
+
+py -3 -B -m unittest discover -s tests/governance -p "test_*.py" -v
+EXIT 0
+Ran 7 tests — OK
+
+FINAL GATE STATE
+Geometry topology: PASS_WITH_REVIEWED_EXCEPTIONS — 97 unique IDs, 103 closed rings, 4,907 valid coordinates; Bamako/Koulikoro and Niamey/Tillabéri enclaves documented.
+Geography allocation: PASS_WITH_REVIEWED_EXCEPTIONS — 32 direct, 8 enclave tie-break, 1 country-level exception.
+Conflict: ADMITTED_WITH_LIMITATIONS — deduplicate by event_id_cnty; Chad historical observation unknown; later index is not backdated; raw rows are not redistributed.
+Displacement: OMISSION_APPROVED — zero-feature artifact, no value inferred.
+Finance/status: ADMITTED_WITH_LIMITATIONS — 265 five-country rows from pinned AfDB/World Bank projections.
+Milestone: READY_FOR_REVIEW — never self-approved ACCEPTED.

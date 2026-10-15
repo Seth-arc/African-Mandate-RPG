@@ -1,9 +1,9 @@
 # Serialized domain contract inventory
 
 **Contract version:** 1.0.0
-**Task:** AM-PB2-03 / PB2-03 through AM-PB2-24 / PB2-24
+**Task:** AM-PB2-03 / PB2-03 through AM-PB2-25 / PB2-25
 **Owner:** `@african-mandate/domain`  
-**Status:** PB2-03 and PB2-07 through PB2-23 ACCEPTED; Prompt 24 editorial QA contract is READY_FOR_REVIEW; no production scenario, geography, or editorial approval admission
+**Status:** PB2-03 and PB2-07 through PB2-24 ACCEPTED; Prompt 25 source admission is READY_FOR_REVIEW; no production baseline has yet been compiled
 
 ## Authority and boundary
 
@@ -27,6 +27,7 @@ Prompt 17 publishes the canonical source-listed narrative perspective, context, 
 | Campaign state | `CampaignStateSchema` with `CampaignMetaSchema` and `EnvoyStateSchema` | Domain §§12.6-15, 111-112 | Exact top-level/core fields, strict status/scalars, JSON-only deferred subsystem envelopes |
 | Partial test fixture | `FixturePackageSchema` | Prompt 03; AM-BUILD-001; fixture plan | `TEST_ONLY_PARTIAL_FIXTURE`; proposal AM-GOV-015; rejected by `ScenarioBundleSchema` |
 | Synthetic compilation artifacts | `FixtureSourceManifestSchema`, `FixtureSourceAuditSchema`, `FixtureZoneRegistrySchema`, `FixtureBaselineSchema`, `FixturePlayerKnowledgeSchema`, `FixtureExpectedHashesSchema`, `FixtureTestReportSchema` in `@african-mandate/data-pipeline` | Data & Methodology Appendix C; Prompt 06 | Version 1.0.0 TEST_ONLY proposal AM-GOV-021; production serializer and publish gate reject fixture output |
+| Production acquisition review | `ProductionAcquisitionManifestSchema`, `ProductionGeometryAdmissionSchema`, `ProductionSourceAcquisitionSchema`, historical and row-grain audit APIs in `@african-mandate/data-pipeline` | Data & Methodology v1.1; Fixture Plan; Prompt 25 | Schema 2 / contract `0.2.0-proposal.1`; AM-GOV-060 owner-decision workflow; pinned source compilation allowed with documented limitations |
 | Determinism vector artifact | `DeterminismVectorArtifactSchema` | Technical v2 §14.1 | Wrapper schema v1.0 is TEST_ONLY proposal AM-GOV-017; vector bytes and expected values are source-canonical |
 | Rules and registered facts | `FactKeySchema`, `FactDefinitionSchema`, `FactQuerySchema`, `RuleExpressionSchema`, `FactResolutionSchema` | Domain §§48-51 and Appendix F.2-F.4; Technical §§50-51 | Initial closed source-listed key set, strict tri-state resolution, explicit unknown, no arbitrary object paths |
 | Strategic command and target | `CommandIdSchema`, `ActionTargetSchemaSchema`, `StrategicActionCommandSchema`, `CommandPreparationResultSchema` | Domain §§43-46 and Appendix F.5; Technical §§13.1, 49, 57 | Strict external command/action/target envelope; duplicate and rejected results carry zero slot cost; no state mutation in Prompt 07 |
@@ -112,3 +113,4 @@ The following remain intentionally outside Prompt 03: production content admissi
 | PB2-22 / AC-008 / AC-018 / AC-021 / AC-022 | ID-based map/list equivalence, knowledge-safe dossier, metadata/evidence/assessment separation, missing/unknown legend, glyph probe, synthetic watermark, hidden-style allowlist and immutable hashes | `tests/unit/map-documents.test.tsx`; `tests/e2e/map-documents.spec.ts`; `docs/build/MAP_DOCUMENT_CONTRACT.md` |
 | PB2-23 / AC-005 / AC-007 / AC-008 / AC-021 / AC-022 / AC-025 | Local draft isolation, one atomic durable commit, unchanged prior state on save failure, append-only journal/ledger, hidden-safe preview, mandatory last-slot safety, focus trap/live announcements and four-month happy/adverse paths | `tests/unit/decision-workflow.test.ts`; `tests/e2e/decision-workflow.spec.ts`; `docs/build/DECISION_WORKFLOW_CONTRACT.md` |
 | PB2-24 / AC-020 / AC-021 / AC-022 / AC-024 | Outcome inventory, copy/token/marker lint, fail-closed human register, 1024px/200% text measurement, keyboard/reduced-motion/axe/offline paths and no phantom meters | `tests/unit/editorial-qa.test.ts`; `scripts/verify-editorial-conformance.ts`; `tests/e2e/editorial-conformance.spec.ts`; `docs/build/EDITORIAL_QA_CONTRACT.md` |
+| PB2-25 / AC-016 / AC-017 / AC-018 / AC-019 | Five ISO parents, historical cutoff/noncoverage, row-grain deduplication, citations/hashes, 97-zone topology/allocation audit, reviewed enclave exceptions, IDMC omission and finance limitations | `tests/unit/production-data-acquisition.test.ts`; `scripts/verify-production-source-audit.ts`; `docs/build/reports/25-source-audit.json` |

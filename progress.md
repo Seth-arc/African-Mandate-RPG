@@ -33,3 +33,11 @@ Original prompt: Prompt 07 — Rule facts, commands and eligibility (AM-PB2-07).
 - Browser evidence: three current major surfaces measured at 1024 by 768 with 200% text and zero overflow/clipping; one month completed keyboard-only under reduced motion; axe, markers/plain summary/locale date and offline fallback checked; four captures hashed and inspected.
 - Independent reproduction exposed host-contention timeouts rather than failed assertions. Trace inspection found delayed application initialization with no console exception. Browser execution is now serialized with resource-tolerant budgets, and deterministic headless construction has a wider per-run envelope; retries, assertions, 50-sample campaigns and expected hashes are unchanged. Corrected stress verification passed headless 9/9 and editorial browser 4/4 concurrently, full browser 24/24, and CI 23 files / 175 tests plus all downstream gates. Both the failed and corrected runs are retained in the Prompt 24 log.
 - Review TODO: independent owner reproduction/commit. Regional language, legal/protocol, publication/licensing, novice cold read, assistive-technology lab, production fonts and production browser matrix remain blocked or pending; no readability target or unrun human approval is claimed.
+
+## Prompt 25 — production boundaries and data acquisition
+
+- Preflight: clean repository-owner Prompt 24 commit `a3fa2a1ddca85a43f46ffa6268f7e5f621a5926a`; Prompt 19 prerequisite accepted at `3ac2753e5f34534e6e3acb786c4e12728e3dcc87`.
+- Owner clarification: existing `data/` artifacts are the intended inputs. AM-GOV-060 replaces AM-GOV-059's four-role proposal with the established owner-reviewed-commit workflow.
+- Implemented: schema 2 / contract `0.2.0-proposal.1`; five ISO parents; 97 Natural Earth zone IDs; topology/allocation audits with reviewed enclaves; conflict deduplication and post-anchor isolation; empty-IDMC omission; pinned AfDB/World Bank finance projections; citations, hashes and use constraints.
+- Data outcome: 41 unique conflict events (32 direct zone matches, eight enclave tie-breaks, one country-level exception); 265 five-country finance rows; no displacement features. Missing observations remain unknown.
+- Status: READY_FOR_REVIEW. PB2-25 is not self-approved; the owner accepts it by reproducing the handoff and committing under AM-GOV-001.

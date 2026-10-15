@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 2,
+  "contractVersion": "0.2.0-proposal.1",
+  "taskId": "AM-PB2-25",
+  "classification": "PRODUCTION_ACQUISITION",
+  "status": "READY_FOR_REVIEW",
+  "assessedAt": "2026-10-13",
+  "historicalConflictAnchor": "2025-09-26",
+  "simulationStartDate": "2025-10-01",
+  "noncoveragePeriod": {
+    "startDate": "2025-09-27",
+    "endDate": "2025-09-30",
+    "treatment": "UNKNOWN_NOT_ZERO"
+  },
+  "countryParents": [
+    { "name": "Mali", "iso2": "ML", "iso3": "MLI" },
+    { "name": "Burkina Faso", "iso2": "BF", "iso3": "BFA" },
+    { "name": "Niger", "iso2": "NE", "iso3": "NER" },
+    { "name": "Chad", "iso2": "TD", "iso3": "TCD" },
+    { "name": "Mauritania", "iso2": "MR", "iso3": "MRT" }
+  ],
+  "geometry": {
+    "approvalStatus": "OWNER_APPROVED",
+    "localPath": "data/african_map.json",
+    "provider": "Natural Earth",
+    "edition": "Repository-pinned Natural Earth 1:10m extract built 2026-09-23",
+    "administrativeLevel": "Natural Earth admin-1 feature layer",
+    "artifactBuiltAt": "2026-09-23",
+    "coordinateReferenceSystem": "EPSG:4326",
+    "stableZoneIdScheme": "ne-admin1:{iso3}:{slug(name)}",
+    "expectedZoneCount": 97,
+    "crosswalkSha256": "4abbc8b2b77d69a12da7d00353d9b661132ad9bbd96a316eea1e8f871573349a",
+    "geometrySha256": "8ef3de3e1bcb846c405915fad33c03f1b38376d83e66ba6d8900681202da3c27",
+    "license": "Public domain",
+    "licenseUrl": "https://www.naturalearthdata.com/about/terms-of-use/",
+    "attributionText": "Natural Earth 1:10m; public domain. Extracted from the repository-pinned African map artifact.",
+    "historicalUse": "NO_BOUNDARY_BACKDATING",
+    "topologyAudit": "PASS_WITH_REVIEWED_EXCEPTIONS",
+    "allocationAudit": "PASS_WITH_REVIEWED_EXCEPTIONS",
+    "ownerDecisionRef": "docs/build/handoffs/25.md"
+  },
+  "sources": [
+    {
+      "sourceKey": "conflict",
+      "requirement": "REQUIRED",
+      "disposition": "ADMITTED_WITH_LIMITATIONS",
+      "approvalStatus": "OWNER_APPROVED",
+      "artifacts": [
+        {
+          "kind": "CONFLICT_EVENTS_CSV",
+          "localPath": "data/ACLED Data_2026-10-01_event_date_from_2024-09-28_event_date_to_2025-09-26.csv",
+          "sha256": "acce392bb35cfcf7ee1f24c9fc4c6025be4480335e46c6a4acc3912ad51bf65b",
+          "release": "Repository-supplied ACLED export downloaded 2026-10-01",
+          "dataAsOf": "2025-09-26",
+          "citationUrls": [
+            "https://acleddata.com/api-documentation/acled-endpoint",
+            "https://acleddata.com/eula",
+            "https://acleddata.com/attributionpolicy"
+          ],
+          "license": "ACLED EULA, Content Usage Terms and Attribution Policy",
+          "attributionText": "Source: Armed Conflict Location & Event Data (ACLED), repository-pinned export.",
+          "redistributionAllowed": false,
+          "recordCount": 1335,
+          "usage": "Deduplicated aggregate evidence only; raw rows are not republished."
+        },
+        {
+          "kind": "CONFLICT_INDEX_XLSX",
+          "localPath": "data/ACLED_Conflict_Index_2025.xlsx",
+          "sha256": "15b00d940213fa0c86e9894f225b6c09ce783b76b8003acdd7f88c7275723314",
+          "release": "ACLED Conflict Index - December 2025",
+          "dataAsOf": "2025-11-28",
+          "citationUrls": [
+            "https://acleddata.com/eula",
+            "https://acleddata.com/attributionpolicy"
+          ],
+          "license": "ACLED EULA, Content Usage Terms and Attribution Policy",
+          "attributionText": "Source: ACLED Conflict Index, December 2025.",
+          "redistributionAllowed": false,
+          "recordCount": 99,
+          "usage": "Five-country coverage and post-anchor reference only; never backdated into the 2025-09-26 historical baseline."
+        }
+      ],
+      "completenessStatus": "PASS_WITH_LIMITATIONS",
+      "deduplicationStatus": "PASS",
+      "provenanceStatus": "PASS",
+      "licenseStatus": "PASS_WITH_LIMITATIONS",
+      "ownerDecisionRef": "docs/build/handoffs/25.md",
+      "note": "The repository owner designated the supplied ACLED artifacts for this build. The CSV is deduplicated by event_id_cnty; Chad remains unknown in the historical extract, and the later index is reference-only. Only non-reversible aggregates may be published."
+    },
+    {
+      "sourceKey": "displacement",
+      "requirement": "OPTIONAL",
+      "disposition": "OMISSION_APPROVED",
+      "approvalStatus": "OWNER_APPROVED",
+      "artifacts": [
+        {
+          "kind": "EMPTY_DISPLACEMENT_GEOJSON",
+          "localPath": "data/IDMC_GIDD_Conflict_Internal_Displacement_Disaggregated.geojson",
+          "sha256": "634c40803007f2f4779d6fd00f72f885ad02a7f0bc77b2b4c4d044dfb6dfc0ed",
+          "release": "Repository-supplied empty IDMC evidence artifact",
+          "dataAsOf": null,
+          "citationUrls": ["https://www.internal-displacement.org/database/"],
+          "license": "Not relied upon; artifact is retained only as evidence for omission",
+          "attributionText": "Internal Displacement Monitoring Centre (IDMC).",
+          "redistributionAllowed": false,
+          "recordCount": 0,
+          "usage": "Omitted: zero features; no displacement value is inferred."
+        }
+      ],
+      "completenessStatus": "NOT_APPLICABLE",
+      "deduplicationStatus": "NOT_APPLICABLE",
+      "provenanceStatus": "PASS_WITH_LIMITATIONS",
+      "licenseStatus": "NOT_APPLICABLE",
+      "ownerDecisionRef": "docs/build/handoffs/25.md",
+      "note": "The owner-approved build excludes displacement because the supplied artifact has zero features. Missing displacement remains unknown, never zero."
+    },
+    {
+      "sourceKey": "finance_status",
+      "requirement": "OPTIONAL",
+      "disposition": "ADMITTED_WITH_LIMITATIONS",
+      "approvalStatus": "OWNER_APPROVED",
+      "artifacts": [
+        {
+          "kind": "GEOMETRY_AND_FINANCE_JSON",
+          "localPath": "data/african_map.json",
+          "sha256": "8ef3de3e1bcb846c405915fad33c03f1b38376d83e66ba6d8900681202da3c27",
+          "release": "Repository-pinned map artifact built 2026-09-23",
+          "dataAsOf": "2026-09-18",
+          "citationUrls": [
+            "https://iatiregistry.org/publisher/afdb",
+            "https://iatiregistry.org/publisher/worldbank",
+            "https://reference.iatistandard.org/en/guidance/publishing-data/what-data-to-publish/how-to-license-your-data/"
+          ],
+          "license": "AfDB: open per publisher; World Bank: CC BY 4.0, as recorded in the pinned artifact",
+          "attributionText": "Finance activity metadata: African Development Bank and World Bank, published using IATI 2.03.",
+          "redistributionAllowed": false,
+          "recordCount": 2874,
+          "usage": "Repository-pinned activity/status projections only; no raw export or cross-source amount aggregation."
+        }
+      ],
+      "completenessStatus": "PASS_WITH_LIMITATIONS",
+      "deduplicationStatus": "PASS_WITH_LIMITATIONS",
+      "provenanceStatus": "PASS_WITH_LIMITATIONS",
+      "licenseStatus": "PASS_WITH_LIMITATIONS",
+      "ownerDecisionRef": "docs/build/handoffs/25.md",
+      "note": "The pinned artifact contains 2,874 finance rows, including 265 for the five approved countries. Source IDs, publisher labels, statuses and nulls are preserved; amounts from different publishers are not combined."
+    }
+  ],
+  "ownerDecision": {
+    "owner": "Seth-arc",
+    "status": "APPROVED_FOR_THIS_BUILD",
+    "decidedAt": "2026-10-13",
+    "authority": "REPOSITORY_OWNER_INSTRUCTION",
+    "evidencePath": "docs/build/handoffs/25.md",
+    "acceptanceMechanism": "OWNER_REVIEWED_COMMIT_AM_GOV_001",
+    "note": "The repository owner confirmed that the existing data directory contains the intended inputs for this individual build. This authorizes use with citations and documented limitations; it does not self-approve PB2-25."
+  },
+  "productionBaselineAllowed": true
+}

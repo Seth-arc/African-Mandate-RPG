@@ -24,7 +24,7 @@ const manifestBytes = await readFile(
   new URL("docs/build/SOURCE_MANIFEST.md", root),
 );
 const manifestHash = createHash("sha256").update(manifestBytes).digest("hex");
-const expectedPrompts = Array.from({ length: 30 }, (_, index) =>
+const expectedPrompts = Array.from({ length: 32 }, (_, index) =>
   String(index).padStart(2, "0"),
 );
 const statuses = new Set(schema.$defs.promptState.properties.status.enum);
@@ -41,7 +41,7 @@ if (
   JSON.stringify(Object.keys(state.prompts).sort()) !==
   JSON.stringify(expectedPrompts)
 ) {
-  fail("BUILD_STATE must contain exactly prompts 00 through 29.");
+  fail("BUILD_STATE must contain exactly prompts 00 through 31.");
 }
 for (const [promptId, prompt] of Object.entries(state.prompts)) {
   if (!statuses.has(prompt.status)) fail(`${promptId}: invalid status.`);

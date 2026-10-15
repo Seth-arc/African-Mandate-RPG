@@ -1,6 +1,6 @@
 # African Mandate — Vibecoding Promptbook v2
 
-**Status:** Revised proposed AI-coding implementation plan; no simulation implementation, tests or legal/research approvals are claimed by this package. **Supersedes:** Promptbook v1. **Contents:** 30 numbered prompts + governance, owner guide, traceability and machine-readable state templates.
+**Status:** Revised proposed AI-coding implementation plan; no simulation implementation, tests or legal/research approvals are claimed by this package. **Supersedes:** Promptbook v1. **Contents:** 32 numbered prompts + governance, owner guide, traceability and machine-readable state templates.
 
 Start with `OWNER_GUIDE.md` → `SOURCE_PRECEDENCE.md` → `BUILD_STATE_PROTOCOL.md` → Prompt `00_REPOSITORY_AUDIT.md`. One prompt at a time, with independent acceptance. Never mistake a TEST_ONLY fixture for historical validation.
 
@@ -10,7 +10,7 @@ Start with `OWNER_GUIDE.md` → `SOURCE_PRECEDENCE.md` → `BUILD_STATE_PROTOCOL
 - **11–17 Simulation mechanics:** intelligence, actors, assessment, commitments, mandates, events/doctrine, deterministic narrative fallback.
 - **18–19 Integrated test slice:** compiled TEST_ONLY content and SIM-01–SIM-16 acceptance.
 - **20–24 Application and UX:** ports/adapters, shell, map/docs, decision UI, editorial/accessibility QA.
-- **25–29 Independently gated production:** source/geometry, institutional/legal/balance, twenty-month content, trusted leaderboard service, release decision.
+- **25–31 Independently gated production:** source/geometry, institutional/legal/balance, production runtime integration, twenty-month content, optional trusted leaderboard service, deployment and release decision.
 
 ## Nonnegotiable rules
 - A task is not complete because an agent wrote tests that its own implementation passes. Verify canonical fixed vectors, negative property checks and independent golden scenarios.
@@ -50,9 +50,11 @@ Start with `OWNER_GUIDE.md` → `SOURCE_PRECEDENCE.md` → `BUILD_STATE_PROTOCOL
 | 24 | [Editorial, accessibility and visual conformance](prompts/24_UI_EDITORIAL_QA.md) | 21–23 ACCEPTED |
 | 25 | [Production track: boundaries and data acquisition](prompts/25_DATA_GEO_TRACK.md) | 19 ACCEPTED; external input required |
 | 26 | [Production track: actors, authority, balances](prompts/26_SCENARIO_APPROVAL.md) | 19 ACCEPTED; external reviewers |
-| 27 | [Full 20-month scenario and balance verification](prompts/27_FULL_CAMPAIGN.md) | 25–26 ACCEPTED and 19 ACCEPTED |
-| 28 | [Separate trusted leaderboard replay service](prompts/28_LEADERBOARD_SERVICE.md) | 04,19,26–27 ACCEPTED; approved ADR |
-| 29 | [Release evidence and sign-off](prompts/29_RELEASE_DECISION.md) | 24–28 ACCEPTED, or explicitly scoped noncompetitive release with authorized exclusion |
+| 27 | [Production baseline and browser runtime integration](prompts/27_PRODUCTION_RUNTIME_INTEGRATION.md) | 20,24–26 ACCEPTED |
+| 28 | [Full 20-month scenario and balance verification](prompts/28_FULL_CAMPAIGN.md) | 27 ACCEPTED |
+| 29 | [Separate trusted leaderboard replay service](prompts/29_LEADERBOARD_SERVICE.md) | 04,19,26–28 ACCEPTED; approved ADR, or authorized noncompetitive deferral |
+| 30 | [Release packaging, CI and deployment](prompts/30_RELEASE_PACKAGING_DEPLOYMENT.md) | 24,27–28 ACCEPTED; release scope recorded |
+| 31 | [Release evidence and sign-off](prompts/31_RELEASE_DECISION.md) | 24–28 and 30 ACCEPTED; 29 ACCEPTED or authorized DEFERRED_APPROVED |
 
 ## Source materials
 Place the original canonical specs under `docs/source/` without modifying source bytes and Build Preparation Package v1 under its existing directory. If a source is absent, record a blocker; never synthesize its content.

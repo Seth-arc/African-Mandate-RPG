@@ -1,6 +1,6 @@
 {
   "schemaVersion": "2.0",
-  "sourceManifestHash": "4ce13c6d0fa6eb7d99f4e7023a7c48669bb57407827dc83f661f8ab6eccbb436",
+  "sourceManifestHash": "dfa0429ded121b6f1d489ab2a8ea0f9767b48d54bb61062324207c6a99eee5d3",
   "prompts": {
     "00": {
       "status": "ACCEPTED",
@@ -41,11 +41,13 @@
     "21": {"status": "ACCEPTED", "approvedCommit": "994280a2327fc02d02f4534078d75b4669a764eb", "evidencePath": "docs/build/handoffs/21.md", "approver": "Seth-arc (repository owner; acceptance by reviewed commit at 2026-10-11T19:39:19-04:00)"},
     "22": {"status": "ACCEPTED", "approvedCommit": "1b54622ed8cea85dd32c4e66867ebe10a9dc2011", "evidencePath": "docs/build/handoffs/22.md", "approver": "Seth-arc (repository owner; acceptance by reviewed commit at 2026-10-11T20:59:05-04:00)"},
     "23": {"status": "ACCEPTED", "approvedCommit": "5a87ae80b59f6f53a65678caf7ae0adf45fc6faa", "evidencePath": "docs/build/handoffs/23.md", "approver": "Seth-arc (repository owner; acceptance by reviewed commit at 2026-10-12T00:23:38-04:00)"},
-    "24": {"status": "READY_FOR_REVIEW", "approvedCommit": null, "evidencePath": "docs/build/handoffs/24.md", "approver": null},
-    "25": {"status": "NOT_STARTED", "approvedCommit": null, "evidencePath": null, "approver": null},
+    "24": {"status": "ACCEPTED", "approvedCommit": "a3fa2a1ddca85a43f46ffa6268f7e5f621a5926a", "evidencePath": "docs/build/handoffs/24.md", "approver": "Seth-arc (repository owner; acceptance by independently reproduced gate and reviewed commit at 2026-10-12T13:01:51-04:00)"},
+    "25": {"status": "READY_FOR_REVIEW", "approvedCommit": null, "evidencePath": "docs/build/handoffs/25.md", "approver": null},
     "26": {"status": "NOT_STARTED", "approvedCommit": null, "evidencePath": null, "approver": null},
     "27": {"status": "NOT_STARTED", "approvedCommit": null, "evidencePath": null, "approver": null},
     "28": {"status": "NOT_STARTED", "approvedCommit": null, "evidencePath": null, "approver": null},
-    "29": {"status": "NOT_STARTED", "approvedCommit": null, "evidencePath": null, "approver": null}
+    "29": {"status": "NOT_STARTED", "approvedCommit": null, "evidencePath": null, "approver": null},
+    "30": {"status": "NOT_STARTED", "approvedCommit": null, "evidencePath": null, "approver": null},
+    "31": {"status": "NOT_STARTED", "approvedCommit": null, "evidencePath": null, "approver": null}
   }
 }

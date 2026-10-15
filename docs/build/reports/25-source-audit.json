@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 2,
+  "taskId": "AM-PB2-25",
+  "assessedAt": "2026-10-13",
+  "classification": "AGGREGATE_AUDIT_NO_RAW_SOURCE_ROWS",
+  "conflict": {
+    "eventArtifactSha256": "acce392bb35cfcf7ee1f24c9fc4c6025be4480335e46c6a4acc3912ad51bf65b",
+    "indexArtifactSha256": "15b00d940213fa0c86e9894f225b6c09ce783b76b8003acdd7f88c7275723314",
+    "totalRows": 1335,
+    "approvedCountryRows": 80,
+    "approvedCountryUniqueEventIds": 41,
+    "approvedCountryDuplicateEventGroups": 39,
+    "approvedCountryDuplicateRows": 78,
+    "countryRows": {
+      "MLI": 40,
+      "BFA": 20,
+      "NER": 14,
+      "TCD": 0,
+      "MRT": 6
+    },
+    "minimumEventDate": "2024-09-28",
+    "maximumEventDate": "2025-09-26",
+    "uniqueEventsAllocatedToOneZone": 32,
+    "uniqueEventsResolvedByEnclaveTieBreak": 8,
+    "uniqueEventsRetainedAtCountryLevel": 1,
+    "indexCoverageCountries": 5,
+    "indexPeriodEnd": "2025-11-28",
+    "historicalUse": "EVENT_CSV_ONLY_THROUGH_ANCHOR",
+    "admissionStatus": "ADMITTED_WITH_LIMITATIONS"
+  },
+  "displacement": {
+    "artifactSha256": "634c40803007f2f4779d6fd00f72f885ad02a7f0bc77b2b4c4d044dfb6dfc0ed",
+    "featureCount": 0,
+    "usable": false,
+    "admissionStatus": "OMISSION_APPROVED"
+  },
+  "financeStatus": {
+    "artifactSha256": "8ef3de3e1bcb846c405915fad33c03f1b38376d83e66ba6d8900681202da3c27",
+    "totalRecords": 2874,
+    "approvedCountryRecords": 265,
+    "publisherRecords": {
+      "AfDB": 152,
+      "WB": 113
+    },
+    "countryRecords": {
+      "ML": 59,
+      "BF": 79,
+      "NE": 51,
+      "TD": 36,
+      "MR": 40
+    },
+    "admissionStatus": "ADMITTED_WITH_LIMITATIONS"
+  },
+  "geometry": {
+    "artifactSha256": "8ef3de3e1bcb846c405915fad33c03f1b38376d83e66ba6d8900681202da3c27",
+    "countryParents": 5,
+    "zoneCount": 97,
+    "zoneCounts": {
+      "MLI": 9,
+      "BFA": 45,
+      "NER": 8,
+      "TCD": 22,
+      "MRT": 13
+    },
+    "uniqueZoneIds": 97,
+    "crosswalkSha256": "4abbc8b2b77d69a12da7d00353d9b661132ad9bbd96a316eea1e8f871573349a",
+    "ringCount": 103,
+    "coordinateCount": 4907,
+    "invalidCoordinateCount": 0,
+    "openRingCount": 0,
+    "reviewedEnclaveOverlapCount": 2,
+    "topologyAudit": "PASS_WITH_REVIEWED_EXCEPTIONS",
+    "allocationAudit": "PASS_WITH_REVIEWED_EXCEPTIONS"
+  },
+  "productionBaselineAllowed": true
+}

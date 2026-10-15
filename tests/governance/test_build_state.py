@@ -19,7 +19,7 @@ def load_json(path: Path) -> dict:
 
 def validate_state(state: dict, schema: dict) -> list[str]:
     errors: list[str] = []
-    expected_prompts = {f"{number:02d}" for number in range(30)}
+    expected_prompts = {f"{number:02d}" for number in range(32)}
     statuses = set(schema["$defs"]["promptState"]["properties"]["status"]["enum"])
 
     if set(state) != {"schemaVersion", "sourceManifestHash", "prompts"}:
@@ -31,7 +31,7 @@ def validate_state(state: dict, schema: dict) -> list[str]:
 
     prompts = state.get("prompts")
     if not isinstance(prompts, dict) or set(prompts) != expected_prompts:
-        errors.append("prompts must contain exactly 00 through 29")
+        errors.append("prompts must contain exactly 00 through 31")
         return errors
 
     for prompt_id, prompt in prompts.items():
@@ -106,17 +106,17 @@ class BuildStateContractTests(unittest.TestCase):
 
     def test_accepted_without_independent_record_is_rejected(self) -> None:
         candidate = copy.deepcopy(self.state)
-        candidate["prompts"]["24"]["status"] = "ACCEPTED"
+        candidate["prompts"]["25"]["status"] = "ACCEPTED"
         errors = validate_state(candidate, self.schema)
-        self.assertIn("24: approved state requires a commit SHA", errors)
-        self.assertIn("24: approved state requires an approver", errors)
+        self.assertIn("25: approved state requires a commit SHA", errors)
+        self.assertIn("25: approved state requires an approver", errors)
 
     def test_unapproved_state_cannot_carry_approval(self) -> None:
         candidate = copy.deepcopy(self.state)
-        candidate["prompts"]["24"]["approvedCommit"] = "0" * 40
-        candidate["prompts"]["24"]["approver"] = "self"
+        candidate["prompts"]["25"]["approvedCommit"] = "0" * 40
+        candidate["prompts"]["25"]["approver"] = "self"
         errors = validate_state(candidate, self.schema)
-        self.assertIn("24: unapproved state cannot claim approval", errors)
+        self.assertIn("25: unapproved state cannot claim approval", errors)
 
 
 if __name__ == "__main__":

@@ -1107,3 +1107,45 @@ CI passed 23 files / 175 unit tests plus deterministic, fixture, boundary,
 editorial, and governance checks. Exact failed and passing results remain in
 `docs/build/logs/24-test.log`. This evidence retains READY_FOR_REVIEW and does
 not satisfy the blocked or pending human approvals.
+
+## AM-PB2-25 — production boundaries and data acquisition
+
+**Status proposed:** READY_FOR_REVIEW
+
+**Acceptance IDs:** PB2-25; AC-016; AC-017; AC-018; AC-019
+
+**Implementation base:** accepted PB2-24 commit `a3fa2a1ddca85a43f46ffa6268f7e5f621a5926a`
+
+### Preflight
+
+- Prompt 19 is ACCEPTED at `3ac2753e5f34534e6e3acb786c4e12728e3dcc87`; the prerequisite is satisfied.
+- The repository owner clarified on 2026-10-13 that the existing `data/` artifacts are the intended inputs for this individual build. AM-GOV-060 supersedes AM-GOV-059's proposed four-role panel. The owner-reviewed commit remains the PB2-25 acceptance event.
+
+### Evidence produced
+
+- Schema version 2 / contract `0.2.0-proposal.1` supplies historical/date and row-grain audits, source/geometry report schemas, and an owner-decision-linked compilation gate.
+- The sole acquisition manifest pins existing map, conflict, displacement, and finance evidence by path and SHA-256 with citations, licence constraints, and use limits.
+- The verifier checks 97 unique Natural Earth zone IDs, 103 closed rings, 4,907 coordinates, two reviewed capital-region enclave overlaps, and event allocation. Of 41 unique events, 32 directly match one zone, eight use the enclave tie-break, and one remains country-level.
+- Conflict evidence has 1,335 rows, 80 five-country rows and 41 unique event IDs. Chad remains unknown. The later Conflict Index covers all five countries but is reference-only after the historical anchor.
+- Empty IDMC data is explicitly omitted. Finance has 2,874 rows, including 265 in scope (152 AfDB and 113 World Bank), admitted with limitations.
+- No raw ACLED row is republished, no source is backdated, and no missing value becomes zero.
+
+### Tests and negative cases
+
+- Focused tests cover ISO mappings, cutoff/noncoverage, deduplication, synthetic geometry rejection, owner-decision linkage, citation/hash failure, post-anchor isolation, completeness, reviewed geometry exceptions, and the admitted compilation gate.
+- The verifier fails on artifact, count, topology, crosswalk, allocation, or manifest drift.
+- PB2-25 remains unaccepted until the owner reproduces the commands and commits under AM-GOV-001.
+
+### Source-to-test traceability
+
+| Acceptance ID | Source authority | Executable evidence | Test state |
+|---|---|---|---|
+| PB2-25 | Prompt 25; Data & Methodology v1.1; Fixture Plan; owner instruction | typed APIs, manifest, verifier, citations, contract and handoff | READY_FOR_REVIEW |
+| AC-016 | historical baseline validity | cutoff/unknown-gap tests; post-anchor workbook isolation | PASS |
+| AC-017 | source identity, provenance, licence, row grain | SHA recomputation, citations, duplicate-ID audit, raw-redistribution prohibition | PASS WITH LIMITATIONS |
+| AC-018 | five parents, topology and allocation | 97 unique IDs, coordinate/ring checks, two reviewed enclaves, deterministic exceptions | PASS WITH REVIEWED EXCEPTIONS |
+| AC-019 | completeness and attribution | conflict report, IDMC exclusion, finance publisher/country counts and citations | PASS WITH LIMITATIONS |
+
+### Remaining review action
+
+Run the handoff commands and review the limitations. If accepted, the owner's commit marks PB2-25 ACCEPTED under AM-GOV-001. No separate GIS, scenario, methodology, or legal reviewer is required for this individual build.

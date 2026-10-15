@@ -5,6 +5,6 @@
 3. The agent must create real code/artifacts and provide tests; `READY_FOR_REVIEW` is not acceptance.
 4. Review the handoff: files touched, exact commands/results, tests intentionally not run, unexpected changes and blockers. Confirm tests with an independent reviewer or separate verification agent.
 5. Record ACCEPTED in BUILD_STATE only after verification and approval; then submit the next prompt. If BLOCKED, address the named dependency rather than authorizing fabricated substitutes.
-6. Prompts 00–24 target synthetic engineering and a provisional UI; 25–29 are separate, approval-dependent production and release tracks. An early prototype may be demoed as TEST_ONLY, never as a validated Sahel baseline.
+6. Prompts 00–24 target synthetic engineering and a provisional UI; 25–31 are separate, approval-dependent production and release tracks. Prompt 27 must replace the fixed browser script with the real production runtime before full-campaign work, and Prompt 30 must produce staging deployment evidence before final release review. An early prototype may be demoed as TEST_ONLY, never as a validated Sahel baseline.
 
 **Review questions:** Does the delivered feature actually work? Did the agent use approved definitions? Are historical and synthetic data distinct? Are tests independently grounded? Were dependencies and negative cases exercised? What remains unproven?
