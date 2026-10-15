@@ -40,7 +40,7 @@ Original prompt: Prompt 07 — Rule facts, commands and eligibility (AM-PB2-07).
 - Owner clarification: existing `data/` artifacts are the intended inputs. AM-GOV-060 replaces AM-GOV-059's four-role proposal with the established owner-reviewed-commit workflow.
 - Implemented: schema 2 / contract `0.2.0-proposal.1`; five ISO parents; 97 Natural Earth zone IDs; topology/allocation audits with reviewed enclaves; conflict deduplication and post-anchor isolation; empty-IDMC omission; pinned AfDB/World Bank finance projections; citations, hashes and use constraints.
 - Data outcome: 41 unique conflict events (32 direct zone matches, eight enclave tie-breaks, one country-level exception); 265 five-country finance rows; no displacement features. Missing observations remain unknown.
-- Status: READY_FOR_REVIEW. PB2-25 is not self-approved; the owner accepts it by reproducing the handoff and committing under AM-GOV-001.
+- Status: ACCEPTED by repository-owner commit `0a0c44157849cbfa52ff4ad5e45da03b5da132d5` under AM-GOV-001/064.
 
 ## Prompt 26 — simulated actors, authority, and balances
 
@@ -49,4 +49,14 @@ Original prompt: Prompt 07 — Rule facts, commands and eligibility (AM-PB2-07).
 - Evaluation: exactly 20 ordered turns, 40% ending state + 60% trajectory mean, critical-duration and countervailing-harm penalties, separate dimension results, no overall score.
 - Safety boundary: no legal/historical claim, real person, asserted private intent, TEST_ONLY promotion, or leaderboard score. Prompt 27 owns baseline/browser integration and Prompt 28 owns full-campaign calibration.
 - Verification: focused 8/8 passed before final full-gate reproduction; final commands and any corrected failures are recorded in `docs/build/logs/26-test.log`.
-- Status: READY_FOR_REVIEW. PB2-26 remains unaccepted until owner reproduction and reviewed commit under AM-GOV-001.
+- Status: ACCEPTED by repository-owner commit `ec60aaf04f025f4a179934c4fa185106703e1ef6` under AM-GOV-001/065.
+
+## Prompt 27 — production baseline and browser runtime integration
+
+- Preflight: repository-owner commits reconcile PB2-25 and PB2-26 as ACCEPTED under AM-GOV-001/064–065; PB2-20 and PB2-24 were already ACCEPTED.
+- Blocker: accepted inputs do not define baseline-to-runtime/unknown mappings, initial campaign resources and actor/institution runtime values, complete executable action definitions, difficulty modifiers, or a pinned browser map build.
+- Safety result: no TEST_ONLY fixture value was copied, no unknown became zero, and no production route or artifact was fabricated.
+- Governance verification: schema check passed; Python governance suite passed 7/7 after its unapproved-state example moved from accepted Prompt 25 to blocked Prompt 27.
+- Status: BLOCKED under AM-GOV-066 pending one versioned owner-approved production initialization profile and map-delivery/toolchain decision.
+- Approved unblocker: AM-GOV-067 profile `0.1.0-proposal.1` was explicitly approved by the owner on 2026-10-15 with hash `4affa81339e8473e176552da43bf56225db29c88668e413d2240cc4e512f2305`. It preserves historical nulls, separates hidden fictional state, defines conservative behavior for the three actions, and uses the pinned local map JSON directly without PMTiles.
+- PB2-27 remains BLOCKED until the AM-GOV-067 approval record is committed; the approval clears the input decision only, not the Prompt 27 implementation gate.

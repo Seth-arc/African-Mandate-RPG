@@ -1,0 +1,48 @@
+AM-PB2-27 preflight — 2026-10-15
+
+Repository and prerequisites
+- HEAD: ec60aaf04f025f4a179934c4fa185106703e1ef6
+- Owner commit PB2-25: 0a0c44157849cbfa52ff4ad5e45da03b5da132d5, Seth-arc, 2026-10-15T11:27:36-04:00, "prompt 25"
+- Owner commit PB2-26: ec60aaf04f025f4a179934c4fa185106703e1ef6, Seth-arc, 2026-10-15T13:02:48-04:00, "prompt 26"
+- Working tree before reconciliation: clean
+- PB2-20 and PB2-24: ACCEPTED
+- PB2-25 and PB2-26: owner acceptance events existed but BUILD_STATE still said READY_FOR_REVIEW
+- Reconciled under AM-GOV-001 as AM-GOV-064/065; PB2-27 prerequisite gate then passed
+
+Pinned hashes
+- SOURCE_MANIFEST.md: dfa0429ded121b6f1d489ab2a8ea0f9767b48d54bb61062324207c6a99eee5d3
+- Prompt 27: 55f7794f0a7d30e75f080540a95bebf2336faa4dc2c682a070900b7ede3e419f
+- Technical Architecture v2: 982be4ecd82b996e14be83b6fd89a60a2876bb4e2505ed195889ad4f81dcee30
+- Data & Methodology v1.1: 90f5de5f32585297747fa8cb91eaae5ad3b98b82327c4fc680df48e145a1a42c
+- Prompt 25 acquisition manifest: 1ff38eae6f623a848bf31743649721bdcf3be0410e9bbaf37e2d21ff91230c16
+- Prompt 25 source audit: 87351bfcbd69f34cdf5bacc4abd2eaf7fe01c3b8df8e4860f8aa022748e986d1
+- Prompt 26 scenario artifact: ab4ccb03b7b638c62f37c27111a2bd27cd156008d2b8b4e8bcad7c5ecb42d904
+
+Initial governance invocation
+- `node scripts/verify-governance-artifacts.mjs`: FAILED because it was invoked outside pnpm and therefore lacked the pinned pnpm user-agent. This is an invocation failure, not a schema failure.
+- Initial sandboxed Python invocation: FAILED because Windows denied access to the packaged Python executable.
+- First escalated Python run: 5 passed, 2 failed because the negative fixtures still treated now-accepted Prompt 25 as unapproved.
+
+Corrected governance verification
+- Updated only the negative fixture target from Prompt 25 to Prompt 27.
+- `corepack pnpm run schema:check`: PASS — governance and toolchain artifacts match their public schemas.
+- `py -3 -B -m unittest discover -s tests/governance -p "test_*.py" -v`: PASS — 7 tests in 0.003s.
+
+Existing regression verification
+- Combined `corepack pnpm run ci` invocation emitted successful formatting, peer, lint and typecheck stages but the tool session ended before returning a final command exit code. No PASS is claimed for that combined invocation.
+- `corepack pnpm run typecheck`: PASS, exit 0.
+- `corepack pnpm run test`: PASS, exit 0 — 25 test files / 191 tests; deterministic vectors, byte-identical fixture rebuild and forbidden import/random checks passed.
+- `corepack pnpm run test:editorial-lint`: PASS, exit 0.
+- `corepack pnpm run test:data-audit`: PASS, exit 0 — 97 zones, 41 unique in-scope events, 265 finance rows and 0 displacement features.
+- `corepack pnpm run schema:check`: PASS, exit 0.
+- All stages that compose the current `ci` script therefore passed in this preflight, although they completed across the retained combined and isolated invocations.
+
+Stop-condition audit
+- Prompt 25 does not approve per-entity data-quality scores or baseline-to-runtime/unknown mappings.
+- Prompt 26 does not define full ActionDefinition semantics, initial envoy/institution/actor runtime state or difficulty modifiers.
+- `toolchain.json` records `gisTools: []`, `browserMatrix: null`, and `basemapProvider: null`; no browser map build matching Technical v2 MapArtifactManifest exists.
+- Data & Methodology v1.1 sections 9–13 retain these initialization/formula/tooling items as approval work.
+
+Result
+- PB2-27: BLOCKED under AM-GOV-066.
+- Production implementation/tests: NOT RUN. No TEST_ONLY values were promoted and no missing value was inferred or converted to zero.

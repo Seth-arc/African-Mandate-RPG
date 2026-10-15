@@ -1,0 +1,49 @@
+AM-PB2-27 initialization-profile draft — 2026-10-15
+
+Request
+- Draft the smallest fictional production initialization profile using only accepted data.
+- Preserve unknown data explicitly.
+- Define conservative action behavior.
+- Use the existing local map artifact directly.
+- Mark the profile READY_FOR_REVIEW for owner approval.
+
+Artifact
+- Path: docs/build/PRODUCTION_INITIALIZATION_PROFILE.json
+- Profile version: 0.1.0-proposal.1
+- Classification: PROPOSED_SIMULATED_PRODUCTION_INITIALIZATION
+- Status: APPROVED under AM-GOV-067 on 2026-10-15
+- SHA-256: 4affa81339e8473e176552da43bf56225db29c88668e413d2240cc4e512f2305
+
+Structural verification
+- JSON parse: PASS
+- Actions: 3
+- Explicit historical unknown records: 3
+- observedMissingValue: null
+- competitiveLeaderboardEnabled: false
+- All directWorldStateMutation values: false
+- TEST_ONLY marker scan: PASS, none present
+- Pinned Prompt 25 manifest/audit hashes: PASS
+- Pinned Prompt 26 canonical configuration hash: PASS
+- Accepted action IDs and exact cost amounts: PASS
+- Pinned local map source hash: PASS
+- Verifier output: PASS: initialization profile pins, costs, unknown policy, map hash, and safety constraints verified.
+- Governance schema: PASS
+- Python governance suite: PASS, 7/7
+
+Map inspection and decision
+- `data/african_map.json` top-level keys: meta, names, basemap, assets, finance, ground, pipelines, cables, china.
+- Boundary geometry path: basemap.admin1.
+- The accepted file is not a standard GeoJSON FeatureCollection.
+- Draft delivery: direct local content-addressed use through adapter `african-map-json-direct-v1`.
+- Source SHA-256: 8ef3de3e1bcb846c405915fad33c03f1b38376d83e66ba6d8900681202da3c27.
+- PMTiles/network basemap: disabled.
+
+Scope result
+- No runtime/compiler/browser code added.
+- Owner approval of AM-GOV-067 is recorded; PB2-27 remains BLOCKED pending the durable reviewed commit required by AM-GOV-001.
+
+Approval verification — 2026-10-15
+- Owner decision: AM-GOV-067 APPROVED by Seth-arc.
+- Approved profile verifier: PASS.
+- Governance schema check: PASS.
+- Python governance regression suite: PASS, 7/7.

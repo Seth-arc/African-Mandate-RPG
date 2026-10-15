@@ -1,0 +1,297 @@
+{
+  "schemaVersion": 1,
+  "profileVersion": "0.1.0-proposal.1",
+  "taskId": "AM-PB2-27-PREPARATION",
+  "classification": "PROPOSED_SIMULATED_PRODUCTION_INITIALIZATION",
+  "status": "APPROVED",
+  "disclosure": "SIMULATED: Runtime starting values and action behavior are fictional game design, not historical observations, legal claims, government positions, or forecasts.",
+  "approval": {
+    "decisionId": "AM-GOV-067",
+    "approvedBy": "Seth-arc, repository owner",
+    "approvedOn": "2026-10-15",
+    "requiredMechanism": "OWNER_REVIEWED_COMMIT_AM_GOV_001"
+  },
+  "sourcePins": {
+    "productionAcquisitionManifest": {
+      "path": "docs/build/PRODUCTION_DATA_ACQUISITION.json",
+      "sha256": "1ff38eae6f623a848bf31743649721bdcf3be0410e9bbaf37e2d21ff91230c16"
+    },
+    "productionSourceAudit": {
+      "path": "docs/build/reports/25-source-audit.json",
+      "sha256": "87351bfcbd69f34cdf5bacc4abd2eaf7fe01c3b8df8e4860f8aa022748e986d1"
+    },
+    "productionScenarioConfiguration": {
+      "contentVersion": "1.0.0-simulated.1",
+      "canonicalSha256": "ab4ccb03b7b638c62f37c27111a2bd27cd156008d2b8b4e8bcad7c5ecb42d904"
+    }
+  },
+  "campaign": {
+    "scenarioId": "sahel-five-country-simulated-v1",
+    "startDate": "2025-10-01",
+    "historicalConflictAnchor": "2025-09-26",
+    "maxTurns": 20,
+    "playableContentThroughTurn": 4,
+    "decisionsPerTurn": 3,
+    "campaignSeedSource": "CAMPAIGN_ID",
+    "countries": ["ML", "BF", "NE", "TD", "MR"],
+    "representedInstitutionId": "institution_au_commission"
+  },
+  "versions": {
+    "gameSchemaVersion": 1,
+    "simulationModelVersion": "1.0.0-production-proposal.1",
+    "baselineVersion": "1.0.0-production-proposal.1",
+    "scenarioVersion": "1.0.0-simulated.1",
+    "contentVersion": "1.0.0-opening-proposal.1",
+    "balanceProfileVersion": "1.0.0-simulated.1",
+    "methodologyVersion": "1.0.0-production-proposal.1",
+    "mapArtifactVersion": "1.0.0-local-json-proposal.1"
+  },
+  "unknownPolicy": {
+    "observedMissingValue": null,
+    "neverCoerceUnknownToZero": true,
+    "playerPresentation": "INSUFFICIENT_INFORMATION",
+    "historicalUnknowns": [
+      {
+        "subject": "TD conflict baseline",
+        "reasonCode": "NO_ADMITTED_HISTORICAL_CONFLICT_OBSERVATIONS",
+        "value": null
+      },
+      {
+        "subject": "displacement baseline",
+        "reasonCode": "SOURCE_OMITTED_ZERO_FEATURES",
+        "value": null
+      },
+      {
+        "subject": "unmeasured source quality factors",
+        "reasonCode": "NO_APPROVED_NUMERIC_QUALITY_MEASURE",
+        "value": null
+      }
+    ],
+    "runtimeRule": "A hidden simulated value may initialize engine state where a numeric runtime field is mandatory, but it must be tagged SIMULATED_NOT_OBSERVED and must never populate the observed baseline or player knowledge as fact."
+  },
+  "baselineCompilation": {
+    "territories": "Compile the five accepted country parents.",
+    "zones": "Compile the 97 accepted Natural Earth admin-1 zones and stable ne-admin1 identifiers.",
+    "conflict": {
+      "source": "Deduplicated admitted ACLED events through 2025-09-26.",
+      "observedFields": ["uniqueEventCount", "coverageStatus", "sourceRefs"],
+      "countryLevelEventTreatment": "Retain the one unresolved event at country level; do not assign it to a zone.",
+      "chadTreatment": "Store null with NO_ADMITTED_HISTORICAL_CONFLICT_OBSERVATIONS; do not backfill from the later index."
+    },
+    "displacement": {
+      "included": false,
+      "value": null,
+      "reasonCode": "SOURCE_OMITTED_ZERO_FEATURES"
+    },
+    "finance": {
+      "source": "The 265 admitted AfDB and World Bank records in the pinned local artifact.",
+      "allowedFields": ["sourceId", "publisher", "country", "status"],
+      "amountAggregation": "FORBIDDEN",
+      "zoneAllocation": "FORBIDDEN_WITHOUT_SOURCE_LOCATION"
+    },
+    "dataQuality": {
+      "schemaDecision": "ALLOW_NULL_WITH_REASON",
+      "defaultValue": null,
+      "reasonCode": "NO_APPROVED_NUMERIC_QUALITY_MEASURE",
+      "note": "Categorical audit outcomes remain provenance metadata and are not converted into 0-100 scores."
+    }
+  },
+  "runtimeInitialization": {
+    "classification": "SIMULATED_NOT_OBSERVED",
+    "envoy": {
+      "materialResources": {
+        "budget": { "amount": 0, "currency": "USD" },
+        "personnel": 0,
+        "logistics": 0,
+        "initialSliceTreatment": "INACTIVE_AND_NOT_PROJECTED"
+      },
+      "institutionalCapacity": {
+        "mandateAuthority": 25,
+        "politicalCapital": 30,
+        "secretariatCapacity": 30,
+        "memberStateAlignment": 40,
+        "partnerConfidence": 40,
+        "implementationCapacity": 25,
+        "intelligenceConfidence": 25
+      },
+      "rationale": "Political and secretariat capacity 30 permits one use of each approved action in a turn (17 each total) without granting surplus power. Other values are conservative fictional starting conditions and are not observations."
+    },
+    "territoryDefaults": {
+      "stability": 50,
+      "institutionalCapacity": 50,
+      "economicResilience": 50,
+      "classification": "SIMULATED_NEUTRAL_NOT_OBSERVED"
+    },
+    "zoneDefaults": {
+      "statePresence": 50,
+      "controlContest": 50,
+      "localGovernanceCapacity": 50,
+      "classification": "SIMULATED_NEUTRAL_NOT_OBSERVED"
+    },
+    "conflictInitialization": {
+      "coveredZoneArmedActivityFormula": "clamp(30 + 5 * uniqueEventCount, 30, 70)",
+      "uncoveredZoneArmedActivity": 50,
+      "uncoveredClassification": "SIMULATED_NEUTRAL_NOT_OBSERVED",
+      "civilianTargeting": 40,
+      "actorFragmentation": 40,
+      "mobility": 40,
+      "recruitmentPressure": 40,
+      "escalationMomentum": 0,
+      "spilloverPressure": 40,
+      "projectionRule": "Only observed event counts and coverage status enter initial player knowledge; hidden runtime scores do not."
+    },
+    "civilianDefaults": {
+      "civilianConfidence": 50,
+      "displacementPressure": 50,
+      "humanitarianAccess": 50,
+      "serviceReliability": 50,
+      "perceivedLegitimacy": 50,
+      "classification": "SIMULATED_NEUTRAL_NOT_OBSERVED",
+      "projectionRule": "All five remain insufficient information until supported by accepted evidence or simulated collection."
+    },
+    "developmentDefaults": {
+      "investmentPipeline": 50,
+      "implementationAbsorption": 50,
+      "infrastructureNeed": 50,
+      "serviceDeficit": 50,
+      "externalFinanceDependence": 50,
+      "classification": "SIMULATED_NEUTRAL_NOT_OBSERVED",
+      "projectionRule": "Finance record presence is shown as evidence and is not converted into a score."
+    },
+    "infrastructure": {
+      "assets": [],
+      "corridors": [],
+      "reasonCode": "NO_APPROVED_2025_OPERATIONAL_STATUS_IN_INITIAL_SLICE"
+    },
+    "externalEnvironmentDefaults": {
+      "externalPowerCompetition": 50,
+      "donorRiskTolerance": 50,
+      "commodityPressure": 50,
+      "regionalDiplomaticPressure": 50,
+      "classification": "SIMULATED_NEUTRAL_NOT_OBSERVED"
+    },
+    "institutionDefaults": {
+      "resourceScores": 50,
+      "legitimacy": 50,
+      "coordinationCapacity": 50,
+      "policyPositions": {},
+      "classification": "SIMULATED_NEUTRAL_NOT_OBSERVED"
+    },
+    "actorDefaults": {
+      "capabilityScores": 50,
+      "aggressiveness": 25,
+      "opportunism": 25,
+      "compromiseWillingnessSource": "productionScenarioConfiguration.actorAssumptions.cooperationBaseline",
+      "fatigue": 0,
+      "activeGoalCodes": [],
+      "strategyTags": [],
+      "classification": "SIMULATED_NOT_OBSERVED"
+    },
+    "difficultyProfile": {
+      "difficultyProfileId": "difficulty_conservative_v1",
+      "evidenceClarityModifier": 0,
+      "confidenceDecayModifier": 0,
+      "hiddenRedLineFrequencyModifier": 0,
+      "actorAdaptationStrengthModifier": 0,
+      "escalationSpeedModifier": 0,
+      "implementationToleranceModifier": 0,
+      "causalExplanationLevel": "high",
+      "rationale": "No additional difficulty multiplier is introduced in the opening production slice."
+    }
+  },
+  "actions": [
+    {
+      "actionId": "action_simulated_collect_evidence",
+      "actionDomain": "intelligence",
+      "targetKinds": ["territory", "zone"],
+      "minTargets": 1,
+      "maxTargets": 1,
+      "decisionSlotCost": 1,
+      "knownCosts": [{ "costType": "secretariat_capacity", "amount": 6 }],
+      "eligibility": ["campaign_active", "decision_slot_available", "known_cost_affordable", "registered_target"],
+      "behavior": "Create one collection task. Resolve it on the next End Turn using admitted baseline evidence for the selected target. If no additional admitted evidence exists, return NO_NEW_VERIFIED_OBSERVATION; never synthesize a factual claim.",
+      "directWorldStateMutation": false,
+      "doctrineDelta": { "prevention": 0, "centralization": 0, "policyOrientation": 0, "diplomaticStyle": 0 }
+    },
+    {
+      "actionId": "action_simulated_consult_counterpart",
+      "actionDomain": "diplomacy",
+      "targetKinds": ["actor", "institution"],
+      "minTargets": 1,
+      "maxTargets": 1,
+      "decisionSlotCost": 1,
+      "knownCosts": [
+        { "costType": "political_capital", "amount": 5 },
+        { "costType": "secretariat_capacity", "amount": 3 }
+      ],
+      "eligibility": ["campaign_active", "decision_slot_available", "known_cost_affordable", "registered_target"],
+      "behavior": "Record one consultation and memory. Apply the accepted simulated consultation trust delta of +5 once for the command, capped at 100. A relevant consultation may satisfy regional_consultation for an open simulated procedure but never grants authorization.",
+      "directWorldStateMutation": false,
+      "doctrineDelta": { "prevention": 0, "centralization": 0, "policyOrientation": 0, "diplomaticStyle": 0 }
+    },
+    {
+      "actionId": "action_simulated_request_authorization",
+      "actionDomain": "diplomacy",
+      "targetKinds": ["institution"],
+      "allowedTargetInstitutionIds": [
+        "institution_government_mali",
+        "institution_government_burkina_faso",
+        "institution_government_niger",
+        "institution_government_chad",
+        "institution_government_mauritania"
+      ],
+      "minTargets": 1,
+      "maxTargets": 1,
+      "decisionSlotCost": 1,
+      "knownCosts": [
+        { "costType": "political_capital", "amount": 12 },
+        { "costType": "secretariat_capacity", "amount": 8 }
+      ],
+      "eligibility": ["campaign_active", "decision_slot_available", "known_cost_affordable", "registered_host_target", "procedure_sequence_satisfied"],
+      "behavior": "Open or advance the matching simulated host procedure by one formal step. First use records commission_submission. regional_consultation must be completed by consultation. After the accepted two-turn lead time, the next use records psc_game_review; a final use records affected_host_game_consent and grants simulated authorization. Missing sequence or lead-time requirements reject without cost or revision.",
+      "directWorldStateMutation": false,
+      "doctrineDelta": { "prevention": 0, "centralization": 0, "policyOrientation": 0, "diplomaticStyle": 0 }
+    }
+  ],
+  "actionSafety": {
+    "unknownEligibilityPolicy": "PROPAGATE_AND_BLOCK_WITHOUT_COST",
+    "invalidOrDuplicateCommandCost": 0,
+    "invalidOrDuplicateRevisionChange": 0,
+    "hiddenSuccessForecast": "FORBIDDEN",
+    "directConflictCivilianInfrastructureDevelopmentEffects": "NONE_IN_INITIAL_SLICE"
+  },
+  "mapDelivery": {
+    "sourcePath": "data/african_map.json",
+    "sourceSha256": "8ef3de3e1bcb846c405915fad33c03f1b38376d83e66ba6d8900681202da3c27",
+    "sourceFormat": "AFRICAN_MAP_JSON_BUNDLE",
+    "isStandardGeoJson": false,
+    "deliveryMode": "LOCAL_CONTENT_HASHED_BUILD_ASSET",
+    "browserArtifactFormat": "AFRICAN_MAP_JSON_BUNDLE",
+    "immutableUrlTemplate": "/assets/african_map.8ef3de3e1bcb846c405915fad33c03f1b38376d83e66ba6d8900681202da3c27.json",
+    "adapterVersion": "african-map-json-direct-v1",
+    "geometryPath": "basemap.admin1",
+    "countryFilter": ["ML", "BF", "NE", "TD", "MR"],
+    "subjectIdScheme": "ne-admin1:{iso3}:{slug(name)}",
+    "coordinateReferenceSystem": "EPSG:4326",
+    "runtimeHashVerification": true,
+    "networkBasemap": false,
+    "pmtiles": false,
+    "sourceMutation": "FORBIDDEN",
+    "note": "The accepted file is a repository-specific JSON bundle, not a GeoJSON FeatureCollection. The browser reads the pinned file through one adapter; a content-addressed build copy is an immutable output, not a second mutable source of truth."
+  },
+  "projectionPolicy": {
+    "observedClaimsRequireSourceRefAndDate": true,
+    "historicalUnknownsRemainNull": true,
+    "simulatedValuesCarryDisclosure": true,
+    "hiddenRuntimeValuesExcluded": true,
+    "competitiveLeaderboardEnabled": false
+  },
+  "explicitExclusions": [
+    "months_5_through_20_content",
+    "cloud_sync_or_accounts",
+    "competitive_leaderboard",
+    "hosting_or_deployment",
+    "unapproved_2025_asset_operational_status",
+    "raw_restricted_source_redistribution"
+  ]
+}

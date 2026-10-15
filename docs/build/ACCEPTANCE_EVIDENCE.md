@@ -1150,6 +1150,8 @@ not satisfy the blocked or pending human approvals.
 
 Run the handoff commands and review the limitations. If accepted, the owner's commit marks PB2-25 ACCEPTED under AM-GOV-001. No separate GIS, scenario, methodology, or legal reviewer is required for this individual build.
 
+PB2-25 was subsequently accepted under AM-GOV-001/064 by repository-owner commit `0a0c44157849cbfa52ff4ad5e45da03b5da132d5`, authored and committed by Seth-arc at `2026-10-15T11:27:36-04:00`. The acceptance preserves the recorded data gaps, source limitations and reviewed geometry exceptions.
+
 ## AM-PB2-26 — production actors, authority, and balances
 
 **Status proposed:** READY_FOR_REVIEW
@@ -1188,3 +1190,45 @@ AM-GOV-062 records the repository owner's 2026-10-15 instruction to treat instit
 | AC-026 | Leaderboard schema rejects enabled state/composite scores | PASS disabled policy; no leaderboard service implemented |
 
 PB2-26 remains unaccepted until the repository owner reviews the exact configuration, reruns the handoff commands, and commits it under AM-GOV-001. Prompt 27 must combine only accepted Prompt 25/26 artifacts with the production runtime.
+
+PB2-26 was subsequently accepted under AM-GOV-001/065 by repository-owner commit `ec60aaf04f025f4a179934c4fa185106703e1ef6`, authored and committed by Seth-arc at `2026-10-15T13:02:48-04:00`. The acceptance preserves the explicit `SIMULATED` classification, non-factual scope and disabled competitive leaderboard.
+
+## AM-PB2-27 — production baseline and browser runtime integration
+
+**Status:** BLOCKED
+
+**Acceptance IDs:** PB2-27; AC-004–006; AC-015–019; AC-021; AC-023–024
+
+**Preflight base:** `ec60aaf04f025f4a179934c4fa185106703e1ef6`
+
+### Gate reconciliation
+
+- PB2-20 and PB2-24 were already ACCEPTED.
+- Repository-owner commits `0a0c44157849cbfa52ff4ad5e45da03b5da132d5` and `ec60aaf04f025f4a179934c4fa185106703e1ef6` satisfy AM-GOV-001 for PB2-25 and PB2-26. AM-GOV-064/065 and `BUILD_STATE.json` now durably reconcile those acceptance events.
+- Source manifest hash is `dfa0429ded121b6f1d489ab2a8ea0f9767b48d54bb61062324207c6a99eee5d3`; Prompt 27 hash is `55f7794f0a7d30e75f080540a95bebf2336faa4dc2c682a070900b7ede3e419f`.
+
+### Blocking evidence
+
+- Prompt 25 admits source files and reviewed limitations, but does not approve the five numeric data-quality factors required for each `BaselinePackage` territory/zone record or the transformation from observed records into runtime scores.
+- Data & Methodology v1.1 sections 9–13 explicitly leave observed-to-latent initialization, missingness mappings and shipped projection formulas requiring approval. Chad conflict and displacement remain unknown; the current runtime score schemas cannot represent those unknown values without a reviewed initialization policy.
+- Prompt 26 approves three action IDs/costs, fictional actor assumptions, procedures, balance constants and the evaluation formula. It does not define the complete `ActionDefinition` fields, initial envoy/institution/actor runtime resources, actor capabilities/intents, or difficulty modifiers required to create a valid `ScenarioBundle` and `CampaignState`.
+- Prompt 25 admits `data/african_map.json` as the geometry input. Technical v2 requires a versioned `MapArtifactManifest` and browser-deliverable immutable map artifact, while `toolchain.json` records no GIS/vector-tile tool, browser matrix or basemap provider. No approved PMTiles bytes, hash or immutable URL exists.
+
+The Prompt 27 stop condition therefore applies. No production compiler, composition root, route or serializer was added, and no TEST_ONLY value was promoted. The smallest unblocker is one versioned owner-approved production initialization profile covering the missing runtime/action/methodology values plus a map-delivery decision with pinned tooling and artifact format.
+
+### Initialization proposal prepared
+
+AM-GOV-067 records the owner's explicit 2026-10-15 approval of profile `0.1.0-proposal.1` at `docs/build/PRODUCTION_INITIALIZATION_PROFILE.json`, canonical SHA-256 `4affa81339e8473e176552da43bf56225db29c88668e413d2240cc4e512f2305`. It keeps Chad conflict, displacement and unmeasured quality values explicitly `null`; separates hidden simulated defaults from observed/player knowledge; defines conservative behavior for the three approved actions; and chooses direct content-addressed browser delivery of the pinned repository map JSON without PMTiles or a network basemap.
+
+The profile is APPROVED. PB2-27 remains BLOCKED only until this approval record is committed as the durable AM-GOV-001 event. The approval clears the missing-input blocker; it does not substitute for Prompt 27 implementation or tests.
+
+The profile verifier passed its canonical hash, Prompt 25/26 pins, exact accepted action costs, map-source hash, explicit-null policy, no-direct-world-mutation rule, disabled leaderboard and no-TEST_ONLY-marker checks. Governance schema and all seven Python governance tests also passed.
+
+### Tests
+
+- `corepack pnpm run schema:check`: PASS after acceptance reconciliation.
+- `py -3 -B -m unittest discover -s tests/governance -p "test_*.py" -v`: PASS, 7/7 after moving the unapproved-state fixture from now-accepted Prompt 25 to Prompt 27.
+- Existing regression gate: formatting, peer dependencies, lint and typecheck passed; 25 unit files / 191 tests passed; deterministic vectors, fixture rebuild, import/random boundaries, editorial conformance and Prompt 25 source audit passed.
+- Production compilation, application integration, build and browser tests: NOT RUN because dependent implementation is prohibited while AM-GOV-066 is blocked.
+
+Full command history, including environment invocation failures, is retained in `docs/build/logs/27-preflight.log`.
