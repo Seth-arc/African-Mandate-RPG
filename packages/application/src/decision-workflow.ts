@@ -129,7 +129,10 @@ export const DecisionWorkspaceProjectionSchema = z
   .object({
     schemaVersion: z.literal(DECISION_WORKFLOW_SCHEMA_VERSION),
     contractVersion: z.literal(DECISION_WORKFLOW_CONTRACT_VERSION),
-    classification: z.literal("TEST_ONLY_DECISION_WORKSPACE"),
+    classification: z.enum([
+      "TEST_ONLY_DECISION_WORKSPACE",
+      "SIMULATED_PRODUCTION_DECISION_WORKSPACE",
+    ]),
     campaign: CampaignProjectionSchema,
     actionOptions: z.array(DecisionActionOptionSchema),
     journal: z.array(DecisionJournalEntrySchema),

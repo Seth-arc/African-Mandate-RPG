@@ -59,6 +59,7 @@ export interface BrowserCampaignStorage {
   loadCurrent(campaignId: CampaignId): Promise<unknown | undefined>;
   loadRecovery(campaignId: CampaignId): Promise<unknown | undefined>;
   commitCurrent(snapshot: SaveSnapshot): Promise<void>;
+  restoreCurrent(snapshot: SaveSnapshot): Promise<void>;
   close(): void;
 }
 
@@ -188,6 +189,21 @@ export class IndexedDbCampaignStorage implements BrowserCampaignStorage {
     await completed;
   }
 
+  public async restoreCurrent(snapshot: SaveSnapshot): Promise<void> {
+    const transaction = this.#database.transaction(
+      ["campaign_current", "storage_metadata"],
+      "readwrite",
+    );
+    const completed = transactionComplete(transaction);
+    transaction
+      .objectStore("campaign_current")
+      .put(snapshot, snapshot.campaignId);
+    transaction
+      .objectStore("storage_metadata")
+      .put(LOCAL_STORAGE_SCHEMA_VERSION, "localStorageSchemaVersion");
+    await completed;
+  }
+
   public close(): void {
     this.#database.close();
   }
@@ -238,6 +254,18 @@ export class IndexedDbCampaignRepository implements CampaignRepository<AtomicCom
       campaignId,
       await this.#storage.loadRecovery(campaignId),
     );
+  }
+
+  public async recoverLastValid(
+    campaignIdValue: CampaignId,
+  ): Promise<SaveSnapshot> {
+    const campaignId = CampaignIdSchema.parse(campaignIdValue);
+    const snapshot = parseStoredSnapshot(
+      campaignId,
+      await this.#storage.loadRecovery(campaignId),
+    );
+    await this.#storage.restoreCurrent(structuredClone(snapshot));
+    return snapshot;
   }
 
   public async writeLocal(snapshotValue: SaveSnapshot): Promise<void> {

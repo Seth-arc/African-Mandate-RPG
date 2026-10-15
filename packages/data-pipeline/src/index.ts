@@ -12,4 +12,5 @@ export * from "./canonical/canonical-json.js";
 export * from "./compilation/compile-synthetic-fixture.js";
 export * from "./geography/assign-points.js";
 export * from "./production/source-admission.js";
+export * from "./production/compile-production-artifacts.js";
 export * from "./schemas/fixture-artifacts.js";

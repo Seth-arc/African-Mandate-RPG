@@ -79,7 +79,7 @@ test.beforeEach(async ({ page }) => {
 test("draft operations are reversible and do not change campaign state", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/?testRoute=1");
   await openDecisionJournal(page);
   await addDraft(page, "Task access verification");
   await addDraft(page, "Consult the AU Commission");
@@ -106,7 +106,7 @@ test("draft operations are reversible and do not change campaign state", async (
 test("confirmation traps focus, returns it, and announces durable commitment", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/?testRoute=1");
   await openDecisionJournal(page);
   await addDraft(page, "Task access verification");
   const commit = page.getByRole("button", { name: "Commit decision" });
@@ -147,7 +147,7 @@ test("confirmation traps focus, returns it, and announces durable commitment", a
 test("failed save keeps prior state and retry reuses the draft", async ({
   page,
 }) => {
-  await page.goto("/?decisionScenario=adverse");
+  await page.goto("/?testRoute=1&decisionScenario=adverse");
   await openDecisionJournal(page);
   await addDraft(page, "Task access verification");
   await page.getByRole("button", { name: "Commit decision" }).click();
@@ -177,7 +177,7 @@ test("failed save keeps prior state and retry reuses the draft", async ({
 test("last slot stays reserved for the known mandatory response", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/?testRoute=1");
   await openDecisionJournal(page);
   for (const label of monthActions[0]) await commitDraft(page, label);
   await endMonth(page, 1);
@@ -212,7 +212,7 @@ test("last slot stays reserved for the known mandatory response", async ({
 test("completes the four-month happy path and preserves ordered history", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/?testRoute=1");
   await openDecisionJournal(page);
   await completeFourMonths(page);
 
@@ -234,7 +234,7 @@ test("completes the four-month happy path and preserves ordered history", async 
 test("completes the adverse path after a visible save failure", async ({
   page,
 }) => {
-  await page.goto("/?decisionScenario=adverse");
+  await page.goto("/?testRoute=1&decisionScenario=adverse");
   await openDecisionJournal(page);
   await addDraft(page, "Task access verification");
   await page.getByRole("button", { name: "Commit decision" }).click();
@@ -263,7 +263,7 @@ test("completes the adverse path after a visible save failure", async ({
 test("decision and dialog surfaces pass accessibility smoke", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/?testRoute=1");
   await openDecisionJournal(page);
   await addDraft(page, "Task access verification");
   await page.getByRole("button", { name: "Commit decision" }).click();

@@ -80,6 +80,11 @@ class DeferredBrowserStorage implements BrowserCampaignStorage {
     this.current = structuredClone(snapshot);
   }
 
+  public restoreCurrent(snapshot: SaveSnapshot): Promise<void> {
+    this.current = structuredClone(snapshot);
+    return Promise.resolve();
+  }
+
   public close(): void {}
 }
 

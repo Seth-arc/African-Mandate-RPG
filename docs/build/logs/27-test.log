@@ -1,0 +1,84 @@
+AM-PB2-27 final implementation and verification log
+Date: 2026-10-15 America/Indianapolis
+Base HEAD: f862ff6f2db159181e42fa5f1180968d56fe9e50
+Status proposed: READY_FOR_REVIEW
+
+PREFLIGHT
+PASS: HEAD and origin/main matched f862ff6f2db159181e42fa5f1180968d56fe9e50.
+PASS: PB2-20, PB2-24, PB2-25 and PB2-26 were ACCEPTED.
+PASS: owner commit subject was "approve AM-GOV-067 production initialization profile".
+PASS: docs/build/PRODUCTION_INITIALIZATION_PROFILE.json canonical SHA-256 matched 4affa81339e8473e176552da43bf56225db29c88668e413d2240cc4e512f2305.
+
+CORRECTED FAILURES RETAINED
+- Initial compiler work exposed a territory-indicator shape mismatch, a production zone-ID schema mismatch and a missing exported schema constant. Each root contract was corrected before artifacts were accepted.
+- First browser startup failed closed with "Illegal invocation" because the global fetch method had lost its receiver. The artifact registry now binds globalThis.fetch.
+- Initial map inspection showed off-centre geometry and excessive labels. The verified production map now fits its data bounds and suppresses polygon labels while retaining the equivalent keyboard subject list.
+- First complete browser run passed 25/26 and failed one test because the test route still expected production notice copy. The assertion was scoped to the explicit test route; focused editorial rerun passed 4/4 and the complete rerun passed 26/26.
+- The final procedure audit first used the wrong disabled-button accessible name, then asserted while the UI was on the ledger view. Both selectors were corrected.
+- The audit then exposed the approved resource ceiling: 30 political capital funds submission (12), consultation (5) and PSC review (12), leaving 1, so final host consent (12) is unaffordable. No recovery value was invented. The final audit verifies the two recorded steps and the fail-closed KNOWN_COST_UNAFFORDABLE result with revision unchanged.
+- One Node invocation failed before execution with Windows sandbox EPERM on C:\Users\ssnguna. The same scoped project commands were rerun with approved workspace access.
+
+FINAL COMMANDS AND ACTUAL RESULTS
+
+corepack pnpm run artifacts:verify
+exit 0
+PASS: two compilations each produced sahel-five-country-simulated-v1 with 97 zones and aggregate hash 41f5560d0e4081e8ea50c51aa7ff2aad92352677bc7acb9d84d5847b128fd82b.
+PASS: 6 production files were schema-valid, TEST_ONLY-free, hash-pinned and byte-identical.
+
+corepack pnpm run ci
+exit 0
+PASS: Prettier, peer dependency check, ESLint and TypeScript.
+PASS: 26 unit files / 194 tests.
+PASS: deterministic vectors and two-process fixture rebuild.
+PASS: forbidden web-to-simulation, UI-to-domain and UI-to-simulation imports; forbidden random calls.
+PASS: editorial conformance.
+PASS: Prompt 25 source audit: 97 zones, 41 unique in-scope events, 265 finance rows, 0 displacement features.
+PASS: governance and toolchain schemas.
+
+corepack pnpm run test:production:e2e
+exit 0
+PASS: 3/3.
+1. real production campaign commit, End Turn and exact reload;
+2. corrupt current snapshot recovery to last valid state;
+3. fictional authorization consultation, two-turn lead, PSC-review and resource-ceiling negative case.
+
+corepack pnpm run test:e2e
+exit 0
+PASS: 27/27 browser tests in 40.8 seconds.
+
+corepack pnpm run build:production
+exit 0
+PASS: 97-zone artifact compilation, aggregate hash 41f5560d0e4081e8ea50c51aa7ff2aad92352677bc7acb9d84d5847b128fd82b.
+PASS: Vite transformed 182 modules and produced the production build.
+
+VISUAL CHECK
+PASS: output/web-game/prompt-27-final-map/shot-0.png inspected at the default production route.
+PASS: output/web-game/prompt-27-final-map/state-0.json reported SIMULATED_PRODUCTION, revision 0, turn 1 and 3 decisions remaining.
+
+ARTIFACT HASHES
+baseline.package.json 3a27c2b6f77064c69e571e5fbb5a59e3a4947329ced1a6f5f5773a2f76ae6b6f
+scenario.bundle.json 16191158eb3a98c96afd6c382d7ba92d059b3c6140973df3f1ed84205e1460f7
+methodology.manifest.json 5cece5777fd1b793774213137551f157e5176b24247dee25de61f42f38cefa12
+map.manifest.json d9316db012efde0b9be5e752b8bf244813486c489fbb13ad608e0505839e57b7
+direct map JSON 8ef3de3e1bcb846c405915fad33c03f1b38376d83e66ba6d8900681202da3c27
+release.manifest.json c85a70d3042fbce13c10cdf611b9948c8a0a0b91235b2c8e69e1bad0f1bbdef9
+
+FINAL GOVERNANCE/DIFF COMMANDS
+corepack pnpm run schema:check
+exit 0
+PASS: governance and toolchain artifacts match public schemas.
+
+py -3 -B -m unittest discover -s tests/governance -p "test_*.py" -v
+exit 0
+PASS: 7/7 governance tests.
+
+git diff --check
+exit 0; no whitespace errors. Git emitted only the repository's Windows LF-to-CRLF notices.
+
+Get-FileHash docs/build/PRODUCTION_INITIALIZATION_PROFILE.json
+exit 0
+PASS: 4AFFA81339E8473E176552DA43BF56225DB29C88668E413D2240CC4E512F2305.
+
+git status --short
+exit 0
+Expected Prompt 27 source, generated artifact, test and evidence paths are modified/untracked. No reference screenshot remains modified after browser-output cleanup.

@@ -82,7 +82,7 @@ test("measures every current major surface at the minimum viewport and 200 perce
   page,
 }) => {
   await page.setViewportSize(minimumViewport);
-  await page.goto("/");
+  await page.goto("/?testRoute=1");
   await enableTextZoom(page);
   await expect(page.locator("[data-map-status='ready']")).toBeVisible();
 
@@ -126,7 +126,7 @@ test("completes one month by keyboard with reduced motion", async ({
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/");
+  await page.goto("/?testRoute=1");
   await openDecisionJournal(page);
 
   for (const label of [
@@ -185,7 +185,7 @@ test("keeps simulation markers, plain summaries, and dates consistent", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/");
+  await page.goto("/?testRoute=1");
   await expect(
     page.getByRole("heading", { name: "Simulation notice" }),
   ).toBeVisible();
@@ -213,7 +213,7 @@ test("retains local fallback surfaces with the browser offline", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/");
+  await page.goto("/?testRoute=1");
   await expect(page.locator("[data-map-status='ready']")).toBeVisible();
   await context.setOffline(true);
   await page.getByRole("link", { name: "Monthly brief" }).click();

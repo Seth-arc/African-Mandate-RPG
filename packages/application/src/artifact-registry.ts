@@ -1,5 +1,6 @@
 import {
   BaselinePackageSchema,
+  CampaignArtifactRefsSchema,
   MethodologyManifestSchema,
   ScenarioBundleSchema,
   type BaselinePackage,
@@ -13,7 +14,10 @@ import type { ArtifactRegistryClient, ArtifactRegistryTypes } from "./ports.js";
 export const APPLICATION_ADAPTER_CONTRACT_VERSION = "1.0.0" as const;
 
 const Sha256Schema = z.string().regex(/^[a-f0-9]{64}$/u);
-const ImmutableUrlSchema = z.url();
+const ImmutableUrlSchema = z.union([
+  z.url(),
+  z.string().regex(/^\/[a-zA-Z0-9_./-]+$/u),
+]);
 
 export const JsonArtifactRefSchema = z
   .object({
@@ -40,17 +44,7 @@ export const MethodologyArtifactRefSchema = JsonArtifactRefSchema.extend({
 }).strict();
 
 /** Exact Save Snapshot v2 artifact identity from Technical v2 section 26. */
-export const CampaignArtifactRefsSchema = z
-  .object({
-    scenarioId: z.string().min(1),
-    scenarioBundleSchemaVersion: z.number().int().positive(),
-    scenarioBundleHash: Sha256Schema,
-    baselineSchemaVersion: z.number().int().positive(),
-    baselineHash: Sha256Schema,
-    mapArtifactSchemaVersion: z.number().int().positive(),
-    mapArtifactHash: Sha256Schema,
-  })
-  .strict();
+export { CampaignArtifactRefsSchema };
 
 /**
  * Test-only proposal: the source defines the client methods but not the
@@ -73,6 +67,7 @@ export const ReleaseScenarioEntrySchema = z
     contentVersion: z.string().min(1),
     balanceProfileVersion: z.string().min(1),
     methodologyVersion: z.string().min(1),
+    methodology: MethodologyArtifactRefSchema,
     scenarioBundle: JsonArtifactRefSchema,
     baseline: BaselineArtifactRefSchema,
     mapArtifact: MapArtifactRefSchema,
@@ -107,16 +102,31 @@ export const MapSourceLayerManifestSchema = z
   })
   .strict();
 
-export const MapArtifactManifestSchema = z
-  .object({
-    mapArtifactSchemaVersion: z.number().int().positive(),
-    pmtilesUrl: ImmutableUrlSchema,
-    pmtilesHash: Sha256Schema,
-    sourceLayers: z.array(MapSourceLayerManifestSchema),
-    crsSource: z.literal("EPSG:4326"),
-    buildToolchainVersion: z.string().min(1),
-  })
-  .strict();
+export const MapArtifactManifestSchema = z.union([
+  z
+    .object({
+      mapArtifactSchemaVersion: z.number().int().positive(),
+      format: z.literal("pmtiles").optional(),
+      pmtilesUrl: ImmutableUrlSchema,
+      pmtilesHash: Sha256Schema,
+      sourceLayers: z.array(MapSourceLayerManifestSchema),
+      crsSource: z.literal("EPSG:4326"),
+      buildToolchainVersion: z.string().min(1),
+    })
+    .strict(),
+  z
+    .object({
+      mapArtifactSchemaVersion: z.number().int().positive(),
+      format: z.literal("african_map_json_bundle"),
+      artifactUrl: ImmutableUrlSchema,
+      artifactHash: Sha256Schema,
+      geometryPath: z.literal("basemap.admin1"),
+      sourceLayers: z.array(MapSourceLayerManifestSchema),
+      crsSource: z.literal("EPSG:4326"),
+      buildToolchainVersion: z.string().min(1),
+    })
+    .strict(),
+]);
 
 export type JsonArtifactRef = z.infer<typeof JsonArtifactRefSchema>;
 export type BaselineArtifactRef = z.infer<typeof BaselineArtifactRefSchema>;
@@ -189,7 +199,7 @@ export class BrowserArtifactRegistryClient implements ArtifactRegistryClient<Bro
     this.#releaseManifestUrl = ImmutableUrlSchema.parse(
       options.releaseManifestUrl,
     );
-    this.#fetcher = options.fetcher ?? globalThis.fetch;
+    this.#fetcher = options.fetcher ?? globalThis.fetch.bind(globalThis);
   }
 
   public async loadReleaseManifest(): Promise<ReleaseManifest> {

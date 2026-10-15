@@ -4,6 +4,7 @@ import {
   EndTurnRequestSchema,
   EndTurnSimulationResultSchema,
   type AtomicEndTurnResult,
+  type CampaignArtifactRefs,
   type CampaignState,
   type EndTurnRequest,
   type EndTurnRejectionReason,
@@ -92,17 +93,20 @@ export class AtomicCampaignTurnService {
   readonly #simulation: EndTurnSimulationPort;
   readonly #repository: CampaignRepository<AtomicCommandRepositoryTypes>;
   readonly #runtimeStore: CampaignRuntimeStore;
+  readonly #artifactRefs: CampaignArtifactRefs | undefined;
 
   public constructor(options: {
     readonly coordinator: CampaignOperationCoordinator;
     readonly simulation: EndTurnSimulationPort;
     readonly repository: CampaignRepository<AtomicCommandRepositoryTypes>;
     readonly runtimeStore: CampaignRuntimeStore;
+    readonly artifactRefs?: CampaignArtifactRefs;
   }) {
     this.#coordinator = options.coordinator;
     this.#simulation = options.simulation;
     this.#repository = options.repository;
     this.#runtimeStore = options.runtimeStore;
+    this.#artifactRefs = options.artifactRefs;
   }
 
   public async endTurn(requestValue: unknown): Promise<AtomicEndTurnResult> {
@@ -170,7 +174,7 @@ export class AtomicCampaignTurnService {
         });
       }
 
-      const snapshot = createSaveSnapshot(result.nextState);
+      const snapshot = createSaveSnapshot(result.nextState, this.#artifactRefs);
       try {
         await this.#repository.writeLocal(snapshot);
       } catch (error) {

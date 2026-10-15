@@ -16,7 +16,7 @@ import { NonNegativeIntegerSchema } from "./scalars.js";
 import { CampaignVersionsSchema } from "./versions.js";
 
 export const ATOMIC_COMMIT_CONTRACT_VERSION = "1.1.0" as const;
-export const SAVE_SNAPSHOT_VERSION = 1 as const;
+export const SAVE_SNAPSHOT_VERSION = 2 as const;
 
 export const AuthoritativeStateHashSchema = z.string().regex(/^[0-9a-f]{64}$/u);
 
@@ -32,9 +32,20 @@ const versionsMatch = (
   left.balanceProfileVersion === right.balanceProfileVersion &&
   left.methodologyVersion === right.methodologyVersion;
 
-export const SaveSnapshotSchema = z
+export const CampaignArtifactRefsSchema = z
   .object({
-    snapshotVersion: z.literal(SAVE_SNAPSHOT_VERSION),
+    scenarioId: z.string().min(1),
+    scenarioBundleSchemaVersion: z.number().int().positive(),
+    scenarioBundleHash: AuthoritativeStateHashSchema,
+    baselineSchemaVersion: z.number().int().positive(),
+    baselineHash: AuthoritativeStateHashSchema,
+    mapArtifactSchemaVersion: z.number().int().positive(),
+    mapArtifactHash: AuthoritativeStateHashSchema,
+  })
+  .strict();
+
+const SaveSnapshotBaseSchema = z
+  .object({
     campaignId: CampaignIdSchema,
     campaignRevision: NonNegativeIntegerSchema,
     versions: CampaignVersionsSchema,
@@ -47,34 +58,48 @@ export const SaveSnapshotSchema = z
       .strict()
       .optional(),
   })
-  .strict()
-  .superRefine((snapshot, ctx) => {
-    if (snapshot.campaignId !== snapshot.authoritativeState.meta.campaignId) {
-      ctx.addIssue({
-        code: "custom",
-        message: "campaignId must match authoritativeState.meta.campaignId",
-        path: ["campaignId"],
-      });
-    }
-    if (
-      snapshot.campaignRevision !== snapshot.authoritativeState.meta.revision
-    ) {
-      ctx.addIssue({
-        code: "custom",
-        message: "campaignRevision must match authoritativeState.meta.revision",
-        path: ["campaignRevision"],
-      });
-    }
-    if (
-      !versionsMatch(snapshot.versions, snapshot.authoritativeState.versions)
-    ) {
-      ctx.addIssue({
-        code: "custom",
-        message: "versions must match authoritativeState.versions",
-        path: ["versions"],
-      });
-    }
-  });
+  .strict();
+
+const refineSnapshot = (
+  snapshot: z.infer<typeof SaveSnapshotBaseSchema>,
+  ctx: z.RefinementCtx,
+) => {
+  if (snapshot.campaignId !== snapshot.authoritativeState.meta.campaignId) {
+    ctx.addIssue({
+      code: "custom",
+      message: "campaignId must match authoritativeState.meta.campaignId",
+      path: ["campaignId"],
+    });
+  }
+  if (snapshot.campaignRevision !== snapshot.authoritativeState.meta.revision) {
+    ctx.addIssue({
+      code: "custom",
+      message: "campaignRevision must match authoritativeState.meta.revision",
+      path: ["campaignRevision"],
+    });
+  }
+  if (!versionsMatch(snapshot.versions, snapshot.authoritativeState.versions)) {
+    ctx.addIssue({
+      code: "custom",
+      message: "versions must match authoritativeState.versions",
+      path: ["versions"],
+    });
+  }
+};
+
+const SaveSnapshotV1Schema = SaveSnapshotBaseSchema.extend({
+  snapshotVersion: z.literal(1),
+}).superRefine(refineSnapshot);
+
+const SaveSnapshotV2Schema = SaveSnapshotBaseSchema.extend({
+  snapshotVersion: z.literal(SAVE_SNAPSHOT_VERSION),
+  artifacts: CampaignArtifactRefsSchema,
+}).superRefine(refineSnapshot);
+
+export const SaveSnapshotSchema = z.discriminatedUnion("snapshotVersion", [
+  SaveSnapshotV1Schema,
+  SaveSnapshotV2Schema,
+]);
 
 export const AtomicStrategicCommandRequestSchema = z
   .object({
@@ -181,6 +206,7 @@ export const AtomicStrategicCommandResultSchema = z.discriminatedUnion(
 );
 
 export type SaveSnapshot = z.infer<typeof SaveSnapshotSchema>;
+export type CampaignArtifactRefs = z.infer<typeof CampaignArtifactRefsSchema>;
 export type AtomicStrategicCommandRequest = z.infer<
   typeof AtomicStrategicCommandRequestSchema
 >;

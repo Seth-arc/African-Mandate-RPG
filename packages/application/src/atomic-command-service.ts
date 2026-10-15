@@ -1,6 +1,7 @@
 import {
   AtomicStrategicCommandRequestSchema,
   AtomicStrategicCommandResultSchema,
+  CampaignArtifactRefsSchema,
   CampaignStateSchema,
   SAVE_SNAPSHOT_VERSION,
   SaveSnapshotSchema,
@@ -8,6 +9,7 @@ import {
   type AtomicStrategicCommandRequest,
   type AtomicStrategicCommandResult,
   type CampaignId,
+  type CampaignArtifactRefs,
   type CampaignState,
   type SaveSnapshot,
   type StrategicCommandSimulationInput,
@@ -88,16 +90,22 @@ export class InMemoryCampaignRuntimeStore implements CampaignRuntimeStore {
   }
 }
 
-export const createSaveSnapshot = (stateValue: CampaignState): SaveSnapshot => {
+export const createSaveSnapshot = (
+  stateValue: CampaignState,
+  artifactRefs?: CampaignArtifactRefs,
+): SaveSnapshot => {
   const state = CampaignStateSchema.parse(stateValue);
   const authoritativeStateHash = hashCanonicalJson(state);
   return SaveSnapshotSchema.parse({
-    snapshotVersion: SAVE_SNAPSHOT_VERSION,
+    snapshotVersion: artifactRefs === undefined ? 1 : SAVE_SNAPSHOT_VERSION,
     campaignId: state.meta.campaignId,
     campaignRevision: state.meta.revision,
     versions: state.versions,
     authoritativeState: state,
     authoritativeStateHash,
+    ...(artifactRefs === undefined
+      ? {}
+      : { artifacts: CampaignArtifactRefsSchema.parse(artifactRefs) }),
   });
 };
 
@@ -178,17 +186,20 @@ export class AtomicCampaignCommandService {
   readonly #simulation: StrategicCommandSimulationPort;
   readonly #repository: CampaignRepository<AtomicCommandRepositoryTypes>;
   readonly #runtimeStore: CampaignRuntimeStore;
+  readonly #artifactRefs: CampaignArtifactRefs | undefined;
 
   public constructor(options: {
     readonly coordinator: CampaignOperationCoordinator;
     readonly simulation: StrategicCommandSimulationPort;
     readonly repository: CampaignRepository<AtomicCommandRepositoryTypes>;
     readonly runtimeStore: CampaignRuntimeStore;
+    readonly artifactRefs?: CampaignArtifactRefs;
   }) {
     this.#coordinator = options.coordinator;
     this.#simulation = options.simulation;
     this.#repository = options.repository;
     this.#runtimeStore = options.runtimeStore;
+    this.#artifactRefs = options.artifactRefs;
   }
 
   public async dispatch(
@@ -271,7 +282,10 @@ export class AtomicCampaignCommandService {
           });
         }
 
-        const snapshot = createSaveSnapshot(simulationResult.nextState);
+        const snapshot = createSaveSnapshot(
+          simulationResult.nextState,
+          this.#artifactRefs,
+        );
         try {
           await this.#repository.writeLocal(snapshot);
         } catch (error) {

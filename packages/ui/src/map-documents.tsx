@@ -222,6 +222,15 @@ const featureLabelAnchor = (feature: TestMapFeature) => {
   }
 };
 
+const featurePositions = (
+  feature: TestMapFeature,
+): readonly [number, number][] => {
+  if (feature.geometry.type === "Point") return [feature.geometry.coordinates];
+  if (feature.geometry.type === "LineString")
+    return feature.geometry.coordinates;
+  return feature.geometry.coordinates.flat();
+};
+
 interface MapHostProps {
   readonly projection: MapDocumentProjection;
   readonly selectedSubjectId: string;
@@ -233,6 +242,9 @@ export const MapHost = ({
   selectedSubjectId,
   onSelectSubject,
 }: MapHostProps) => {
+  const production =
+    projection.classification ===
+    "SIMULATED_PRODUCTION_MAP_DOCUMENT_PROJECTION";
   const hostRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const markersRef = useRef<Map<string, MapLibreMarker>>(new Map());
@@ -269,8 +281,32 @@ export const MapHost = ({
           const canvas = map.getCanvas();
           canvas.tabIndex = -1;
           canvas.setAttribute("aria-hidden", "true");
+          const positions =
+            projection.geometry.features.flatMap(featurePositions);
+          if (positions.length > 0) {
+            const bounds = positions.reduce(
+              (current, [longitude, latitude]) =>
+                [
+                  [
+                    Math.min(current[0][0], longitude),
+                    Math.min(current[0][1], latitude),
+                  ],
+                  [
+                    Math.max(current[1][0], longitude),
+                    Math.max(current[1][1], latitude),
+                  ],
+                ] as [[number, number], [number, number]],
+              [
+                [positions[0]![0], positions[0]![1]],
+                [positions[0]![0], positions[0]![1]],
+              ] as [[number, number], [number, number]],
+            );
+            map.fitBounds(bounds, { padding: 24, duration: 0 });
+          }
 
-          for (const feature of projection.geometry.features) {
+          for (const feature of production
+            ? []
+            : projection.geometry.features) {
             const markerButton = globalThis.document.createElement("button");
             markerButton.type = "button";
             markerButton.className = "am-map-label";
@@ -345,16 +381,22 @@ export const MapHost = ({
       <header className="am-map-host__header">
         <div>
           <p className="am-meta">MapLibre host</p>
-          <h3 id="map-title">Synthetic strategic map</h3>
+          <h3 id="map-title">
+            {production
+              ? "Verified local strategic map"
+              : "Synthetic strategic map"}
+          </h3>
         </div>
         <span className="am-watermark">
-          Simulated · Synthetic test geometry
+          {production
+            ? "Simulated · Verified local geography"
+            : "Simulated · Synthetic test geometry"}
         </span>
       </header>
       <p id="map-description" className="am-map-description">
-        Abstract geometry only. It is not a Mopti polygon, an inferred zone or a
-        production geographic assertion. Use the synchronized subject list for
-        complete keyboard access.
+        {production
+          ? "The browser verified this content-addressed local map artifact before rendering it. Use the synchronized subject list for complete keyboard access."
+          : "Abstract geometry only. It is not a Mopti polygon, an inferred zone or a production geographic assertion. Use the synchronized subject list for complete keyboard access."}
       </p>
       <div
         ref={hostRef}
@@ -364,10 +406,14 @@ export const MapHost = ({
       />
       <p className="am-map-status" role="status" aria-live="polite">
         {status === "loading"
-          ? "Loading synthetic map."
+          ? production
+            ? "Loading verified local map."
+            : "Loading synthetic map."
           : status === "error"
-            ? "The synthetic map could not be rendered. The equivalent subject list remains available."
-            : "Synthetic map ready. Map and list selection use subject IDs."}
+            ? "The map could not be rendered. The equivalent subject list remains available."
+            : production
+              ? "Verified local map ready. Map and list selection use subject IDs."
+              : "Synthetic map ready. Map and list selection use subject IDs."}
       </p>
     </section>
   );

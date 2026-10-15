@@ -8,7 +8,12 @@ const id = <T extends string>(prefix: string) =>
 
 export const CampaignIdSchema = id<"CampaignId">("campaign_");
 export const TerritoryIdSchema = id<"TerritoryId">("territory_");
-export const ZoneIdSchema = id<"ZoneId">("zone_");
+export const ZoneIdSchema = z
+  .string()
+  .regex(
+    /^(?:zone_[a-z0-9][a-z0-9_-]*|ne-admin1:[A-Z]{3}:[a-z0-9][a-z0-9-]*)$/u,
+  )
+  .brand<"ZoneId">();
 export const AssetIdSchema = id<"AssetId">("asset_");
 export const CorridorIdSchema = id<"CorridorId">("corridor_");
 export const InstitutionIdSchema = id<"InstitutionId">("institution_");

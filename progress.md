@@ -60,3 +60,12 @@ Original prompt: Prompt 07 — Rule facts, commands and eligibility (AM-PB2-07).
 - Status: BLOCKED under AM-GOV-066 pending one versioned owner-approved production initialization profile and map-delivery/toolchain decision.
 - Approved unblocker: AM-GOV-067 profile `0.1.0-proposal.1` was explicitly approved by the owner on 2026-10-15 with hash `4affa81339e8473e176552da43bf56225db29c88668e413d2240cc4e512f2305`. It preserves historical nulls, separates hidden fictional state, defines conservative behavior for the three actions, and uses the pinned local map JSON directly without PMTiles.
 - PB2-27 remains BLOCKED until the AM-GOV-067 approval record is committed; the approval clears the input decision only, not the Prompt 27 implementation gate.
+
+### Prompt 27 resumed after AM-GOV-067 commitment
+
+- Gate cleared by owner commit `f862ff6f2db159181e42fa5f1180968d56fe9e50`; HEAD matched `origin/main` at resumed preflight.
+- Added deterministic baseline/scenario/methodology/map compilation, Save Snapshot v2 artifact pins, direct-map hash verification, IndexedDB recovery, and a production composition root using the accepted atomic command and End Turn services.
+- Default browser route is production; the synthetic acceptance UI now loads only from explicit `?testRoute=1` imports.
+- Verification complete: deterministic production artifacts passed twice with 97 zones and aggregate hash `41f5560d0e4081e8ea50c51aa7ff2aad92352677bc7acb9d84d5847b128fd82b`; full CI passed 26 files / 194 tests; complete browser suite passed 27/27; production build passed; default-route map and text projection were visually inspected.
+- Procedure audit preserves the approved resource ceiling: submission, consultation and PSC review succeed in sequence, while final host consent rejects `KNOWN_COST_UNAFFORDABLE` without state mutation. No unapproved recovery value was invented.
+- Status: READY_FOR_REVIEW. Owner reproduction and a reviewed commit are still required for PB2-27 ACCEPTED; Prompt 28 remains gated.

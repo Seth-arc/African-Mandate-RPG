@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 
 test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/");
+  await page.goto("/?testRoute=1");
 });
 
 test("renders a MapLibre host with an equivalent ID-driven subject list", async ({

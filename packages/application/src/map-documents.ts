@@ -214,21 +214,27 @@ export const MapDocumentProjectionSchema = z
   .object({
     schemaVersion: z.literal(MAP_DOCUMENT_SCHEMA_VERSION),
     contractVersion: z.literal(MAP_DOCUMENT_CONTRACT_VERSION),
-    classification: z.literal("TEST_ONLY_MAP_DOCUMENT_PROJECTION"),
+    classification: z.enum([
+      "TEST_ONLY_MAP_DOCUMENT_PROJECTION",
+      "SIMULATED_PRODUCTION_MAP_DOCUMENT_PROJECTION",
+    ]),
     campaignId: CampaignProjectionSchema.shape.campaignId,
     campaignRevision: CampaignProjectionSchema.shape.campaignRevision,
     mapArtifactManifest: MapArtifactManifestSchema,
-    renderTransport: z.literal("test_inline_geojson"),
+    renderTransport: z.enum([
+      "test_inline_geojson",
+      "verified_local_json_bundle",
+    ]),
     geometryHash: Sha256Schema,
     geometry: TestMapGeometrySchema,
-    labelGlyphProbe: z.literal("Burkinabè · Tillabéri · Ŋ"),
+    labelGlyphProbe: NonEmptyStringSchema,
     subjects: z.array(MapSubjectProjectionSchema).min(1),
     documents: z.array(KnowledgeDocumentProjectionSchema).min(1),
     productionGates: z
       .object({
-        realGeography: z.literal("BLOCKED"),
-        pmtilesPublication: z.literal("BLOCKED"),
-        assetTemporalAdmission: z.literal("BLOCKED"),
+        realGeography: z.enum(["BLOCKED", "VERIFIED_LOCAL_ARTIFACT"]),
+        pmtilesPublication: z.enum(["BLOCKED", "NOT_REQUIRED"]),
+        assetTemporalAdmission: z.enum(["BLOCKED", "NOT_IN_INITIAL_SLICE"]),
       })
       .strict(),
   })
@@ -238,7 +244,7 @@ export const MapDocumentProjectionSchema = z
       context.addIssue({
         code: "custom",
         path: ["geometryHash"],
-        message: "Synthetic geometry hash mismatch",
+        message: "Map geometry hash mismatch",
       });
     }
 

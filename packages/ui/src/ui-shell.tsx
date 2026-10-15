@@ -403,6 +403,7 @@ export const UiShell = ({
   decisionWorkflow,
 }: UiShellProps) => {
   const model = UiShellModelSchema.parse(inputModel);
+  const production = model.classification === "SIMULATED_PRODUCTION_UI_SHELL";
   const [decisionWorkspace, setDecisionWorkspace] = useState<
     DecisionWorkspaceProjection | undefined
   >(() =>
@@ -574,7 +575,11 @@ export const UiShell = ({
       <div className="am-shell">
         <header className="am-shell__masthead">
           <div>
-            <p className="am-meta">Simulated · Test-only interface</p>
+            <p className="am-meta">
+              {production
+                ? "Simulated · Local production campaign"
+                : "Simulated · Test-only interface"}
+            </p>
             <h1>African Mandate</h1>
           </div>
           <p className="am-shell__office">Office of the AU Strategic Envoy</p>
@@ -639,9 +644,9 @@ export const UiShell = ({
             </header>
             <div className="am-panel__body">
               <Notice heading="Simulation notice" severity="info" role="status">
-                This is a simulation. Events, quotes, and figures are invented
-                unless a source is shown. The test interface does not predict
-                real events.
+                {production
+                  ? "This is a simulation. Institutional positions, procedures, balances, and outcomes are fictional game design. Historical observations are shown only with an attributable source and date; the game does not predict real events."
+                  : "This is a simulation. Events, quotes, and figures are invented unless a source is shown. The test interface does not predict real events."}
               </Notice>
               <WorkspaceState
                 state={state}

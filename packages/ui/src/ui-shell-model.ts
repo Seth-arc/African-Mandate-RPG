@@ -38,7 +38,10 @@ export const UiShellModelSchema = z
   .object({
     schemaVersion: z.literal(UI_SHELL_SCHEMA_VERSION),
     contractVersion: z.literal(UI_SHELL_CONTRACT_VERSION),
-    classification: z.literal("TEST_ONLY_UI_SHELL"),
+    classification: z.enum([
+      "TEST_ONLY_UI_SHELL",
+      "SIMULATED_PRODUCTION_UI_SHELL",
+    ]),
     campaignRevision: z.number().int().nonnegative(),
     currentTurn: z.number().int().positive(),
     maxTurns: z.number().int().positive(),

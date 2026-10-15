@@ -12,7 +12,7 @@ test("passes the accessibility smoke and exposes no unnamed buttons", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1280, height: 720 });
-  await page.goto("/");
+  await page.goto("/?testRoute=1");
 
   const results = await new AxeBuilder({ page }).analyze();
   expect(results.violations).toEqual([]);
@@ -27,7 +27,7 @@ test("supports keyboard skip navigation and campaign navigation", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1280, height: 720 });
-  await page.goto("/");
+  await page.goto("/?testRoute=1");
 
   await page.keyboard.press("Tab");
   await expect(
@@ -56,7 +56,7 @@ test("renders loading, error, and partial states", async ({ page }) => {
     ["error", "Campaign view could not load"],
     ["partial", "Partial campaign view"],
   ] as const) {
-    await page.goto(`/?state=${state}`);
+    await page.goto(`/?testRoute=1&state=${state}`);
     await expect(page.getByRole("heading", { name: heading })).toBeVisible();
   }
 });
@@ -65,7 +65,7 @@ test("keeps content and controls available at 200 percent text size", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1280, height: 720 });
-  await page.goto("/");
+  await page.goto("/?testRoute=1");
   await page.locator("html").evaluate((element) => {
     element.setAttribute("style", "font-size: 200%");
   });
@@ -100,7 +100,7 @@ test("honors reduced motion and omits unapproved headline indicators", async ({
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.setViewportSize({ width: 1280, height: 720 });
-  await page.goto("/");
+  await page.goto("/?testRoute=1");
   const text = (await page.locator("body").innerText()).toLowerCase();
   for (const prohibited of [
     "stability",
@@ -125,7 +125,7 @@ test("honors reduced motion and omits unapproved headline indicators", async ({
 for (const viewport of viewports) {
   test(`captures and measures ${viewport.name}`, async ({ page }) => {
     await page.setViewportSize(viewport);
-    await page.goto("/");
+    await page.goto("/?testRoute=1");
     const measurement = await page.evaluate(() => ({
       width: window.innerWidth,
       height: window.innerHeight,

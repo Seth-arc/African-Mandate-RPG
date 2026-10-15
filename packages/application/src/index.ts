@@ -19,5 +19,6 @@ export * from "./narrative-service.js";
 export * from "./operation-coordinator.js";
 export * from "./ports.js";
 export * from "./projections.js";
+export * from "./production-runtime.js";
 export * from "./sync-status.js";
 export * from "./testing/in-memory-adapters.js";

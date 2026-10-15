@@ -21,13 +21,23 @@ const observedValueSchema = z.union([
 const observedNullableValueSchema = observedValueSchema.nullable();
 const numericIndicatorRecordSchema = z.record(z.string(), z.number().finite());
 
+const DataQualityMeasureSchema = z.union([
+  ScoreSchema,
+  z
+    .object({
+      value: z.null(),
+      reasonCode: NonEmptyStringSchema,
+    })
+    .strict(),
+]);
+
 const DataQualitySchema = z
   .object({
-    sourceReliability: ScoreSchema,
-    spatialPrecision: ScoreSchema,
-    freshness: ScoreSchema,
-    completeness: ScoreSchema,
-    gameplayRelevance: ScoreSchema,
+    sourceReliability: DataQualityMeasureSchema,
+    spatialPrecision: DataQualityMeasureSchema,
+    freshness: DataQualityMeasureSchema,
+    completeness: DataQualityMeasureSchema,
+    gameplayRelevance: DataQualityMeasureSchema,
   })
   .strict();
 

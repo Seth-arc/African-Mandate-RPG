@@ -1,0 +1,2 @@
+apps/web/public/assets/*.json
+apps/web/public/production/*.json

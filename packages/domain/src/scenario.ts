@@ -805,6 +805,7 @@ export const FixturePackageSchema = z
 export type AuthorityDomain = z.infer<typeof AuthorityDomainSchema>;
 export type ScenarioDefinition = z.infer<typeof ScenarioDefinitionSchema>;
 export type ScenarioBundle = z.infer<typeof ScenarioBundleSchema>;
+export type MethodologyManifest = z.infer<typeof MethodologyManifestSchema>;
 export type FixturePackage = z.infer<typeof FixturePackageSchema>;
 export type ActionDefinition = z.infer<typeof ActionDefinitionSchema>;
 export type EventDefinition = z.infer<typeof EventDefinitionSchema>;
