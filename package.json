@@ -20,6 +20,7 @@
     "test:decisions": "vitest run tests/unit/decision-workflow.test.ts",
     "test:editorial": "vitest run tests/unit/editorial-qa.test.ts tests/unit/narrative-fallback.test.ts",
     "test:data-acquisition": "vitest run tests/unit/production-data-acquisition.test.ts",
+    "test:scenario-approval": "vitest run tests/unit/production-scenario.test.ts",
     "test:data-audit": "tsx scripts/verify-production-source-audit.ts",
     "test:editorial-lint": "tsx scripts/verify-editorial-conformance.ts",
     "test:editorial:e2e": "playwright test tests/e2e/editorial-conformance.spec.ts --config playwright.config.ts",

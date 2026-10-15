@@ -1,0 +1,68 @@
+AM-PB2-26 simulated production scenario verification
+Date: 2026-10-15 (America/Indianapolis)
+Implementation base: 0a0c44157849cbfa52ff4ad5e45da03b5da132d5
+Owner scope decision: AM-GOV-062
+
+Command: corepack pnpm run typecheck
+Initial exit code: 1
+Result: three branded Score return values in the new evaluation resolver required schema parsing. The resolver was corrected to return EvaluationDimensionResultSchema.parse(...).
+
+Command: corepack pnpm run typecheck
+Corrected exit code: 0
+Result: PASS.
+
+Command: corepack pnpm run test:scenario-approval
+Exit code: 0
+Result: 1 file / 8 tests PASS.
+
+Command: corepack pnpm run format:check
+Initial exit code: 1
+Result: Prettier identified four new TypeScript files. Installed Prettier was applied only to those files.
+
+Command: corepack pnpm run lint
+Exit code: 0
+Result: PASS.
+
+Command: corepack pnpm run format:check
+Second exit code: 1
+Result: one later test edit required formatting. Installed Prettier was applied only to that test.
+
+Command: corepack pnpm run test:scenario-approval
+Final focused exit code: 0
+Result: 1 file / 8 tests PASS in 1.01s.
+
+Command: corepack pnpm run ci
+Exit code: 0
+Result:
+- formatting: PASS
+- peer dependency check: PASS
+- lint: PASS
+- typecheck: PASS
+- unit tests: 25 files / 191 tests PASS
+- deterministic two-process verifier: PASS
+- fixture two-process verifier: PASS
+- forbidden import/random checks: PASS
+- editorial conformance: PASS
+- Prompt 25 source audit: PASS (97 zones; 41 unique events; 265 finance rows; 0 displacement features)
+- governance/toolchain schema verification: PASS
+
+Command: py -3 -B -m unittest discover -s tests/governance -p "test_*.py" -v
+Exit code: 0
+Result: 7 tests PASS in 0.002s.
+
+Command: corepack pnpm exec tsx -e <canonical policy hash command from handoff>
+Exit code: 0
+Result: ab4ccb03b7b638c62f37c27111a2bd27cd156008d2b8b4e8bcad7c5ecb42d904
+
+Focused coverage:
+- schema/version/owner decision/disclosure/hash
+- no TEST_ONLY marker or duplicated historical source claim
+- AES/ECOWAS consultation-only boundary
+- required fictional procedure steps, lead time, expiry and duplicate-step rejection
+- six separate dimension results and no overall score
+- 20-turn requirement, critical-duration penalty, last-turn cosmetic recovery and countervailing harm
+- structurally disabled leaderboard
+- three nonzero one-slot action costs
+
+Gate result: READY_FOR_REVIEW
+No PB2-26 acceptance or real-world legal/regional accuracy is claimed.

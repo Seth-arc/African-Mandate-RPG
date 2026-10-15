@@ -43,7 +43,7 @@
     "23": {"status": "ACCEPTED", "approvedCommit": "5a87ae80b59f6f53a65678caf7ae0adf45fc6faa", "evidencePath": "docs/build/handoffs/23.md", "approver": "Seth-arc (repository owner; acceptance by reviewed commit at 2026-10-12T00:23:38-04:00)"},
     "24": {"status": "ACCEPTED", "approvedCommit": "a3fa2a1ddca85a43f46ffa6268f7e5f621a5926a", "evidencePath": "docs/build/handoffs/24.md", "approver": "Seth-arc (repository owner; acceptance by independently reproduced gate and reviewed commit at 2026-10-12T13:01:51-04:00)"},
     "25": {"status": "READY_FOR_REVIEW", "approvedCommit": null, "evidencePath": "docs/build/handoffs/25.md", "approver": null},
-    "26": {"status": "NOT_STARTED", "approvedCommit": null, "evidencePath": null, "approver": null},
+    "26": {"status": "READY_FOR_REVIEW", "approvedCommit": null, "evidencePath": "docs/build/handoffs/26.md", "approver": null},
     "27": {"status": "NOT_STARTED", "approvedCommit": null, "evidencePath": null, "approver": null},
     "28": {"status": "NOT_STARTED", "approvedCommit": null, "evidencePath": null, "approver": null},
     "29": {"status": "NOT_STARTED", "approvedCommit": null, "evidencePath": null, "approver": null},

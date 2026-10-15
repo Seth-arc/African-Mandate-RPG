@@ -1149,3 +1149,42 @@ not satisfy the blocked or pending human approvals.
 ### Remaining review action
 
 Run the handoff commands and review the limitations. If accepted, the owner's commit marks PB2-25 ACCEPTED under AM-GOV-001. No separate GIS, scenario, methodology, or legal reviewer is required for this individual build.
+
+## AM-PB2-26 — production actors, authority, and balances
+
+**Status proposed:** READY_FOR_REVIEW
+
+**Acceptance IDs:** PB2-26; AC-022; AC-023; AC-024; AC-026
+
+**Implementation base:** `0a0c44157849cbfa52ff4ad5e45da03b5da132d5`
+
+### Owner scope decision
+
+AM-GOV-062 records the repository owner's 2026-10-15 instruction to treat institutional procedures, actor positions, costs, balance values and evaluation coefficients as fictional simulation design; use owner-only review; label the model visibly `SIMULATED`; and disable competitive leaderboard scoring. This replaces external legal/regional approval for this individual noncompetitive build without converting the model into legal or historical fact.
+
+### Evidence produced
+
+- `@african-mandate/domain` publishes schema 1 / contract `1.0.0` for the simulated production policy, functional actors, fictional procedures, action costs, evaluation request, and authorization progress/results.
+- `@african-mandate/content` owns one configuration, `1.0.0-simulated.1`, canonical hash `ab4ccb03b7b638c62f37c27111a2bd27cd156008d2b8b4e8bcad7c5ecb42d904`.
+- Five host-specific procedures require Commission submission, regional consultation, simulated PSC review and affected-host game consent. AES and ECOWAS are consultation roles, not grant authorities.
+- Nine functional actor assumptions carry bounded uncertainty and explicitly deny historical-claim status. No real person or asserted private intention is present.
+- Three consequential action-cost profiles and the existing canonical balance shape use versioned `simulated.*` values. TEST_ONLY content is not imported or promoted.
+- The six dimensions are scored separately across exactly 20 turns using ending state, trajectory mean, critical-state duration and countervailing harm. There is no overall score.
+- Competitive leaderboard state can only be disabled; the schema rejects enabled/composite scoring.
+
+### Tests and negative cases
+
+- Focused unit tests cover configuration hash and disclosures, procedure competence, missing steps, lead time, expiry, duplicate steps, all six outputs, sustained failure, last-turn cosmetic recovery, countervailing harm, incomplete trajectories, nonzero action costs and leaderboard rejection.
+- Full CI and governance results are recorded in `docs/build/logs/26-test.log`.
+
+### Source-to-test traceability
+
+| Acceptance ID | Evidence | Test state |
+|---|---|---|
+| PB2-26 | Typed policy/configuration APIs, owner decision, contract, hash and handoff | READY_FOR_REVIEW |
+| AC-022 | Every policy surface carries `SIMULATED:` and the artifact contains no duplicated historical source claim | PASS for owner-scoped fictional content; no claim of regional accuracy |
+| AC-023 | Five procedure profiles separate consultation from authority and require host game consent; `legalClaim` is false | PASS for fictional game competence; no claim of real law |
+| AC-024 | Versioned 20-turn six-dimension formula with critical-duration, cosmetic-recovery and harm edge tests | PASS |
+| AC-026 | Leaderboard schema rejects enabled state/composite scores | PASS disabled policy; no leaderboard service implemented |
+
+PB2-26 remains unaccepted until the repository owner reviews the exact configuration, reruns the handoff commands, and commits it under AM-GOV-001. Prompt 27 must combine only accepted Prompt 25/26 artifacts with the production runtime.

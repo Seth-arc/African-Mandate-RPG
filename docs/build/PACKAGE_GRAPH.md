@@ -4,7 +4,7 @@
 
 **Task:** AM-PB2-02
 
-**Classification:** ACCEPTED TEST_ONLY foundations through Prompt 24; Prompt 25 production source admission is READY_FOR_REVIEW
+**Classification:** ACCEPTED TEST_ONLY foundations through Prompt 24; Prompt 25 source admission and Prompt 26 simulated scenario policy are READY_FOR_REVIEW
 
 ## Dependency direction
 
@@ -26,11 +26,11 @@ Arrows show direct contract imports. `application` may consume the public `simul
 
 | Workspace | Public root | Allowed internal imports | Ownership |
 |---|---|---|---|
-| `packages/domain` | `@african-mandate/domain` | none | Serialized contracts, domain types, typed lifecycle/world state and effects, command/EndTurn/world request/results, save snapshots, and deterministic artifacts |
-| `packages/simulation` | `@african-mandate/simulation` | `domain` | Deterministic primitives, pure command/world-effect logic, mandatory-capacity rules, exact calendar, and ordered lifecycle resolver registry |
+| `packages/domain` | `@african-mandate/domain` | none | Serialized contracts, domain types, typed lifecycle/world state and effects, command/EndTurn/world request/results, save snapshots, deterministic artifacts, and Prompt 26 simulated production-policy schemas |
+| `packages/simulation` | `@african-mandate/simulation` | `domain` | Deterministic primitives, pure command/world-effect logic, mandatory-capacity rules, exact calendar, ordered lifecycle resolvers, and Prompt 26 simulated authorization/evaluation resolvers |
 | `packages/application` | `@african-mandate/application` | `domain`, public `simulation` API | Versioned ports, atomic services, verified immutable-artifact client, IndexedDB repository, Web Locks edit lock, sync status, narrative fallback, projection facade/cache, TEST_ONLY map/document projections and decision-workflow coordinator |
 | `packages/data-pipeline` | `@african-mandate/data-pipeline` | `domain` | TEST_ONLY synthetic fixture compiler plus Prompt 25 owner-selected production-source schemas, audits and compilation gate; no production baseline compiled |
-| `packages/content` | `@african-mandate/content` | `domain` | Versioned four-month TEST_ONLY compiled artifact, strict cross-reference schema, branch inventory and hard production rejection; no production content admitted |
+| `packages/content` | `@african-mandate/content` | `domain` | Versioned four-month TEST_ONLY artifact plus the separate owner-scoped Prompt 26 simulated production policy; no TEST_ONLY value is promoted |
 | `packages/headless` | `@african-mandate/headless` | `domain`, public `simulation`, `application`, `content`, `data-pipeline`, `narrative` APIs | Independent TEST_ONLY SIM-01…SIM-16 goldens, deterministic sample/replay runner and blocked-production-gate report; not a production runtime dependency |
 | `packages/ui` | `@african-mandate/ui` | `application` | Projection-only React presentation boundary, TEST_ONLY shell/map/document/decision components, MapLibre host and canonical-token stylesheet; domain, simulation, and raw state forbidden |
 | `apps/web` | `@african-mandate/web` | `domain`, `application`, `ui` | Knowledge-safe React/Vite shell host and fixed TEST_ONLY browser fixtures; no simulation import |
@@ -41,7 +41,7 @@ Arrows show direct contract imports. `application` may consume the public `simul
 - Deep imports such as `@african-mandate/domain/internal` are forbidden; callers use public package roots.
 - Normal UI cannot import domain, simulation, headless tooling, raw campaign stores, or debug projections. Web cannot import simulation, headless tooling, raw campaign stores, or debug projections.
 - Domain cannot import another workspace package.
-- Content and data-pipeline can import only domain. Prompt 18 keeps the compiled artifact in content. Prompt 25 admits pinned sources for later compilation without creating a baseline. The Prompt 19 `headless` integration package may consume public package roots solely for TEST_ONLY acceptance and is not imported by production packages.
+- Content and data-pipeline can import only domain. Prompt 18 keeps the compiled TEST_ONLY artifact in content. Prompt 25 admits pinned sources for later compilation without creating a baseline. Prompt 26 adds a separate, visibly simulated production policy and keeps execution in simulation. The Prompt 19 `headless` integration package may consume public package roots solely for TEST_ONLY acceptance and is not imported by production packages.
 - Package exports expose only their public roots. Prompt 20 adds application-owned IndexedDB/Web Locks, revision-aware sync status, verified JSON artifact loading, knowledge-safe projections, and deterministic narrative failover without moving simulation ownership. Prompt 21 adds projection-derived shell/status rendering. Prompt 22 adds only an immutable synthetic map/document projection and UI. Prompt 23 adds a projection-only decision coordinator/UI and fixed browser script; simulation ownership does not move into UI/web. Prompt 24 adds build-time editorial/token audits and typed evidence records in tooling; UI/web still do not depend on tooling at runtime. Cloud transport, approved fallback lease constants, production artifact publication/source admission and production UI certification remain outside these milestones.
 
 `tests/fixtures/forbidden-import/web-imports-simulation.ts`, `ui-imports-domain.ts`, and `ui-imports-simulation.ts` deliberately violate the projection firewall. `scripts/verify-forbidden-import.mjs` passes only when ESLint rejects all three fixtures with `no-restricted-imports`.

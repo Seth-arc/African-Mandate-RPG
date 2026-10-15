@@ -10,3 +10,4 @@ export type ContentPackageDescriptor = typeof contentPackage;
 
 export * from "./four-month-content.js";
 export * from "./four-month-fixture.js";
+export * from "./production-scenario.js";

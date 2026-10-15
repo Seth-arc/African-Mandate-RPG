@@ -20,5 +20,6 @@ export * from "./event-director.js";
 export * from "./mandatory-attention.js";
 export * from "./knowledge.js";
 export * from "./mandates.js";
+export * from "./production-scenario.js";
 export * from "./turn-engine.js";
 export * from "./world-resolvers.js";

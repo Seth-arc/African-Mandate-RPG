@@ -41,3 +41,12 @@ Original prompt: Prompt 07 — Rule facts, commands and eligibility (AM-PB2-07).
 - Implemented: schema 2 / contract `0.2.0-proposal.1`; five ISO parents; 97 Natural Earth zone IDs; topology/allocation audits with reviewed enclaves; conflict deduplication and post-anchor isolation; empty-IDMC omission; pinned AfDB/World Bank finance projections; citations, hashes and use constraints.
 - Data outcome: 41 unique conflict events (32 direct zone matches, eight enclave tie-breaks, one country-level exception); 265 five-country finance rows; no displacement features. Missing observations remain unknown.
 - Status: READY_FOR_REVIEW. PB2-25 is not self-approved; the owner accepts it by reproducing the handoff and committing under AM-GOV-001.
+
+## Prompt 26 — simulated actors, authority, and balances
+
+- Owner scope: AM-GOV-062 authorizes an owner-only individual-build workflow, explicitly fictional institutional procedures/actor positions/balance values, visible `SIMULATED` disclosure, and no competitive leaderboard.
+- Implemented: schema 1 / contract `1.0.0`; one `1.0.0-simulated.1` policy artifact; five host-specific fictional procedures; nine bounded functional actor assumptions; three action-cost profiles; versioned balance coefficients; pure authorization and six-dimension evaluation resolvers.
+- Evaluation: exactly 20 ordered turns, 40% ending state + 60% trajectory mean, critical-duration and countervailing-harm penalties, separate dimension results, no overall score.
+- Safety boundary: no legal/historical claim, real person, asserted private intent, TEST_ONLY promotion, or leaderboard score. Prompt 27 owns baseline/browser integration and Prompt 28 owns full-campaign calibration.
+- Verification: focused 8/8 passed before final full-gate reproduction; final commands and any corrected failures are recorded in `docs/build/logs/26-test.log`.
+- Status: READY_FOR_REVIEW. PB2-26 remains unaccepted until owner reproduction and reviewed commit under AM-GOV-001.
